@@ -1,0 +1,675 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BIO-RESCUE: Code Blue</title>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2");
+@font-face{font-family:"SebangGothic";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.0/SEBANG_Gothic_Bold.woff") format("woff");font-weight:700;font-display:swap;}
+:root{--bg:#020a18;--panel:#050f22;--neon-green:#48E5C2;--neon-blue:#3A86FF;--alert-red:#FF3B30;--warn-yellow:#FFCC00;--text:#FFF;--muted:#7a95b2;--border:rgba(72,229,194,0.25);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow:hidden;}
+h2,.stage-badge,button,.heart-btn{font-family:"SebangGothic",system-ui,sans-serif;}
+#app{width:100%;max-width:480px;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--panel);border-left:1px solid var(--border);border-right:1px solid var(--border);}
+.header{background:rgba(2,5,13,.97);backdrop-filter:blur(10px);padding:10px 16px;border-bottom:2px solid var(--neon-green);display:flex;justify-content:space-between;align-items:center;z-index:20;flex-shrink:0;}
+.logo-wrap{display:flex;align-items:center;gap:8px;}
+.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--neon-green);box-shadow:0 0 12px var(--neon-green);animation:pulse-dot 1.2s infinite;}
+.logo-text{font-size:1rem;color:var(--neon-green);letter-spacing:2px;font-family:"SebangGothic",system-ui,sans-serif;}
+.status-bar{display:flex;gap:12px;align-items:center;}
+.status-bpm{font-size:.95rem;font-weight:700;transition:color .3s;}
+.status-score{font-size:.9rem;color:var(--warn-yellow);font-weight:700;}
+.pulse-danger{color:var(--alert-red);animation:blink .5s infinite;}
+.pulse-normal{color:var(--neon-green);}
+.progress-track{display:flex;gap:4px;justify-content:center;padding:5px 0;background:rgba(0,0,0,.3);flex-shrink:0;}
+.progress-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);transition:all .3s;}
+.progress-dot.done{background:var(--neon-green);box-shadow:0 0 6px var(--neon-green);}
+.progress-dot.active{background:var(--neon-blue);box-shadow:0 0 6px var(--neon-blue);animation:pulse-dot 1s infinite;}
+.scene-wrap{width:100%;height:175px;position:relative;overflow:hidden;flex-shrink:0;cursor:crosshair;}
+.scene-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,var(--panel) 100%);pointer-events:none;z-index:2;}
+.scene-img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease,filter .35s ease;transform-origin:center center;will-change:transform;}
+.scan-line{position:absolute;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(72,229,194,.5),transparent);top:0;left:0;animation:scan 2.5s linear infinite;z-index:3;pointer-events:none;}
+.ripple{position:absolute;border-radius:50%;background:rgba(72,229,194,.25);transform:scale(0);animation:ripple-out .7s ease-out forwards;pointer-events:none;z-index:5;}
+.hud-corner{position:absolute;width:18px;height:18px;border-color:var(--neon-green);border-style:solid;z-index:6;pointer-events:none;opacity:.7;}
+.hud-tl{top:5px;left:5px;border-width:2px 0 0 2px;}
+.hud-tr{top:5px;right:5px;border-width:2px 2px 0 0;}
+.hud-bl{bottom:12px;left:5px;border-width:0 0 2px 2px;}
+.hud-br{bottom:12px;right:5px;border-width:0 2px 2px 0;}
+.screen{display:none;flex:1;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:14px 16px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.screen.active{display:flex;animation:fadeSlide .4s ease-out;}
+.screen::-webkit-scrollbar{width:3px;}
+.screen::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.stage-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(72,229,194,.08);border:1px solid var(--neon-green);border-radius:20px;padding:4px 12px;font-size:.72rem;letter-spacing:2px;color:var(--neon-green);margin-bottom:8px;align-self:flex-start;}
+.stage-dot{width:5px;height:5px;border-radius:50%;background:var(--neon-green);animation:pulse-dot 1.5s infinite;}
+h2{font-size:1.2rem;line-height:1.3;margin-bottom:9px;}
+.red-title{color:var(--alert-red);}
+.green-title{color:var(--neon-green);}
+.instructions{background:rgba(255,255,255,.04);padding:11px 13px;border-radius:10px;border-left:3px solid var(--neon-blue);font-size:.86rem;line-height:1.6;margin-bottom:12px;color:#c0d8f0;}
+.instructions strong{color:var(--neon-green);}
+input[type="text"]{width:100%;padding:12px 14px;margin-bottom:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:white;border-radius:10px;font-size:.93rem;font-family:system-ui,sans-serif;transition:border-color .2s,box-shadow .2s;outline:none;}
+input[type="text"]:focus{border-color:var(--neon-green);box-shadow:0 0 16px rgba(72,229,194,.35);}
+input[type="text"]::placeholder{color:var(--muted);}
+select{width:100%;padding:11px 14px;margin-bottom:10px;background:rgba(10,20,40,.9);border:1px solid var(--border);color:white;border-radius:10px;font-size:.9rem;font-family:system-ui,sans-serif;outline:none;cursor:pointer;transition:border-color .2s;}
+select:focus{border-color:var(--neon-blue);}
+select option{background:#0E1A30;color:white;}
+.btn-primary{background:linear-gradient(135deg,var(--neon-green),#2bc4a3);color:#020a18;border:none;padding:15px;border-radius:12px;font-size:1.02rem;font-weight:700;cursor:pointer;transition:all .15s;margin-top:auto;width:100%;letter-spacing:1px;box-shadow:0 0 18px rgba(72,229,194,.4);position:relative;overflow:hidden;font-family:"SebangGothic",system-ui,sans-serif;}
+.btn-primary:active{transform:scale(.97);opacity:.9;}
+.btn-next{display:none;background:linear-gradient(135deg,var(--neon-blue),#2266dd);color:white;border:none;padding:13px;border-radius:12px;font-size:.97rem;font-weight:700;cursor:pointer;transition:all .15s;margin-top:10px;width:100%;letter-spacing:1px;box-shadow:0 0 16px rgba(58,134,255,.4);font-family:"SebangGothic",system-ui,sans-serif;}
+.btn-next:active{transform:scale(.97);}
+.cpr-container{display:flex;flex-direction:column;align-items:center;margin:14px 0;gap:14px;}
+.heart-btn{width:138px;height:138px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ff6b6b,var(--alert-red) 60%,#8B0000);color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;border:3px solid rgba(255,255,255,.25);cursor:pointer;user-select:none;box-shadow:0 0 22px rgba(255,59,48,.65),inset 0 -4px 10px rgba(0,0,0,.3);transition:transform .08s,box-shadow .08s;font-family:"SebangGothic",system-ui,sans-serif;}
+.heart-btn:active{transform:scale(.88);}
+.heart-label{font-size:.72rem;opacity:.85;}
+.gauge-bg{width:100%;height:11px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.1);}
+.gauge-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--neon-green),#80ffdd);border-radius:6px;transition:width .1s;box-shadow:0 0 8px rgba(72,229,194,.6);}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.match-item{background:rgba(255,255,255,.04);padding:13px 6px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);text-align:center;cursor:pointer;font-weight:600;font-size:.86rem;transition:all .18s;user-select:none;}
+.match-item:hover{background:rgba(255,255,255,.08);}
+.match-item.selected{border-color:var(--neon-green);background:rgba(72,229,194,.12);box-shadow:0 0 14px rgba(72,229,194,.3);}
+.match-item.bypassed{border-color:var(--muted);opacity:.5;cursor:default;}
+.match-item.digested{border-color:var(--neon-blue);background:rgba(58,134,255,.12);opacity:.6;pointer-events:none;}
+.divider-arrow{text-align:center;font-size:1rem;color:var(--muted);margin:4px 0;letter-spacing:4px;}
+.swipe-card{background:linear-gradient(135deg,rgba(72,229,194,.06),rgba(58,134,255,.06));border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;margin:10px 0;}
+.swipe-target{font-size:1.9rem;font-weight:700;margin-bottom:5px;}
+.swipe-sub{font-size:.78rem;color:var(--muted);}
+.swipe-btns{display:flex;gap:9px;margin-top:14px;}
+.swipe-btn{flex:1;padding:13px;border-radius:9px;border:none;font-size:.92rem;font-weight:700;cursor:pointer;font-family:"SebangGothic",system-ui,sans-serif;transition:all .15s;}
+.swipe-btn-left{background:rgba(139,0,0,.55);color:white;border:1px solid rgba(139,0,0,.8);}
+.swipe-btn-right{background:rgba(0,100,0,.55);color:white;border:1px solid rgba(0,100,0,.8);}
+.swipe-btn:active{transform:scale(.95);}
+.detox-panel{display:flex;justify-content:space-around;align-items:center;margin:14px 0;padding:14px;background:rgba(255,59,48,.07);border:2px dashed rgba(255,59,48,.38);border-radius:12px;}
+.toxin-node{padding:11px 16px;background:rgba(255,59,48,.8);color:white;border-radius:8px;font-weight:700;animation:shake .5s infinite;cursor:pointer;font-size:.87rem;border:2px solid transparent;transition:border .2s;}
+.toxin-node.selected{border-color:white;box-shadow:0 0 18px rgba(255,59,48,.6);}
+.liver-node{padding:11px 16px;background:rgba(139,69,19,.8);color:white;border-radius:8px;font-weight:700;cursor:pointer;border:2px solid #D2691E;font-size:.87rem;transition:all .15s;}
+.liver-node:hover{background:rgba(139,69,19,1);transform:scale(1.05);}
+.arrow-anim{font-size:1.8rem;color:var(--muted);animation:arrow-move 1s infinite alternate;}
+.bubble-container{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:12px 0;}
+.bubble{width:72px;height:72px;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:700;cursor:pointer;font-size:.72rem;gap:2px;user-select:none;transition:transform .12s,opacity .3s;animation:float 3s ease-in-out infinite;}
+.bubble:nth-child(2){animation-delay:.5s;}.bubble:nth-child(3){animation-delay:1s;}.bubble:nth-child(4){animation-delay:1.5s;}.bubble:nth-child(5){animation-delay:.3s;}.bubble:nth-child(6){animation-delay:.8s;}
+.bubble-co2{background:radial-gradient(circle,rgba(255,100,80,.28),rgba(255,59,48,.08));border:2px dashed rgba(255,59,48,.65);color:#FF8A84;}
+.bubble-o2{background:radial-gradient(circle,rgba(80,150,255,.28),rgba(58,134,255,.08));border:2px solid rgba(58,134,255,.65);color:#8CC4FF;}
+.bubble:active{transform:scale(.85);}
+.bubble.hit{opacity:.15;pointer-events:none;animation:pop .3s ease-out forwards;}
+.bubble-icon{font-size:1.2rem;}
+.s3-score-bar{display:flex;gap:10px;justify-content:center;margin-bottom:8px;}
+.s3-stat{background:rgba(255,255,255,.05);border-radius:8px;padding:5px 12px;font-size:.8rem;font-weight:600;}
+.valve-grid{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.valve-btn{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.14);color:var(--muted);padding:13px 14px;border-radius:10px;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;text-align:left;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:9px;}
+.valve-btn::before{content:"🔒";font-size:.95rem;}
+.valve-btn.open{background:rgba(58,134,255,.1);border-color:var(--neon-blue);color:var(--neon-blue);box-shadow:0 0 14px rgba(58,134,255,.3);}
+.valve-btn.open::before{content:"✅";}
+.hold-pump{background:linear-gradient(135deg,rgba(200,30,30,.55),rgba(100,0,0,.75));color:white;padding:18px;text-align:center;border-radius:12px;font-size:1.02rem;font-weight:700;cursor:pointer;user-select:none;opacity:.4;pointer-events:none;transition:all .3s;border:2px solid rgba(255,59,48,.25);font-family:"SebangGothic",system-ui,sans-serif;}
+.hold-pump.enabled{opacity:1;border-color:var(--alert-red);box-shadow:0 0 22px rgba(255,59,48,.55);animation:pump-pulse 1.5s infinite;}
+.mission-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:10px 13px;margin-bottom:9px;}
+.mission-label{font-size:.85rem;color:#c0d8f0;margin-bottom:7px;font-weight:600;}
+.river-box{height:205px;background:linear-gradient(180deg,rgba(2,10,30,.9),rgba(0,28,58,.8));border:2px solid rgba(58,134,255,.38);border-radius:12px;position:relative;overflow:hidden;margin-bottom:10px;}
+.river-box::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 22px,rgba(58,134,255,.025) 22px,rgba(58,134,255,.025) 23px);pointer-events:none;}
+.falling-item{position:absolute;padding:6px 12px;border-radius:20px;font-weight:700;cursor:pointer;user-select:none;font-size:.8rem;box-shadow:0 4px 10px rgba(0,0,0,.4);border:1.5px solid rgba(255,255,255,.18);white-space:nowrap;}
+.falling-item:active{transform:scale(.9);}
+.s6-status-txt{text-align:center;font-weight:700;color:var(--neon-green);font-size:.88rem;margin-bottom:6px;}
+.fusion-area{display:flex;justify-content:space-around;align-items:center;margin:18px 0;}
+.fusion-node{width:106px;height:106px;border-radius:50%;border:2.5px solid rgba(72,229,194,.35);display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:700;cursor:pointer;font-size:.82rem;gap:5px;transition:all .25s;user-select:none;background:rgba(255,255,255,.03);}
+.fusion-node .fn-icon{font-size:1.9rem;}
+.fusion-node.active{background:rgba(72,229,194,.1);border-color:var(--neon-green);box-shadow:0 0 22px rgba(72,229,194,.55);animation:pulse-glow 1.5s infinite;}
+.fusion-plus{font-size:1.9rem;color:var(--muted);}
+.formula-box{background:rgba(255,255,255,.04);border:1px solid var(--neon-green);border-radius:10px;padding:11px;text-align:center;font-size:.84rem;color:#c0d8f0;margin-bottom:11px;}
+.formula-box strong{color:var(--warn-yellow);}
+#sync-msg{text-align:center;margin-top:11px;font-weight:600;font-size:.88rem;color:var(--neon-blue);min-height:22px;}
+.codeblue-overlay{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(12,0,0,.97);z-index:100;padding:18px;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.codeblue-overlay.active{display:flex;animation:red-alert .6s infinite alternate;}
+.cb-img-wrap{width:100%;height:130px;position:relative;border-radius:10px;overflow:hidden;margin-bottom:14px;border:2px solid var(--alert-red);flex-shrink:0;}
+.cb-title{font-size:1.9rem;color:var(--alert-red);animation:blink .5s infinite;margin-bottom:8px;font-family:"SebangGothic",system-ui,sans-serif;}
+.cb-sub{font-size:.9rem;line-height:1.6;color:rgba(255,255,255,.9);margin-bottom:18px;}
+.hold-circle{width:135px;height:135px;border-radius:50%;background:radial-gradient(circle,#FFDD00,#FFCC00);color:#000;font-size:1.35rem;display:none;justify-content:center;align-items:center;font-weight:700;margin:18px auto;user-select:none;box-shadow:0 0 28px rgba(255,204,0,.6);font-family:"SebangGothic",system-ui,sans-serif;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-3px);}75%{transform:translateX(3px);}}
+@keyframes scan{from{top:0;}to{top:100%;}}
+@keyframes ripple-out{to{transform:scale(8);opacity:0;}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@keyframes pop{0%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:.3;}100%{transform:scale(0);opacity:0;}}
+@keyframes arrow-move{from{transform:translateX(-4px);}to{transform:translateX(4px);}}
+@keyframes red-alert{from{box-shadow:inset 0 0 60px rgba(255,59,48,.28);}to{box-shadow:inset 0 0 120px rgba(255,59,48,.58);}}
+@keyframes pump-pulse{0%,100%{box-shadow:0 0 22px rgba(255,59,48,.55);}50%{box-shadow:0 0 40px rgba(255,59,48,.8);}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 22px rgba(72,229,194,.55);}50%{box-shadow:0 0 36px rgba(72,229,194,.75);}}
+@keyframes app-shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+@keyframes victory-glow{0%,100%{box-shadow:none;}50%{box-shadow:inset 0 0 80px rgba(72,229,194,.12);}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="header">
+  <div class="logo-wrap"><div class="logo-dot"></div><span class="logo-text">BIO-RESCUE</span></div>
+  <div class="status-bar">
+    <span id="ui-bpm" class="status-bpm pulse-danger">&#9829; 0 BPM</span>
+    <span id="ui-score" class="status-score">100&#51216;</span>
+  </div>
+</div>
+<div class="progress-track">
+  <div class="progress-dot active" id="pd-0"></div><div class="progress-dot" id="pd-1"></div>
+  <div class="progress-dot" id="pd-2"></div><div class="progress-dot" id="pd-3"></div>
+  <div class="progress-dot" id="pd-4"></div><div class="progress-dot" id="pd-5"></div>
+  <div class="progress-dot" id="pd-6"></div><div class="progress-dot" id="pd-7"></div>
+  <div class="progress-dot" id="pd-8"></div>
+</div>
+
+<div id="screen-login" class="screen active">
+  <div class="scene-wrap" id="sw-login">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_1.png" class="scene-img" alt="BIO-RESCUE" onerror="this.style.background='linear-gradient(135deg,#020a18,#0a1a35)';this.style.border='none'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>MISSION BRIEFING</div>
+  <h2>&#128680; 특수 의료팀 원격 접속</h2>
+  <div class="instructions"><strong>환자 X</strong>가 응급실에 실려왔습니다! 심정지 상태로 골든타임 임박!<br>팀원 코드명을 입력하고 Medi-Bot으로 체내에 침투하십시오.</div>
+  <input type="text" id="studentId" placeholder="팀 번호 입력 (예: 1모둠)">
+  <input type="text" id="studentName" placeholder="코드명 입력 (예: 홍길동)">
+  <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 이 기기에만 저장되며 외부로 전송되지 않습니다.</p>
+  <button class="btn-primary" onclick="startGame()">&#9889; 시스템 침투 승인</button>
+</div>
+
+<div id="screen-cpr" class="screen">
+  <div class="scene-wrap" id="sw-cpr">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_2.png" class="scene-img" alt="CPR" onerror="this.style.background='#1a0000'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>PROLOGUE: CPR</div>
+  <h2 class="red-title">V/S 확인 불가! 심정지!</h2>
+  <div class="instructions">나노 로봇 진입로 확보를 위해 메인 펌프(심장)를 수동 가동하십시오.<br><strong>30회 연타!</strong></div>
+  <div class="cpr-container">
+    <div class="heart-btn" id="cprBtn" onclick="doIntroCPR()">
+      <span style="font-size:2rem;">&#9829;</span>
+      <span class="heart-label" id="cpr-count">0 / 30</span>
+    </div>
+    <div class="gauge-bg"><div class="gauge-fill" id="cpr-gauge"></div></div>
+  </div>
+</div>
+
+<div id="screen-stage1" class="screen">
+  <div class="scene-wrap" id="sw-s1">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_3.png" class="scene-img" id="s1-img" alt="Stage 1" onerror="this.style.background='#1a0800'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>STAGE 1: 소화 파쇄 라인</div>
+  <h2 id="s1-zone-title">구역: 입</h2>
+  <div class="instructions" id="s1-desc">알맞은 소화 효소를 매칭하세요.</div>
+  <div class="match-grid" id="s1-nutrient-grid"></div>
+  <div class="divider-arrow">&#9660; 소화 효소 선택 &#9660;</div>
+  <div class="match-grid" id="s1-enzyme-grid">
+    <div class="match-item enzyme" onclick="selectItem(this,'enzyme','아밀레이스')">&#128300; 아밀레이스</div>
+    <div class="match-item enzyme" onclick="selectItem(this,'enzyme','펩신')">&#129514; 펩신(+염산)</div>
+    <div class="match-item enzyme" onclick="selectItem(this,'enzyme','라이페이스')">&#9879;&#65039; 라이페이스</div>
+    <div class="match-item enzyme" onclick="selectItem(this,'enzyme','통과')" style="border-color:var(--muted);">&#8617; 그냥 통과</div>
+  </div>
+  <button class="btn-next" id="btn-s1-next" onclick="nextS1Zone()">다음 구역 이동 &#8594;</button>
+</div>
+
+<div id="screen-stage2" class="screen">
+  <div class="scene-wrap" id="sw-s2">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_5.png" class="scene-img" alt="Stage 2" onerror="this.style.background='#001a0a'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>STAGE 2: 환승센터 &amp; 간 방어전</div>
+  <div id="s2-p1">
+    <div class="instructions">수용성 영양소는 <strong>[모세혈관]</strong>으로, 지용성은 <strong>[암죽관]</strong>으로!</div>
+    <div class="swipe-card">
+      <div class="swipe-target" id="s2-target">포도당</div>
+      <div class="swipe-sub">어느 통로로 보내시겠습니까?</div>
+      <div class="swipe-btns">
+        <button class="swipe-btn swipe-btn-left" onclick="swipeS2('모세혈관')">&#128072; 모세혈관</button>
+        <button class="swipe-btn swipe-btn-right" onclick="swipeS2('암죽관')">암죽관 &#128073;</button>
+      </div>
+    </div>
+  </div>
+  <div id="s2-p2" style="display:none;">
+    <div class="instructions" style="border-color:var(--alert-red);">&#128680; 치명적인 <strong>암모니아</strong> 유출! 즉시 '간'으로 보내 해독하십시오!</div>
+    <div class="detox-panel">
+      <div class="toxin-node" id="s2-toxin" onclick="selectToxin()">&#9760;&#65039; 암모니아</div>
+      <span class="arrow-anim">&#10148;</span>
+      <div class="liver-node" onclick="triggerDetox()">&#129372; 간 (해독)</div>
+    </div>
+  </div>
+  <button class="btn-next" id="btn-s2-next" onclick="goStage3()">기체 교환소 이동 &#8594;</button>
+</div>
+
+<div id="screen-stage3" class="screen">
+  <div class="scene-wrap" id="sw-s3">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_7.png" class="scene-img" alt="Stage 3" onerror="this.style.background='#001020'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>STAGE 3: 폐포 기체 확산</div>
+  <div class="instructions">혈액 속 <strong>CO&#8322;는 터치하여 방출</strong>, 떠다니는 <strong>O&#8322;는 터치하여 흡수</strong>!</div>
+  <div class="s3-score-bar">
+    <div class="s3-stat" id="s3-o2" style="color:var(--neon-blue);">&#128309; O&#8322; 흡수: 0/3</div>
+    <div class="s3-stat" id="s3-co2" style="color:var(--alert-red);">&#128308; CO&#8322; 방출: 0/3</div>
+  </div>
+  <div class="bubble-container" id="s3-bubbles">
+    <div class="bubble bubble-co2" onclick="hitGas('co2',this)"><span class="bubble-icon">&#128308;</span>CO&#8322;</div>
+    <div class="bubble bubble-o2" onclick="hitGas('o2',this)"><span class="bubble-icon">&#128309;</span>O&#8322;</div>
+    <div class="bubble bubble-co2" onclick="hitGas('co2',this)"><span class="bubble-icon">&#128308;</span>CO&#8322;</div>
+    <div class="bubble bubble-o2" onclick="hitGas('o2',this)"><span class="bubble-icon">&#128309;</span>O&#8322;</div>
+    <div class="bubble bubble-o2" onclick="hitGas('o2',this)"><span class="bubble-icon">&#128309;</span>O&#8322;</div>
+    <div class="bubble bubble-co2" onclick="hitGas('co2',this)"><span class="bubble-icon">&#128308;</span>CO&#8322;</div>
+  </div>
+  <button class="btn-next" id="btn-s3-next" onclick="goStage4()">순환 루프 연결 &#8594;</button>
+</div>
+
+<div id="screen-stage4" class="screen">
+  <div class="scene-wrap" id="sw-s4">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_9.png" class="scene-img" alt="Stage 4" onerror="this.style.background='#0a001a'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>STAGE 4: 8자 루프 파이프라인</div>
+  <div class="instructions">단방향 밸브를 모두 열고, <strong>좌심실 메인 펌프를 2초간</strong> 꾹 눌러 피를 분출시키세요!</div>
+  <div class="valve-grid">
+    <div class="valve-btn" id="v1" onclick="toggleValve(1)">우심실 &#10145; 폐동맥 밸브 (열기)</div>
+    <div class="valve-btn" id="v2" onclick="toggleValve(2)">좌심방 &#10145; 좌심실 밸브 (열기)</div>
+  </div>
+  <div class="hold-pump" id="s4-pump">&#10084;&#65039; 좌심실 강력 펌핑 (HOLD 2초)</div>
+  <button class="btn-next" id="btn-s4-next" onclick="goStage5()">전신 순환 출발 &#8594;</button>
+</div>
+
+<div id="screen-stage5" class="screen">
+  <div class="scene-wrap" id="sw-s5">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_10.png" class="scene-img" alt="Stage 5" onerror="this.style.background='#100010'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>STAGE 5: 혈구 특공대 파견</div>
+  <div class="instructions">비상 징후 발생! 알맞은 <strong>혈액 성분</strong>을 즉시 파견하십시오.</div>
+  <div class="mission-item">
+    <div class="mission-label">&#128680; 출혈 발생! 딱지를 만들어라!</div>
+    <select id="s5-a1"><option value="">&#8594; 혈액 성분 선택</option><option value="적혈구">적혈구</option><option value="백혈구">백혈구</option><option value="혈소판">혈소판</option></select>
+  </div>
+  <div class="mission-item">
+    <div class="mission-label">&#129440; 미확인 세균 침입! 식균 작용!</div>
+    <select id="s5-a2"><option value="">&#8594; 혈액 성분 선택</option><option value="적혈구">적혈구</option><option value="백혈구">백혈구</option><option value="혈소판">혈소판</option></select>
+  </div>
+  <div class="mission-item">
+    <div class="mission-label">&#128168; 뇌세포 산소 기아 상태! 산소 배달!</div>
+    <select id="s5-a3"><option value="">&#8594; 혈액 성분 선택</option><option value="적혈구">적혈구</option><option value="백혈구">백혈구</option><option value="혈소판">혈소판</option></select>
+  </div>
+  <button class="btn-primary" onclick="checkStage5()">&#9889; 특공대 일제 투입</button>
+</div>
+
+<div id="screen-stage6" class="screen">
+  <div class="scene-wrap" id="sw-s6">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_11.png" class="scene-img" alt="Stage 6" onerror="this.style.background='#001020'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge"><div class="stage-dot"></div>STAGE 6: 세뇨관 정수 필터</div>
+  <div class="instructions">급류에 쓸려가는 <strong>포도당·아미노산을 터치</strong>해 구출! <strong>요소는 건드리지 마세요!</strong></div>
+  <div class="river-box" id="s6-river"></div>
+  <div class="s6-status-txt" id="s6-status">구출된 영양소: 0/5</div>
+  <button class="btn-next" id="btn-s6-next" onclick="goEpilogue()">최종 발전소 진입 &#8594;</button>
+</div>
+
+<div id="screen-epilogue" class="screen">
+  <div class="scene-wrap" id="sw-epi">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_12.png" class="scene-img" alt="Epilogue" onerror="this.style.background='#1a1000'">
+    <div class="scan-line"></div>
+    <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+  </div>
+  <div class="stage-badge" style="background:rgba(255,204,0,.08);border-color:var(--warn-yellow);color:var(--warn-yellow);"><div class="stage-dot" style="background:var(--warn-yellow);"></div>EPILOGUE: SYSTEM STABLE</div>
+  <h2 class="green-title">미토콘드리아 도착!</h2>
+  <div class="instructions">영양소와 산소를 융합하여 <strong>에너지(ATP)를 폭발</strong>시키십시오!</div>
+  <div class="fusion-area">
+    <div class="fusion-node" id="epi-nut" onclick="toggleEpi('nut')"><span class="fn-icon">&#127822;</span><span>영양소</span></div>
+    <div class="fusion-plus">&#65291;</div>
+    <div class="fusion-node" id="epi-o2" onclick="toggleEpi('o2')"><span class="fn-icon">&#128309;</span><span>산소</span></div>
+  </div>
+  <div class="formula-box">영양소 + 산소 &#10148; 물 + CO&#8322; + <strong>에너지(ATP) &#9889;</strong></div>
+  <button class="btn-primary" id="btn-finish" onclick="finishGame()">&#9889; 에너지 빅뱅! (완료)</button>
+  <div id="sync-msg"></div>
+</div>
+
+<div class="codeblue-overlay" id="cb-panel">
+  <div class="cb-img-wrap">
+    <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_2.png" style="width:100%;height:100%;object-fit:cover;filter:hue-rotate(300deg) saturate(2);" alt="Code Blue" onerror="this.style.background='#300000'">
+    <div class="scan-line"></div>
+  </div>
+  <div class="cb-title">&#128680; CODE BLUE! &#128680;</div>
+  <div class="cb-sub">환자 V/S 소실! 즉시 제세동 CPR을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: 구조 시 생명력 15점 차감)</span></div>
+  <div id="cb-tap-ui">
+    <div class="heart-btn" id="cbBtn" onclick="doCodeBlueCPR()">
+      <span style="font-size:2rem;">&#9829;</span>
+      <span class="heart-label" id="cb-count">0 / 30</span>
+    </div>
+    <div class="gauge-bg" style="width:80%;margin:12px auto 0;"><div class="gauge-fill" id="cb-gauge"></div></div>
+    <p style="color:var(--warn-yellow);margin-top:10px;font-size:.85rem;">화면을 미친듯이 연타하여 게이지를 채우세요!</p>
+  </div>
+  <div id="cb-hold-ui" style="display:none;width:100%;text-align:center;">
+    <div class="hold-circle" id="cbHoldBtn">HOLD 5s</div>
+    <p style="color:var(--neon-green);margin-top:10px;font-size:.85rem;">5초간 화면을 꾹 누르고 떼지 마세요!</p>
+  </div>
+</div>
+</div>
+<script>
+// ── 전역 변수 ─────────────────────────────────────────────
+var pData = { id:"", name:"", score:100 };
+var errorCount = 0, currentStageFunc = null;
+var actx = null, sirenInt = null, flatSound = null;
+
+// ── 진행도 트래커 ─────────────────────────────────────────
+function updateProgress(idx) {
+  for (var i = 0; i < 9; i++) {
+    var dot = document.getElementById("pd-" + i);
+    if (!dot) continue;
+    dot.className = "progress-dot" + (i < idx ? " done" : i === idx ? " active" : "");
+  }
+}
+
+// ── 이미지 리플 효과 ──────────────────────────────────────
+function spawnRipple(e, wrapperId) {
+  var wrap = document.getElementById(wrapperId);
+  if (!wrap) return;
+  var rect = wrap.getBoundingClientRect();
+  var cx = (e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : rect.left + rect.width/2));
+  var cy = (e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : rect.top + rect.height/2));
+  var rip = document.createElement("div");
+  rip.className = "ripple";
+  rip.style.cssText = "width:30px;height:30px;left:" + (cx - rect.left - 15) + "px;top:" + (cy - rect.top - 15) + "px;";
+  wrap.appendChild(rip);
+  setTimeout(function(){ rip.parentNode && rip.parentNode.removeChild(rip); }, 720);
+}
+
+// 모든 scene-wrap에 클릭/터치 이벤트
+document.querySelectorAll(".scene-wrap").forEach(function(wrap) {
+  wrap.addEventListener("click", function(e){ spawnRipple(e, wrap.id); });
+  wrap.addEventListener("touchstart", function(e){ if(e.touches[0]) spawnRipple(e.touches[0], wrap.id); }, {passive:true});
+});
+
+// ── 마우스 시차 효과 ──────────────────────────────────────
+document.addEventListener("mousemove", function(e) {
+  var wrap = document.querySelector(".screen.active .scene-wrap");
+  if (!wrap) return;
+  var img = wrap.querySelector(".scene-img");
+  if (!img) return;
+  var rect = wrap.getBoundingClientRect();
+  var dx = (e.clientX - rect.left - rect.width/2) / rect.width * 9;
+  var dy = (e.clientY - rect.top - rect.height/2) / rect.height * 5;
+  img.style.transform = "scale(1.07) translate(" + dx + "px," + dy + "px)";
+});
+
+document.addEventListener("touchmove", function(e) {
+  if (!e.touches[0]) return;
+  var wrap = document.querySelector(".screen.active .scene-wrap");
+  if (!wrap) return;
+  var img = wrap.querySelector(".scene-img");
+  if (!img) return;
+  var rect = wrap.getBoundingClientRect();
+  var dx = (e.touches[0].clientX - rect.left - rect.width/2) / rect.width * 7;
+  var dy = (e.touches[0].clientY - rect.top - rect.height/2) / rect.height * 4;
+  img.style.transform = "scale(1.06) translate(" + dx + "px," + dy + "px)";
+}, {passive:true});
+
+// ── 오디오 ───────────────────────────────────────────────
+function playSnd(type) {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = actx.createOscillator(), gn = actx.createGain();
+    osc.connect(gn); gn.connect(actx.destination);
+    if (type === "beep") { osc.frequency.value = 800; gn.gain.value = 0.08; osc.start(); osc.stop(actx.currentTime + 0.1); }
+    else if (type === "fail") { osc.frequency.value = 150; gn.gain.value = 0.18; osc.start(); osc.stop(actx.currentTime + 0.3); }
+    else if (type === "success") {
+      osc.frequency.value = 523; gn.gain.value = 0.09; osc.start(); osc.stop(actx.currentTime + 0.1);
+      setTimeout(function(){ try { var o2=actx.createOscillator(),g2=actx.createGain(); o2.connect(g2); g2.connect(actx.destination); o2.frequency.value=659; g2.gain.value=0.09; o2.start(); o2.stop(actx.currentTime+0.2); } catch(e){} }, 120);
+    }
+    else if (type === "flat") { osc.frequency.value = 400; gn.gain.value = 0.04; osc.start(); return {osc:osc,gn:gn}; }
+  } catch(e) {} return null;
+}
+
+function toggleSiren(on) {
+  if (on) {
+    flatSound = playSnd("flat");
+    sirenInt = setInterval(function(){ try { if(!actx) return; var o=actx.createOscillator(),g=actx.createGain(); o.connect(g); g.connect(actx.destination); o.frequency.value=880; g.gain.value=0.08; o.start(); o.stop(actx.currentTime+0.2); } catch(e){} }, 800);
+  } else {
+    if (sirenInt) clearInterval(sirenInt);
+    if (flatSound) { try { flatSound.osc.stop(); } catch(e) {} }
+  }
+}
+
+// ── UI 헬퍼 ──────────────────────────────────────────────
+function switchUI(id) {
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+  setTimeout(function(){ var img=document.querySelector(".screen.active .scene-img"); if(img) img.style.transform="scale(1)"; }, 50);
+}
+
+function setBPM(val, status) {
+  var el = document.getElementById("ui-bpm");
+  el.innerText = "♥ " + val + " BPM";
+  el.className = status === "danger" ? "status-bpm pulse-danger" : "status-bpm pulse-normal";
+}
+
+function updateScore(amt) {
+  pData.score = Math.max(0, pData.score + amt);
+  document.getElementById("ui-score").innerText = pData.score + "점";
+}
+
+function triggerError(restartFunc) {
+  errorCount++; playSnd("fail"); updateScore(-5);
+  var appEl = document.getElementById("app");
+  appEl.style.animation = "none"; void appEl.offsetHeight; appEl.style.animation = "app-shake 0.4s";
+  setTimeout(function(){ appEl.style.animation = ""; }, 400);
+  if (errorCount >= 3) { setTimeout(function(){ initCodeBlue(restartFunc); }, 500); }
+  else { var txt = document.getElementById("ui-bpm").innerText; var cur = parseInt(txt.replace(/[^0-9]/g,""))||0; if(cur>40) setBPM(cur-5,"danger"); }
+}
+
+// ── 게임 시작 ─────────────────────────────────────────────
+function startGame() {
+  var sid = document.getElementById("studentId").value.trim();
+  var sname = document.getElementById("studentName").value.trim();
+  if (!sid || !sname) { alert("팀 번호와 코드명을 입력하세요."); return; }
+  if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
+  // 로컬에만 저장 - 외부 전송 없음
+  pData.id = sid; pData.name = sname;
+  updateProgress(1); switchUI("screen-cpr");
+}
+
+// ── CPR ──────────────────────────────────────────────────
+var introCpr = 0;
+function doIntroCPR() {
+  introCpr++; playSnd("beep");
+  document.getElementById("cpr-gauge").style.width = (introCpr/30*100) + "%";
+  document.getElementById("cpr-count").innerText = introCpr + " / 30";
+  var btn = document.getElementById("cprBtn");
+  btn.style.transform = "scale(0.88)"; setTimeout(function(){ btn.style.transform="scale(1)"; }, 100);
+  if (introCpr >= 30) { setBPM(40,"normal"); playSnd("success"); setTimeout(function(){ startStage1(); }, 600); }
+}
+
+// ── STAGE 1 ───────────────────────────────────────────────
+var s1Zone = 0, s1SelNut = null, s1SelEnz = null;
+var s1Logic = [
+  { name:"입", img:"이미지/Bio_Rescue_Code_Blue_-_Slide_3.png", items:["녹말","단백질","지방"], rule:{"녹말":"아밀레이스","단백질":"통과","지방":"통과"} },
+  { name:"위", img:"이미지/Bio_Rescue_Code_Blue_-_Slide_4.png", items:["엿당","단백질","지방"], rule:{"단백질":"펩신","엿당":"통과","지방":"통과"} },
+  { name:"작은창자", img:"이미지/Bio_Rescue_Code_Blue_-_Slide_6.png", items:["엿당","중간단백질","지방"], rule:{"지방":"라이페이스","엿당":"통과","중간단백질":"통과"} }
+];
+
+function startStage1() { updateProgress(2); switchUI("screen-stage1"); s1Zone=0; currentStageFunc=startStage1; errorCount=0; renderS1(); }
+
+function renderS1() {
+  var data = s1Logic[s1Zone];
+  document.getElementById("s1-img").src = data.img;
+  document.getElementById("s1-zone-title").innerText = "구역: " + data.name;
+  document.getElementById("s1-desc").innerHTML = "[" + data.name + "] 알맞은 소화 효소를 매칭하세요. 분해 안 되면 [그냥 통과]를 선택하세요.";
+  var grid = document.getElementById("s1-nutrient-grid"); grid.innerHTML = "";
+  data.items.forEach(function(itm) {
+    var div = document.createElement("div"); div.className = "match-item nutrient"; div.innerText = itm;
+    div.onclick = function(){ document.querySelectorAll(".nutrient").forEach(function(el){el.classList.remove("selected");}); div.classList.add("selected"); s1SelNut={el:div,val:itm}; checkS1Match(); };
+    grid.appendChild(div);
+  });
+  document.querySelectorAll(".enzyme").forEach(function(el){ el.classList.remove("selected"); });
+  s1SelNut=null; s1SelEnz=null; document.getElementById("btn-s1-next").style.display="none";
+}
+
+function selectItem(el, type, val) {
+  if (type === "enzyme") {
+    document.querySelectorAll(".enzyme").forEach(function(e){ e.classList.remove("selected"); });
+    el.classList.add("selected"); s1SelEnz={el:el,val:val}; checkS1Match();
+  }
+}
+
+function checkS1Match() {
+  if (!s1SelNut || !s1SelEnz) return;
+  var rule = s1Logic[s1Zone].rule;
+  if (rule[s1SelNut.val] === s1SelEnz.val) {
+    playSnd("success");
+    s1SelNut.el.classList.add(s1SelEnz.val==="통과" ? "bypassed" : "digested");
+    s1SelNut.el.classList.remove("selected","nutrient");
+    s1SelNut.el.innerText = s1SelEnz.val==="통과" ? s1SelNut.val+" ↪패스" : s1SelNut.val+" ✅분해됨";
+    s1SelNut=null; s1SelEnz=null;
+    if (document.querySelectorAll(".nutrient:not(.digested):not(.bypassed)").length === 0)
+      document.getElementById("btn-s1-next").style.display="block";
+  } else {
+    s1SelNut.el.classList.remove("selected"); s1SelEnz.el.classList.remove("selected");
+    s1SelNut=null; s1SelEnz=null; triggerError(startStage1);
+  }
+}
+
+function nextS1Zone() {
+  s1Zone++;
+  if (s1Zone > 2) { setBPM(50,"normal"); startStage2(); }
+  else { setBPM(40+s1Zone*5,"normal"); renderS1(); }
+}
+
+// ── STAGE 2 ───────────────────────────────────────────────
+var s2Items=[{name:"포도당",ans:"모세혈관"},{name:"지방산",ans:"암죽관"},{name:"아미노산",ans:"모세혈관"}];
+var s2Idx=0, toxSel=false;
+
+function startStage2() { updateProgress(3); switchUI("screen-stage2"); currentStageFunc=startStage2; errorCount=0; s2Idx=0; toxSel=false; document.getElementById("s2-p1").style.display="block"; document.getElementById("s2-p2").style.display="none"; document.getElementById("btn-s2-next").style.display="none"; updS2Card(); }
+function updS2Card() { if(s2Idx>=s2Items.length){document.getElementById("s2-p1").style.display="none";document.getElementById("s2-p2").style.display="block";return;} document.getElementById("s2-target").innerText=s2Items[s2Idx].name; }
+function swipeS2(dir) { if(s2Items[s2Idx].ans===dir){playSnd("success");s2Idx++;updS2Card();}else triggerError(startStage2); }
+function selectToxin() { toxSel=true; document.getElementById("s2-toxin").classList.add("selected"); playSnd("beep"); }
+function triggerDetox() {
+  if (!toxSel) return triggerError(startStage2);
+  playSnd("success");
+  var tox=document.getElementById("s2-toxin");
+  tox.className="toxin-node"; tox.style.background="var(--neon-green)"; tox.style.color="#000"; tox.style.animation="none"; tox.innerText="✅ 안전한 요소";
+  document.getElementById("btn-s2-next").style.display="block";
+}
+function goStage3() { setBPM(60,"normal"); startStage3(); }
+
+// ── STAGE 3 ───────────────────────────────────────────────
+var o2Cnt=0, co2Cnt=0;
+function startStage3() { updateProgress(4); switchUI("screen-stage3"); currentStageFunc=startStage3; errorCount=0; o2Cnt=0; co2Cnt=0; updS3(); document.querySelectorAll(".bubble").forEach(function(b){ b.classList.remove("hit"); b.style.opacity="1"; b.style.pointerEvents="auto"; }); document.getElementById("btn-s3-next").style.display="none"; }
+function updS3() { document.getElementById("s3-o2").innerText="🔵 O₂ 흡수: "+o2Cnt+"/3"; document.getElementById("s3-co2").innerText="🔴 CO₂ 방출: "+co2Cnt+"/3"; }
+function hitGas(type, el) { if(el.classList.contains("hit"))return; el.classList.add("hit"); playSnd("beep"); if(type==="o2")o2Cnt++;else co2Cnt++; updS3(); if(o2Cnt>=3&&co2Cnt>=3){playSnd("success");document.getElementById("btn-s3-next").style.display="block";} }
+function goStage4() { setBPM(70,"normal"); startStage4(); }
+
+// ── STAGE 4 ───────────────────────────────────────────────
+var v1St=false, v2St=false, pumpTm=null;
+function startStage4() {
+  updateProgress(5); switchUI("screen-stage4"); currentStageFunc=startStage4; errorCount=0;
+  v1St=false; v2St=false;
+  document.getElementById("v1").className="valve-btn"; document.getElementById("v2").className="valve-btn";
+  var pump=document.getElementById("s4-pump"); pump.className="hold-pump"; pump.style.opacity="0.4"; pump.style.pointerEvents="none"; pump.innerText="❤️ 좌심실 강력 펌핑 (HOLD 2초)";
+  document.getElementById("btn-s4-next").style.display="none"; initPump();
+}
+function toggleValve(num) {
+  playSnd("beep");
+  if(num===1){v1St=!v1St;document.getElementById("v1").className=v1St?"valve-btn open":"valve-btn";}
+  if(num===2){v2St=!v2St;document.getElementById("v2").className=v2St?"valve-btn open":"valve-btn";}
+  if(v1St&&v2St){var p=document.getElementById("s4-pump");p.className="hold-pump enabled";p.style.opacity="1";p.style.pointerEvents="auto";}
+}
+function initPump() {
+  var btn=document.getElementById("s4-pump");
+  btn.onpointerdown=function(e){e.preventDefault();if(!v1St||!v2St)return;playSnd("beep");btn.innerText="펌핑 중... 유지하세요!";pumpTm=setTimeout(function(){playSnd("success");btn.innerText="✅ 순환 개방 완료!";btn.className="hold-pump";btn.style.background="rgba(72,229,194,0.15)";btn.style.borderColor="var(--neon-green)";document.getElementById("btn-s4-next").style.display="block";},2000);};
+  btn.onpointerup=btn.onpointerleave=function(){if(pumpTm){clearTimeout(pumpTm);pumpTm=null;if(btn.innerText!=="✅ 순환 개방 완료!"){btn.innerText="실패! 다시 2초간 누르세요";triggerError(startStage4);}}};
+}
+function goStage5() { setBPM(80,"normal"); startStage5(); }
+
+// ── STAGE 5 ───────────────────────────────────────────────
+function startStage5() { updateProgress(6); switchUI("screen-stage5"); currentStageFunc=startStage5; errorCount=0; ["s5-a1","s5-a2","s5-a3"].forEach(function(id){document.getElementById(id).value="";}); }
+function checkStage5() {
+  var a1=document.getElementById("s5-a1").value, a2=document.getElementById("s5-a2").value, a3=document.getElementById("s5-a3").value;
+  if(a1==="혈소판"&&a2==="백혈구"&&a3==="적혈구"){playSnd("success");setBPM(85,"normal");startStage6();}else triggerError(startStage5);
+}
+
+// ── STAGE 6 ───────────────────────────────────────────────
+var s6Int=null, s6Save=0;
+function startStage6() {
+  updateProgress(7); switchUI("screen-stage6"); currentStageFunc=startStage6; errorCount=0; s6Save=0;
+  document.getElementById("s6-status").innerText="구출된 영양소: 0/5";
+  document.getElementById("s6-river").innerHTML=""; document.getElementById("btn-s6-next").style.display="none";
+  if(s6Int) clearInterval(s6Int); s6Int=setInterval(spawnItem,950);
+}
+function spawnItem() {
+  if(!document.getElementById("screen-stage6").classList.contains("active")){ clearInterval(s6Int); return; }
+  var types=[{t:"🍬 포도당",isGood:true},{t:"🥩 아미노산",isGood:true},{t:"☠️ 요소",isGood:false}];
+  var sel=types[Math.floor(Math.random()*types.length)];
+  var el=document.createElement("div"); el.className="falling-item"; el.innerText=sel.t;
+  el.style.background=sel.isGood?"linear-gradient(135deg,rgba(72,229,194,0.88),rgba(40,180,150,0.92))":"linear-gradient(135deg,rgba(255,80,60,0.88),rgba(180,30,20,0.92))";
+  el.style.color=sel.isGood?"#020a18":"white"; el.style.top="-35px"; el.style.left=(Math.random()*55+15)+"%";
+  el.onpointerdown=function(){
+    if(sel.isGood){s6Save++;document.getElementById("s6-status").innerText="구출된 영양소: "+s6Save+"/5";playSnd("beep");el.parentNode&&el.parentNode.removeChild(el);if(s6Save>=5){clearInterval(s6Int);playSnd("success");document.getElementById("btn-s6-next").style.display="block";}}
+    else{el.parentNode&&el.parentNode.removeChild(el);triggerError(startStage6);}
+  };
+  document.getElementById("s6-river").appendChild(el);
+  var y=-35;
+  var fall=setInterval(function(){ y+=3.5; el.style.top=y+"px"; if(y>220){clearInterval(fall);if(sel.isGood&&el.parentNode)triggerError(startStage6);el.parentNode&&el.parentNode.removeChild(el);} },40);
+}
+function goEpilogue() { setBPM(90,"normal"); startEpilogue(); }
+
+// ── 에필로그 ─────────────────────────────────────────────
+var epiNut=false, epiO2=false;
+function startEpilogue() { updateProgress(8); switchUI("screen-epilogue"); epiNut=false; epiO2=false; document.getElementById("epi-nut").classList.remove("active"); document.getElementById("epi-o2").classList.remove("active"); document.getElementById("btn-finish").style.display="block"; document.getElementById("sync-msg").innerText=""; }
+function toggleEpi(type) {
+  playSnd("beep");
+  if(type==="nut"){epiNut=!epiNut;document.getElementById("epi-nut").className=epiNut?"fusion-node active":"fusion-node";}
+  if(type==="o2"){epiO2=!epiO2;document.getElementById("epi-o2").className=epiO2?"fusion-node active":"fusion-node";}
+}
+function finishGame() {
+  if(!epiNut||!epiO2){ alert("영양소와 산소를 모두 탭하여 활성화하세요!"); return; }
+  playSnd("success"); setBPM(100,"normal");
+  document.getElementById("btn-finish").style.display="none";
+  document.getElementById("app").style.animation="victory-glow 1s infinite";
+  // 외부 서버 전송 없음 - 로컬 완료 처리만
+  document.getElementById("sync-msg").innerHTML = "🎉 임무 완료!<br>최종 생명력: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+}
+
+// ── CODE BLUE ─────────────────────────────────────────────
+var cbTaps=0, cbHoldTm=null;
+function initCodeBlue(restartFunc) {
+  toggleSiren(true); setBPM(0,"danger");
+  document.getElementById("cb-panel").classList.add("active");
+  document.getElementById("cb-tap-ui").style.display="block"; document.getElementById("cb-hold-ui").style.display="none";
+  cbTaps=0; document.getElementById("cb-gauge").style.width="0%"; document.getElementById("cb-count").innerText="0 / 30";
+  currentStageFunc=restartFunc;
+}
+function doCodeBlueCPR() {
+  cbTaps++; playSnd("beep");
+  document.getElementById("cb-gauge").style.width=(cbTaps/30*100)+"%"; document.getElementById("cb-count").innerText=cbTaps+" / 30";
+  var btn=document.getElementById("cbBtn"); btn.style.transform="scale(0.88)"; setTimeout(function(){ btn.style.transform="scale(1)"; },80);
+  if(cbTaps>=30){playSnd("success");document.getElementById("cb-tap-ui").style.display="none";document.getElementById("cb-hold-ui").style.display="block";document.getElementById("cbHoldBtn").style.display="flex";initHoldCPR();}
+}
+function initHoldCPR() {
+  var btn=document.getElementById("cbHoldBtn");
+  btn.onpointerdown=function(e){ e.preventDefault(); playSnd("beep"); var timeLeft=5; btn.innerText=timeLeft+"s"; cbHoldTm=setInterval(function(){ timeLeft--; btn.innerText=timeLeft+"s"; playSnd("beep"); if(timeLeft<=0){clearInterval(cbHoldTm);cbHoldTm=null;reviveCodeBlue();} },1000); };
+  btn.onpointerup=btn.onpointerleave=function(){ if(cbHoldTm){clearInterval(cbHoldTm);cbHoldTm=null;btn.innerText="HOLD 5s";playSnd("fail");alert("압박 실패! 손을 떼면 안 됩니다.");} };
+}
+function reviveCodeBlue() {
+  toggleSiren(false); playSnd("success"); updateScore(-15); errorCount=0;
+  document.getElementById("cb-panel").classList.remove("active");
+  alert("V/S 극적 회복! 감점 처리 후 현재 구역을 재시도합니다.");
+  if(currentStageFunc) currentStageFunc();
+}
+</script>
+</body>
+</html>

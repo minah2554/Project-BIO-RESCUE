@@ -1,0 +1,1 @@
+﻿{"version":2,"builds":[{"src":"*.html","use":"@vercel/static"}],"routes":[{"src":"/(.*)\\.png","dest":"/이미지/$1.png"},{"src":"/(.*)","dest":"/index.html"}]}

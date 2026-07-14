@@ -1,0 +1,1 @@
+﻿{"hosting":{"public":".","ignore":["firebase.json",".git",".gitignore","node_modules"],"rewrites":[{"source":"**","destination":"/index.html"}],"headers":[{"source":"**","headers":[{"key":"Cache-Control","value":"max-age=3600"}]}]}}
