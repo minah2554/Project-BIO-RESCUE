@@ -12,48 +12,56 @@
       font-weight: 100;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
       font-weight: 200;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
       font-weight: 300;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
       font-weight: 400;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
       font-weight: 500;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
       font-weight: 600;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
       font-weight: 700;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
       font-weight: 800;
       font-display: swap;
     }
+
     @font-face {
       font-family: 'Pretendard';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
@@ -496,8 +504,9 @@
       cursor: pointer;
       user-select: none;
       box-shadow: 0 0 22px rgba(255, 59, 48, .65), inset 0 -4px 10px rgba(0, 0, 0, .3);
-      transition: transform .08s, box-shadow .08s, margin-left .1s;
+      transition: transform .08s, box-shadow .08s;
       font-family: "Pretendard", system-ui, -apple-system, sans-serif;
+      margin: 18px auto;
     }
 
     .heart-btn:active {
@@ -709,15 +718,41 @@
       animation: float 3s ease-in-out infinite;
     }
 
-    .bubble:nth-child(2)  { animation-delay: .4s; }
-    .bubble:nth-child(3)  { animation-delay: .8s; }
-    .bubble:nth-child(4)  { animation-delay: 1.2s; }
-    .bubble:nth-child(5)  { animation-delay: 1.6s; }
-    .bubble:nth-child(6)  { animation-delay: .2s; }
-    .bubble:nth-child(7)  { animation-delay: .6s; }
-    .bubble:nth-child(8)  { animation-delay: 1.0s; }
-    .bubble:nth-child(9)  { animation-delay: 1.4s; }
-    .bubble:nth-child(10) { animation-delay: 1.8s; }
+    .bubble:nth-child(2) {
+      animation-delay: .4s;
+    }
+
+    .bubble:nth-child(3) {
+      animation-delay: .8s;
+    }
+
+    .bubble:nth-child(4) {
+      animation-delay: 1.2s;
+    }
+
+    .bubble:nth-child(5) {
+      animation-delay: 1.6s;
+    }
+
+    .bubble:nth-child(6) {
+      animation-delay: .2s;
+    }
+
+    .bubble:nth-child(7) {
+      animation-delay: .6s;
+    }
+
+    .bubble:nth-child(8) {
+      animation-delay: 1.0s;
+    }
+
+    .bubble:nth-child(9) {
+      animation-delay: 1.4s;
+    }
+
+    .bubble:nth-child(10) {
+      animation-delay: 1.8s;
+    }
 
     .bubble-co2 {
       background: radial-gradient(circle, rgba(255, 100, 80, .35), rgba(255, 59, 48, .1));
@@ -728,7 +763,7 @@
     .bubble-co2.tapped-once {
       background: radial-gradient(circle, rgba(255, 60, 30, .55), rgba(200, 30, 10, .2));
       border: 2.5px dashed rgba(255, 120, 80, 1);
-      box-shadow: 0 0 14px rgba(255,80,40,.5);
+      box-shadow: 0 0 14px rgba(255, 80, 40, .5);
       transform: scale(1.12);
     }
 
@@ -780,12 +815,13 @@
       align-items: center;
       gap: 8px;
       padding: 10px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
       margin-bottom: 8px;
       flex-shrink: 0;
     }
+
     .tool {
       padding: 6px 10px;
       background: #2d3748;
@@ -801,6 +837,7 @@
       color: #e2e8f0;
       font-family: "Pretendard", sans-serif;
     }
+
     .tool.selected {
       background: var(--neon-blue);
       border-color: #fff;
@@ -808,6 +845,7 @@
       color: #fff;
       transform: translateY(-2px);
     }
+
     .row {
       display: flex;
       width: 100%;
@@ -815,12 +853,14 @@
       gap: 36px;
       z-index: 2;
     }
+
     .v-col {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 5px;
     }
+
     .organ {
       width: 220px;
       height: 32px;
@@ -833,12 +873,13 @@
       text-align: center;
       background: linear-gradient(90deg, #3182ce 50%, #e53e3e 50%);
       border: 2px solid #fff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       z-index: 5;
       color: white;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
       font-family: "Pretendard", sans-serif;
     }
+
     .heart-container {
       position: relative;
       width: 100%;
@@ -848,6 +889,7 @@
       margin: 8px 0;
       gap: 4px;
     }
+
     .heart-bg {
       position: absolute;
       top: 15px;
@@ -859,7 +901,9 @@
       z-index: 0;
       border-radius: 10px;
     }
-    .heart-bg::before, .heart-bg::after {
+
+    .heart-bg::before,
+    .heart-bg::after {
       content: '';
       position: absolute;
       width: 130px;
@@ -867,8 +911,16 @@
       background-color: inherit;
       border-radius: 50%;
     }
-    .heart-bg::before { top: -65px; left: 0; }
-    .heart-bg::after { top: 0; left: 65px; }
+
+    .heart-bg::before {
+      top: -65px;
+      left: 0;
+    }
+
+    .heart-bg::after {
+      top: 0;
+      left: 65px;
+    }
 
     .chamber {
       width: 82px;
@@ -882,12 +934,15 @@
       font-size: 12px;
       z-index: 2;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
       transition: 0.2s;
       text-shadow: 1px 1px 2px black;
       font-family: "Pretendard", sans-serif;
     }
-    .chamber:active { transform: scale(0.95); }
+
+    .chamber:active {
+      transform: scale(0.95);
+    }
 
     .slot {
       width: 78px;
@@ -903,12 +958,14 @@
       text-shadow: 1px 1px 2px black;
       font-family: "Pretendard", sans-serif;
     }
+
     .slot.empty {
       border: 1.5px dashed #718096;
       background: #2d3748;
       color: #a0aec0;
       text-shadow: none;
     }
+
     .slot.filled {
       border: 1.5px solid;
       color: white;
@@ -927,22 +984,41 @@
       font-weight: bold;
       z-index: 2;
     }
+
     .arrow.empty {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border: 1.5px solid #888;
       color: #888;
     }
+
     .arrow.set {
-      background: rgba(255,215,0,0.25);
+      background: rgba(255, 215, 0, 0.25);
       border: 1.5px solid #ffd700;
       color: #ffd700;
-      box-shadow: 0 0 8px rgba(255,215,0,0.5);
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
     }
-    .arrow-row { gap: 80px; margin: 1px 0; }
 
-    .bg-gray { background: #4a5568 !important; border-color: #718096 !important; }
-    .bg-red { background: #e53e3e !important; border-color: #fc8181 !important; box-shadow: 0 0 15px rgba(229, 62, 62, 0.4) !important;}
-    .bg-blue { background: #3182ce !important; border-color: #63b3ed !important; box-shadow: 0 0 15px rgba(49, 130, 206, 0.4) !important;}
+    .arrow-row {
+      gap: 80px;
+      margin: 1px 0;
+    }
+
+    .bg-gray {
+      background: #4a5568 !important;
+      border-color: #718096 !important;
+    }
+
+    .bg-red {
+      background: #e53e3e !important;
+      border-color: #fc8181 !important;
+      box-shadow: 0 0 15px rgba(229, 62, 62, 0.4) !important;
+    }
+
+    .bg-blue {
+      background: #3182ce !important;
+      border-color: #63b3ed !important;
+      box-shadow: 0 0 15px rgba(49, 130, 206, 0.4) !important;
+    }
 
     .blood-particle {
       position: absolute;
@@ -955,13 +1031,49 @@
       pointer-events: none;
       opacity: 0;
     }
-    .blood-particle.red { background: #ff0844; box-shadow: 0 0 10px #ff0844, 0 0 15px #ffb199; }
-    .blood-particle.blue { background: #00f2fe; box-shadow: 0 0 10px #00f2fe, 0 0 15px #4facfe; }
 
-    .pulse-ready { animation: pulse-border 1s infinite alternate; }
-    @keyframes pulse-border { from { box-shadow: 0 0 10px #ffd700, inset 0 0 10px #ffd700; } to { box-shadow: 0 0 25px #ffd700, inset 0 0 20px #ffd700; } }
-    .pump-effect { animation: beat 0.5s ease-out 3; }
-    @keyframes beat { 0% { transform: scale(1); } 50% { transform: scale(1.05); filter: brightness(1.3); } 100% { transform: scale(1); } }
+    .blood-particle.red {
+      background: #ff0844;
+      box-shadow: 0 0 10px #ff0844, 0 0 15px #ffb199;
+    }
+
+    .blood-particle.blue {
+      background: #00f2fe;
+      box-shadow: 0 0 10px #00f2fe, 0 0 15px #4facfe;
+    }
+
+    .pulse-ready {
+      animation: pulse-border 1s infinite alternate;
+    }
+
+    @keyframes pulse-border {
+      from {
+        box-shadow: 0 0 10px #ffd700, inset 0 0 10px #ffd700;
+      }
+
+      to {
+        box-shadow: 0 0 25px #ffd700, inset 0 0 20px #ffd700;
+      }
+    }
+
+    .pump-effect {
+      animation: beat 0.5s ease-out 3;
+    }
+
+    @keyframes beat {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+        filter: brightness(1.3);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
 
     .mission-item {
       background: rgba(255, 255, 255, .04);
@@ -1127,14 +1239,37 @@
     }
 
     @keyframes cb-shake {
-      0%   { transform: translate(0px, 0px) rotate(0deg); }
-      15%  { transform: translate(-3px, 2px) rotate(-0.4deg); }
-      30%  { transform: translate(3px, -2px) rotate(0.4deg); }
-      45%  { transform: translate(-2px, -3px) rotate(0.2deg); }
-      60%  { transform: translate(2px, 3px) rotate(-0.2deg); }
-      75%  { transform: translate(-3px, 1px) rotate(0.3deg); }
-      90%  { transform: translate(2px, -1px) rotate(-0.3deg); }
-      100% { transform: translate(0px, 0px) rotate(0deg); }
+      0% {
+        transform: translate(0px, 0px) rotate(0deg);
+      }
+
+      15% {
+        transform: translate(-3px, 2px) rotate(-0.4deg);
+      }
+
+      30% {
+        transform: translate(3px, -2px) rotate(0.4deg);
+      }
+
+      45% {
+        transform: translate(-2px, -3px) rotate(0.2deg);
+      }
+
+      60% {
+        transform: translate(2px, 3px) rotate(-0.2deg);
+      }
+
+      75% {
+        transform: translate(-3px, 1px) rotate(0.3deg);
+      }
+
+      90% {
+        transform: translate(2px, -1px) rotate(-0.3deg);
+      }
+
+      100% {
+        transform: translate(0px, 0px) rotate(0deg);
+      }
     }
 
     .cb-content {
@@ -1398,7 +1533,8 @@
 
     <div id="screen-login" class="screen active">
       <div class="scene-wrap" id="sw-login">
-        <video src="이미지/표지.mp4" class="scene-img" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
+        <video src="이미지/표지.mp4" class="scene-img" autoplay loop muted playsinline
+          style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
         <div class="scan-line"></div>
         <div class="hud-corner hud-tl"></div>
         <div class="hud-corner hud-tr"></div>
@@ -1413,7 +1549,8 @@
         침투하십시오.</div>
       <input type="text" id="studentId" placeholder="학번 입력 (예: 20101)">
       <input type="text" id="studentName" placeholder="코드명 입력 (예: 홍길동)">
-      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글 시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
+      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글
+        시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
       <button class="btn-primary" onclick="startGame()">&#9889; 시스템 침투 승인</button>
     </div>
 
@@ -1521,7 +1658,8 @@
       <div class="stage-badge">
         <div class="stage-dot"></div>STAGE 3: 폐포 기체 확산
       </div>
-      <div class="instructions">혈액 속 <strong>CO&#8322;는 두 번 터치해 방출</strong> 💥, 떠다니는 <strong>O&#8322;는 한 번 터치해 흡수</strong> ✅!</div>
+      <div class="instructions">혈액 속 <strong>CO&#8322;는 두 번 터치해 방출</strong> 💥, 떠다니는 <strong>O&#8322;는 한 번 터치해
+          흡수</strong> ✅!</div>
       <div class="s3-score-bar">
         <div class="s3-stat" id="s3-o2" style="color:var(--neon-blue);">&#128309; O&#8322; 흡수: 0/5</div>
         <div class="s3-stat" id="s3-co2" style="color:var(--alert-red);">&#128308; CO&#8322; 방출: 0/5</div>
@@ -1573,8 +1711,8 @@
 
     <div id="screen-stage4" class="screen">
       <div class="scene-wrap" id="sw-s4">
-        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_9.png" class="scene-img" alt="Stage 4"
-          onerror="this.style.background='#0a001a'">
+        <video src="이미지/심장박동.mp4" class="scene-img" autoplay loop muted playsinline
+          style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
         <div class="scan-line"></div>
         <div class="hud-corner hud-tl"></div>
         <div class="hud-corner hud-tr"></div>
@@ -1584,11 +1722,12 @@
       <div class="stage-badge">
         <div class="stage-dot"></div>STAGE 4: 순환계 루트 복구
       </div>
-      
+
       <div class="instructions">
         1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>
         2. 심방과 심실도 눌러 색을 맞추세요.<br>
-        3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.
+        3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.<br>
+        4. 좌심실을 2초간 눌러 혈액을 공급하세요.
       </div>
 
       <div id="toolbox">
@@ -1598,65 +1737,72 @@
         <div class="tool" onclick="selectTool('대정맥')">대정맥</div>
       </div>
 
-      <div id="board" style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 10px 0; overflow-y: auto; flex-grow: 1;">
-        <div id="message-wrap" style="position: absolute; top: 10px; width: 100%; display: flex; justify-content: center; z-index: 20; pointer-events: none;">
-          <div id="message" style="background: rgba(0,0,0,0.85); color: #ffd700; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; opacity: 0; transition: opacity 0.3s; text-align: center; border: 1px solid #ffd700;"></div>
+      <div id="board"
+        style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 10px 0; overflow-y: auto; flex-grow: 1;">
+        <div id="message-wrap"
+          style="position: absolute; top: 10px; width: 100%; display: flex; justify-content: center; z-index: 20; pointer-events: none;">
+          <div id="message"
+            style="background: rgba(0,0,0,0.85); color: #ffd700; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; opacity: 0; transition: opacity 0.3s; text-align: center; border: 1px solid #ffd700;">
+          </div>
         </div>
 
         <!-- 폐(허파) 모세혈관 -->
         <div id="lungs" class="organ">폐의 모세혈관</div>
-        
+
         <!-- 폐 연결 혈관 및 화살표 -->
         <div class="row">
-            <div class="v-col">
-                <div id="arr-lungs-pa" class="arrow empty" onclick="arrowClick('arr-lungs-pa')">↕</div>
-                <div id="slot-pa" class="slot empty bg-gray" onclick="vesselClick('pa')">빈칸</div>
-                <div id="arr-pa" class="arrow empty" onclick="arrowClick('arr-pa')">↕</div>
-            </div>
-            <div class="v-col">
-                <div id="arr-lungs-pv" class="arrow empty" onclick="arrowClick('arr-lungs-pv')">↕</div>
-                <div id="slot-pv" class="slot empty bg-gray" onclick="vesselClick('pv')">빈칸</div>
-                <div id="arr-pv" class="arrow empty" onclick="arrowClick('arr-pv')">↕</div>
-            </div>
+          <div class="v-col">
+            <div id="arr-lungs-pa" class="arrow empty" onclick="arrowClick('arr-lungs-pa')">↕</div>
+            <div id="slot-pa" class="slot empty bg-gray" onclick="vesselClick('pa')">빈칸</div>
+            <div id="arr-pa" class="arrow empty" onclick="arrowClick('arr-pa')">↕</div>
+          </div>
+          <div class="v-col">
+            <div id="arr-lungs-pv" class="arrow empty" onclick="arrowClick('arr-lungs-pv')">↕</div>
+            <div id="slot-pv" class="slot empty bg-gray" onclick="vesselClick('pv')">빈칸</div>
+            <div id="arr-pv" class="arrow empty" onclick="arrowClick('arr-pv')">↕</div>
+          </div>
         </div>
-        
+
         <div class="heart-container" id="heart-area">
-            <div class="heart-bg"></div>
-            
-            <div class="row">
-                <div id="ra" class="chamber bg-gray" onclick="chamberClick('ra')">우심방</div>
-                <div id="la" class="chamber bg-gray" onclick="chamberClick('la')">좌심방</div>
-            </div>
-            
-            <div class="row arrow-row">
-                <div id="arr-ra-rv" class="arrow empty" onclick="arrowClick('arr-ra-rv')">↕</div>
-                <div id="arr-la-lv" class="arrow empty" onclick="arrowClick('arr-la-lv')">↕</div>
-            </div>
-            
-            <div class="row">
-                <div id="rv" class="chamber bg-gray" onclick="chamberClick('rv')">우심실</div>
-                <div id="lv" class="chamber bg-gray">좌심실<br><span style="font-size:10px; color:#ccc;">(Hold)</span></div>
-            </div>
+          <div class="heart-bg"></div>
+
+          <div class="row">
+            <div id="ra" class="chamber bg-gray" onclick="chamberClick('ra')">우심방</div>
+            <div id="la" class="chamber bg-gray" onclick="chamberClick('la')">좌심방</div>
+          </div>
+
+          <div class="row arrow-row">
+            <div id="arr-ra-rv" class="arrow empty" onclick="arrowClick('arr-ra-rv')">↕</div>
+            <div id="arr-la-lv" class="arrow empty" onclick="arrowClick('arr-la-lv')">↕</div>
+          </div>
+
+          <div class="row">
+            <div id="rv" class="chamber bg-gray" onclick="chamberClick('rv')">우심실</div>
+            <div id="lv" class="chamber bg-red">좌심실<br><span style="font-size:10px; color:#ccc;">(Hold)</span></div>
+          </div>
         </div>
 
         <div class="row">
-            <div class="v-col">
-                <div id="arr-vc" class="arrow empty" onclick="arrowClick('arr-vc')">↕</div>
-                <div id="slot-vc" class="slot empty bg-gray" onclick="vesselClick('vc')">빈칸</div>
-                <div id="arr-body-vc" class="arrow empty" onclick="arrowClick('arr-body-vc')">↕</div>
-            </div>
-            <div class="v-col">
-                <div id="arr-ao" class="arrow empty" onclick="arrowClick('arr-ao')">↕</div>
-                <div id="slot-ao" class="slot empty bg-gray" onclick="vesselClick('ao')">빈칸</div>
-                <div id="arr-ao-body" class="arrow empty" onclick="arrowClick('arr-ao-body')">↕</div>
-            </div>
+          <div class="v-col">
+            <div id="arr-vc" class="arrow empty" onclick="arrowClick('arr-vc')">↕</div>
+            <div id="slot-vc" class="slot empty bg-gray" onclick="vesselClick('vc')">빈칸</div>
+            <div id="arr-body-vc" class="arrow empty" onclick="arrowClick('arr-body-vc')">↕</div>
+          </div>
+          <div class="v-col">
+            <div id="arr-ao" class="arrow empty" onclick="arrowClick('arr-ao')">↕</div>
+            <div id="slot-ao" class="slot empty bg-gray" onclick="vesselClick('ao')">빈칸</div>
+            <div id="arr-ao-body" class="arrow empty" onclick="arrowClick('arr-ao-body')">↕</div>
+          </div>
         </div>
 
         <!-- 온몸 모세혈관 -->
         <div id="body-cells" class="organ">온몸의 모세혈관</div>
       </div>
 
-      <div id="gauge-container" style="position: absolute; bottom: 65px; left: 10%; width: 80%; height: 20px; background: rgba(0,0,0,0.8); border: 2px solid #ffd700; border-radius: 10px; display: none; overflow: hidden; z-index: 10;"><div id="gauge"></div></div>
+      <div id="gauge-container"
+        style="position: absolute; bottom: 65px; left: 10%; width: 80%; height: 20px; background: rgba(0,0,0,0.8); border: 2px solid #ffd700; border-radius: 10px; display: none; overflow: hidden; z-index: 10;">
+        <div id="gauge"></div>
+      </div>
 
       <button class="btn-next" id="btn-s4-next" style="display:none;" onclick="goStage5()">전신 순환 출발 &#8594;</button>
     </div>
@@ -1718,7 +1864,8 @@
       <div class="stage-badge">
         <div class="stage-dot"></div>STAGE 6: 세뇨관 정수 필터
       </div>
-      <div class="instructions">급류에 쓸려가는 물질 중 <strong>신장에서 꼭 재흡수해야 하는 영양소</strong>를 터치하여 구출하고, 노폐물이나 여과되지 않는 물질은 그대로 통과시키세요!</div>
+      <div class="instructions">급류에 쓸려가는 물질 중 <strong>신장에서 꼭 재흡수해야 하는 영양소</strong>를 터치하여 구출하고, 노폐물이나 여과되지 않는 물질은 그대로
+        통과시키세요!</div>
       <div class="river-box" id="s6-river"></div>
       <div class="s6-status-txt" id="s6-status">구출된 영양소: 0/8</div>
       <button class="btn-next" id="btn-s6-next" onclick="goEpilogue()">최종 발전소 진입 &#8594;</button>
@@ -1755,14 +1902,13 @@
 
     <div class="codeblue-overlay" id="cb-panel">
       <div class="cb-img-wrap">
-        <img src="이미지/코드블루.png"
-          alt="Code Blue"
-          onerror="this.style.background='#300000'">
+        <img src="이미지/코드블루.png" alt="Code Blue" onerror="this.style.background='#300000'">
         <div class="scan-line"></div>
       </div>
       <div class="cb-content">
         <div class="cb-title">&#128680; CODE BLUE! &#128680;</div>
-        <div class="cb-sub">환자 V/S 소실! 즉시 제세동 CPR을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: CPR 시행 횟수만큼 최종 점수 감점)</span></div>
+        <div class="cb-sub">환자의 심장박동이 멈췄습니다! 즉시 제세동 CPR을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: CPR 시행 횟수만큼
+            최종 점수 감점)</span></div>
         <div id="cb-tap-ui">
           <div class="heart-btn" id="cbBtn" onclick="doCodeBlueCPR()">
             <span style="font-size:2rem;">&#9829;</span>
@@ -1853,14 +1999,14 @@
           utterance.rate = 1.05;
           utterance.volume = 1.0;
           window.speechSynthesis.speak(utterance);
-          
+
           if (count > 1) {
-            speechTimer = setTimeout(function() {
+            speechTimer = setTimeout(function () {
               speakCodeBlue(count - 1);
             }, 2500);
           }
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     function playSnd(type) {
@@ -1891,15 +2037,15 @@
             var o = actx.createOscillator(), g = actx.createGain();
             o.connect(g);
             g.connect(actx.destination);
-            o.type = "sine";
-            o.frequency.value = toggle ? 784 : 659;
-            g.gain.setValueAtTime(0.06, actx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+            o.type = "sawtooth";
+            o.frequency.value = toggle ? 950 : 750;
+            g.gain.setValueAtTime(0.05, actx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.38);
             o.start();
-            o.stop(actx.currentTime + 0.5);
+            o.stop(actx.currentTime + 0.38);
             toggle = !toggle;
           } catch (e) { }
-        }, 700);
+        }, 400); // 더 빠르고 날카로운 주기
       } else {
         if (sirenInt) {
           clearInterval(sirenInt);
@@ -1913,7 +2059,7 @@
           if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
           }
-        } catch(e) {}
+        } catch (e) { }
       }
     }
 
@@ -2072,17 +2218,17 @@
     var o2Cnt = 0, co2Cnt = 0;
     function startStage3(isRetry) {
       updateProgress(4); switchUI("screen-stage3");
-      
+
       var container = document.getElementById("s3-bubbles");
       var bubbles = container.querySelectorAll(".bubble");
-      
+
       // 5 cols x 2 rows grid for random placement (prevents overlaps)
       var positions = [];
       var cols = 5;
       var rows = 2;
-      var cellWidth = 90 / cols; 
+      var cellWidth = 90 / cols;
       var cellHeight = 90 / rows;
-      
+
       for (var r = 0; r < rows; r++) {
         for (var c = 0; c < cols; c++) {
           positions.push({
@@ -2092,18 +2238,18 @@
         }
       }
       // Shuffle positions
-      positions.sort(function() { return Math.random() - 0.5; });
-      
+      positions.sort(function () { return Math.random() - 0.5; });
+
       bubbles.forEach(function (b, idx) {
         if (positions[idx]) {
           b.style.left = positions[idx].x + "%";
           b.style.top = positions[idx].y + "%";
         }
-        
+
         if (!isRetry) {
-          b.classList.remove("hit", "tapped-once"); 
+          b.classList.remove("hit", "tapped-once");
           b.dataset.taps = "0";
-          b.style.opacity = "1"; 
+          b.style.opacity = "1";
           b.style.pointerEvents = "auto";
           var hint = b.querySelector(".bubble-tap-hint");
           if (hint) {
@@ -2155,24 +2301,24 @@
     var touchStartTime = 0;
 
     var s4State = {
-        'pa': { type: 'vessel', word: '', color: 'gray', ansWord: '폐동맥', ansColor: 'blue' },
-        'pv': { type: 'vessel', word: '', color: 'gray', ansWord: '폐정맥', ansColor: 'red' },
-        'vc': { type: 'vessel', word: '', color: 'gray', ansWord: '대정맥', ansColor: 'blue' },
-        'ao': { type: 'vessel', word: '', color: 'gray', ansWord: '대동맥', ansColor: 'red' },
-        'ra': { type: 'chamber', color: 'gray', ansColor: 'blue' },
-        'la': { type: 'chamber', color: 'gray', ansColor: 'red' },
-        'rv': { type: 'chamber', color: 'gray', ansColor: 'blue' },
-        'lv': { type: 'chamber', color: 'gray', ansColor: 'red' },
-        'arr-lungs-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },   
-        'arr-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },         
-        'arr-lungs-pv': { type: 'arrow', dir: 'none', ansDir: 'down' }, 
-        'arr-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },       
-        'arr-ra-rv': { type: 'arrow', dir: 'none', ansDir: 'down' },    
-        'arr-la-lv': { type: 'arrow', dir: 'none', ansDir: 'down' },    
-        'arr-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },         
-        'arr-body-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },    
-        'arr-ao': { type: 'arrow', dir: 'none', ansDir: 'down' },       
-        'arr-ao-body': { type: 'arrow', dir: 'none', ansDir: 'down' }   
+      'pa': { type: 'vessel', word: '', color: 'gray', ansWord: '폐동맥', ansColor: 'blue' },
+      'pv': { type: 'vessel', word: '', color: 'gray', ansWord: '폐정맥', ansColor: 'red' },
+      'vc': { type: 'vessel', word: '', color: 'gray', ansWord: '대정맥', ansColor: 'blue' },
+      'ao': { type: 'vessel', word: '', color: 'gray', ansWord: '대동맥', ansColor: 'red' },
+      'ra': { type: 'chamber', color: 'gray', ansColor: 'blue' },
+      'la': { type: 'chamber', color: 'gray', ansColor: 'red' },
+      'rv': { type: 'chamber', color: 'gray', ansColor: 'blue' },
+      'lv': { type: 'chamber', color: 'red', ansColor: 'red' },
+      'arr-lungs-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-lungs-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-ra-rv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-la-lv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-body-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-ao': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-ao-body': { type: 'arrow', dir: 'none', ansDir: 'down' }
     };
 
     function startStage4(isRetry) {
@@ -2182,31 +2328,35 @@
       allCorrect = false;
       currentTool = null;
       timeHeld = 0;
-      
-      particles.forEach(function(p) { if(p.parentNode) p.parentNode.removeChild(p); });
+
+      particles.forEach(function (p) { if (p.parentNode) p.parentNode.removeChild(p); });
       particles = [];
-      
+
       for (var key in s4State) {
         if (s4State[key].type === 'vessel') {
           s4State[key].word = '';
           s4State[key].color = 'gray';
           updateVesselUI(key);
         } else if (s4State[key].type === 'chamber') {
-          s4State[key].color = 'gray';
+          if (key === 'lv') {
+            s4State[key].color = 'red';
+          } else {
+            s4State[key].color = 'gray';
+          }
           updateChamberUI(key);
         } else if (s4State[key].type === 'arrow') {
           s4State[key].dir = 'none';
           updateArrowUI(key);
         }
       }
-      
+
       document.getElementById("message").style.opacity = 0;
       document.getElementById("btn-s4-next").style.display = "none";
-      document.getElementById("gauge-container").style.display = "none";
+      document.getElementById("gauge-container").style.display = "block"; // 항상 노출
       document.getElementById("gauge").style.width = "0%";
-      document.getElementById("lv").classList.remove("pulse-ready");
+      document.getElementById("lv").classList.add("pulse-ready"); // 항상 준비 상태로 보임
       document.getElementById("heart-area").classList.remove("pump-effect");
-      
+
       var lv = document.getElementById("lv");
       lv.onmousedown = handleLvStart;
       lv.onmouseup = handleLvEnd;
@@ -2214,14 +2364,14 @@
       lv.ontouchstart = handleLvStart;
       lv.ontouchend = handleLvEnd;
       lv.ontouchcancel = handleLvEnd;
-      
-      document.querySelectorAll('.tool').forEach(function(el) { el.classList.remove('selected'); });
+
+      document.querySelectorAll('.tool').forEach(function (el) { el.classList.remove('selected'); });
     }
 
     function selectTool(word) {
       if (allCorrect) return;
       currentTool = word;
-      document.querySelectorAll('.tool').forEach(function(el) {
+      document.querySelectorAll('.tool').forEach(function (el) {
         el.classList.toggle('selected', el.innerText === word);
       });
       playSnd("beep");
@@ -2233,9 +2383,9 @@
 
       if (currentTool) {
         s.word = currentTool;
-        s.color = 'gray'; 
+        s.color = 'gray';
         currentTool = null;
-        document.querySelectorAll('.tool').forEach(function(e) { e.classList.remove('selected'); });
+        document.querySelectorAll('.tool').forEach(function (e) { e.classList.remove('selected'); });
         playSnd("beep");
       } else if (s.word !== '') {
         playSnd("beep");
@@ -2244,19 +2394,18 @@
         else s.color = 'gray';
       }
       updateVesselUI(id);
-      checkPuzzle();
     }
 
     function chamberClick(id) {
       if (allCorrect) return;
+      if (id === 'lv') return; // 좌심실은 붉은색 고정!
       var s = s4State[id];
       playSnd("beep");
       if (s.color === 'gray') s.color = 'red';
       else if (s.color === 'red') s.color = 'blue';
       else s.color = 'gray';
-      
+
       updateChamberUI(id);
-      checkPuzzle();
     }
 
     function arrowClick(id) {
@@ -2265,15 +2414,14 @@
       playSnd("beep");
       if (s.dir === 'none' || s.dir === 'down') s.dir = 'up';
       else s.dir = 'down';
-      
+
       updateArrowUI(id);
-      checkPuzzle();
     }
 
     function updateVesselUI(id) {
       var el = document.getElementById('slot-' + id);
       var s = s4State[id];
-      if(el) {
+      if (el) {
         el.innerText = s.word || '빈칸';
         el.className = 'slot ' + (s.word ? 'filled' : 'empty') + ' bg-' + s.color;
       }
@@ -2282,7 +2430,7 @@
     function updateChamberUI(id) {
       var el = document.getElementById(id);
       var s = s4State[id];
-      if(el) {
+      if (el) {
         el.className = 'chamber bg-' + s.color;
       }
     }
@@ -2290,7 +2438,7 @@
     function updateArrowUI(id) {
       var el = document.getElementById(id);
       var s = s4State[id];
-      if(el) {
+      if (el) {
         el.className = 'arrow ' + (s.dir !== 'none' ? 'set' : 'empty');
         if (s.dir === 'up') el.innerText = '▲';
         else if (s.dir === 'down') el.innerText = '▼';
@@ -2310,7 +2458,7 @@
       }
     }
 
-    function checkPuzzle() {
+    function isPuzzleCorrect() {
       var correct = true;
       for (var key in s4State) {
         var s = s4State[key];
@@ -2318,47 +2466,48 @@
         if (s.type === 'chamber' && s.color !== s.ansColor) correct = false;
         if (s.type === 'arrow' && s.dir !== s.ansDir) correct = false;
       }
-
-      if (correct && !allCorrect) {
-        allCorrect = true;
-        playSnd("success");
-        showMessage("✅ 완벽합니다! 빛나는 <b>좌심실</b>을 2초간 길게 누르세요!", true);
-        document.getElementById('gauge-container').style.display = "block";
-        document.getElementById('lv').classList.add('pulse-ready');
-      }
+      return correct;
     }
 
     function handleLvStart(e) {
+      if (allCorrect) return;
       if (e.type === 'touchstart') e.preventDefault();
       touchStartTime = Date.now();
 
-      if (allCorrect) {
-        document.getElementById('lv').style.transform = "scale(0.95)";
-        timeHeld = 0;
-        document.getElementById('gauge').style.width = "0%";
-        holdTimer = setInterval(function() {
-          timeHeld += 50;
-          document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
-          if (timeHeld >= 2000) {
+      document.getElementById('lv').style.transform = "scale(0.95)";
+      timeHeld = 0;
+      document.getElementById('gauge').style.width = "0%";
+      holdTimer = setInterval(function () {
+        timeHeld += 50;
+        document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
+        if (timeHeld >= 2000) {
+          clearInterval(holdTimer);
+          holdTimer = null;
+          // 2초 충전 시 정답 판정
+          if (isPuzzleCorrect()) {
+            allCorrect = true;
             successPumping();
-            handleLvEnd();
+          } else {
+            playSnd("fail");
+            alert("혈액공급실패! 심방, 심실, 혈관의 단어와 화살표(혈류 방향)를 다시 확인해 주세요.");
+            timeHeld = 0;
+            document.getElementById('gauge').style.width = "0%";
           }
-        }, 50);
-      }
+          handleLvEnd();
+        }
+      }, 50);
     }
 
     function handleLvEnd(e) {
       var lv = document.getElementById('lv');
-      if(lv) lv.style.transform = "scale(1)";
-      if (allCorrect) {
+      if (lv) lv.style.transform = "scale(1)";
+      if (holdTimer) {
         clearInterval(holdTimer);
-        if(timeHeld < 2000) {
-          timeHeld = 0;
-          document.getElementById('gauge').style.width = "0%";
-        }
-      } else {
-        var duration = Date.now() - touchStartTime;
-        if (duration < 500) chamberClick('lv');
+        holdTimer = null;
+      }
+      if (!allCorrect) {
+        timeHeld = 0;
+        document.getElementById('gauge').style.width = "0%";
       }
     }
 
@@ -2370,7 +2519,7 @@
 
       startBloodFlow();
 
-      setTimeout(function() {
+      setTimeout(function () {
         playSnd("success");
         document.getElementById("btn-s4-next").style.display = "block";
         showMessage("🎉 순환계 복구 완료! 다음 구역으로 출발하세요!", true);
@@ -2379,8 +2528,8 @@
 
     function startBloodFlow() {
       for (var i = 0; i < 6; i++) {
-        (function(index) {
-          setTimeout(function() {
+        (function (index) {
+          setTimeout(function () {
             spawnBloodParticle('red');
             spawnBloodParticle('blue');
           }, index * 600);
@@ -2390,7 +2539,7 @@
 
     function spawnBloodParticle(type) {
       var board = document.getElementById('board');
-      if(!board) return;
+      if (!board) return;
       var particle = document.createElement('div');
       particle.className = 'blood-particle ' + type;
       board.appendChild(particle);
@@ -2525,12 +2674,12 @@
           score: pData.score
         })
       })
-      .then(function () {
-        document.getElementById("sync-msg").innerHTML = "🎉 임무 완료 및 구조 보고서 전송 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
-      })
-      .catch(function () {
-        document.getElementById("sync-msg").innerHTML = "⚠️ 네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong>";
-      });
+        .then(function () {
+          document.getElementById("sync-msg").innerHTML = "🎉 임무 완료 및 구조 보고서 전송 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+        })
+        .catch(function () {
+          document.getElementById("sync-msg").innerHTML = "⚠️ 네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong>";
+        });
     }
 
     // ── CODE BLUE ─────────────────────────────────────────────
@@ -2569,38 +2718,38 @@
       var btn = document.getElementById("cbHoldBtn");
       btn.innerText = "HOLD 5s";
       if (cbHoldTm) { clearInterval(cbHoldTm); cbHoldTm = null; }
-      btn.onpointerdown = function (e) { 
-        e.preventDefault(); 
-        playSnd("beep"); 
-        var timeLeft = 5; 
-        btn.innerText = timeLeft + "s"; 
-        cbHoldTm = setInterval(function () { 
-          timeLeft--; 
-          btn.innerText = timeLeft + "s"; 
-          playSnd("beep"); 
-          if (timeLeft <= 0) { 
-            clearInterval(cbHoldTm); 
-            cbHoldTm = null; 
-            reviveCodeBlue(); 
-          } 
-        }, 1000); 
+      btn.onpointerdown = function (e) {
+        e.preventDefault();
+        playSnd("beep");
+        var timeLeft = 5;
+        btn.innerText = timeLeft + "s";
+        cbHoldTm = setInterval(function () {
+          timeLeft--;
+          btn.innerText = timeLeft + "s";
+          playSnd("beep");
+          if (timeLeft <= 0) {
+            clearInterval(cbHoldTm);
+            cbHoldTm = null;
+            reviveCodeBlue();
+          }
+        }, 1000);
       };
-      btn.onpointerup = btn.onpointerleave = function () { 
-        if (cbHoldTm) { 
-          clearInterval(cbHoldTm); 
-          cbHoldTm = null; 
-          btn.innerText = "HOLD 5s"; 
-          playSnd("fail"); 
+      btn.onpointerup = btn.onpointerleave = function () {
+        if (cbHoldTm) {
+          clearInterval(cbHoldTm);
+          cbHoldTm = null;
+          btn.innerText = "HOLD 5s";
+          playSnd("fail");
           updateScore(-5); // 홀드 실패 시 벌칙 감점 소량 부여
-          alert("압박 실패! 손을 떼면 안 됩니다. 다시 시도해 주세요."); 
+          alert("압박 실패! 손을 떼면 안 됩니다. 다시 시도해 주세요.");
           initHoldCPR(); // 홀드온 5초 다시 시도 가능하게 만듦
-        } 
+        }
       };
     }
     function reviveCodeBlue() {
       toggleSiren(false); playSnd("success"); updateScore(-10); errorCount = 0;
       document.getElementById("cb-panel").classList.remove("active");
-      alert("V/S 극적 회복! 현재 구역부터 재시도합니다.");
+      alert("심장박동 극적 회복! 현재 구역부터 재시도합니다.");
       if (currentStageFunc) currentStageFunc();
     }
   </script>

@@ -103,15 +103,15 @@ function toggleSiren(on) {
         const o = actx.createOscillator(), g = actx.createGain();
         o.connect(g);
         g.connect(actx.destination);
-        o.type = "sine";
-        o.frequency.value = toggle ? 784 : 659;
-        g.gain.setValueAtTime(0.06, actx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+        o.type = "sawtooth";
+        o.frequency.value = toggle ? 950 : 750;
+        g.gain.setValueAtTime(0.05, actx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.38);
         o.start();
-        o.stop(actx.currentTime + 0.5);
+        o.stop(actx.currentTime + 0.38);
         toggle = !toggle;
       } catch (e) { }
-    }, 700);
+    }, 400);
   } else {
     if (sirenInt) {
       clearInterval(sirenInt);
@@ -358,7 +358,7 @@ const s4State = {
     'ra': { type: 'chamber', color: 'gray', ansColor: 'blue' },
     'la': { type: 'chamber', color: 'gray', ansColor: 'red' },
     'rv': { type: 'chamber', color: 'gray', ansColor: 'blue' },
-    'lv': { type: 'chamber', color: 'gray', ansColor: 'red' },
+    'lv': { type: 'chamber', color: 'red', ansColor: 'red' },
     'arr-lungs-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },   
     'arr-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },         
     'arr-lungs-pv': { type: 'arrow', dir: 'none', ansDir: 'down' }, 
@@ -388,7 +388,11 @@ function startStage4(isRetry) {
       s4State[key].color = 'gray';
       updateVesselUI(key);
     } else if (s4State[key].type === 'chamber') {
-      s4State[key].color = 'gray';
+      if (key === 'lv') {
+        s4State[key].color = 'red';
+      } else {
+        s4State[key].color = 'gray';
+      }
       updateChamberUI(key);
     } else if (s4State[key].type === 'arrow') {
       s4State[key].dir = 'none';
@@ -398,9 +402,9 @@ function startStage4(isRetry) {
   
   document.getElementById("message").style.opacity = 0;
   document.getElementById("btn-s4-next").style.display = "none";
-  document.getElementById("gauge-container").style.display = "none";
+  document.getElementById("gauge-container").style.display = "block";
   document.getElementById("gauge").style.width = "0%";
-  document.getElementById("lv").classList.remove("pulse-ready");
+  document.getElementById("lv").classList.add("pulse-ready");
   document.getElementById("heart-area").classList.remove("pump-effect");
   
   const lv = document.getElementById("lv");
@@ -440,11 +444,11 @@ function vesselClick(id) {
     else s.color = 'gray';
   }
   updateVesselUI(id);
-  checkPuzzle();
 }
 
 function chamberClick(id) {
   if (allCorrect) return;
+  if (id === 'lv') return;
   const s = s4State[id];
   playSnd("beep");
   if (s.color === 'gray') s.color = 'red';
@@ -452,7 +456,6 @@ function chamberClick(id) {
   else s.color = 'gray';
   
   updateChamberUI(id);
-  checkPuzzle();
 }
 
 function arrowClick(id) {
@@ -463,7 +466,6 @@ function arrowClick(id) {
   else s.dir = 'down';
   
   updateArrowUI(id);
-  checkPuzzle();
 }
 
 function updateVesselUI(id) {
@@ -506,7 +508,7 @@ function showMessage(text, persist) {
   }
 }
 
-function checkPuzzle() {
+function isPuzzleCorrect() {
   let correct = true;
   for (let key in s4State) {
     const s = s4State[key];
@@ -514,47 +516,47 @@ function checkPuzzle() {
     if (s.type === 'chamber' && s.color !== s.ansColor) correct = false;
     if (s.type === 'arrow' && s.dir !== s.ansDir) correct = false;
   }
-
-  if (correct && !allCorrect) {
-    allCorrect = true;
-    playSnd("success");
-    showMessage("✅ 완벽합니다! 빛나는 <b>좌심실</b>을 2초간 길게 누르세요!", true);
-    document.getElementById('gauge-container').style.display = "block";
-    document.getElementById('lv').classList.add('pulse-ready');
-  }
+  return correct;
 }
 
 function handleLvStart(e) {
+  if (allCorrect) return;
   if (e.type === 'touchstart') e.preventDefault();
   touchStartTime = Date.now();
 
-  if (allCorrect) {
-    document.getElementById('lv').style.transform = "scale(0.95)";
-    timeHeld = 0;
-    document.getElementById('gauge').style.width = "0%";
-    holdTimer = setInterval(() => {
-      timeHeld += 50;
-      document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
-      if (timeHeld >= 2000) {
+  document.getElementById('lv').style.transform = "scale(0.95)";
+  timeHeld = 0;
+  document.getElementById('gauge').style.width = "0%";
+  holdTimer = setInterval(() => {
+    timeHeld += 50;
+    document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
+    if (timeHeld >= 2000) {
+      clearInterval(holdTimer);
+      holdTimer = null;
+      if (isPuzzleCorrect()) {
+        allCorrect = true;
         successPumping();
-        handleLvEnd();
+      } else {
+        playSnd("fail");
+        alert("혈액공급실패! 심방, 심실, 혈관의 단어와 화살표(혈류 방향)를 다시 확인해 주세요.");
+        timeHeld = 0;
+        document.getElementById('gauge').style.width = "0%";
       }
-    }, 50);
-  }
+      handleLvEnd();
+    }
+  }, 50);
 }
 
 function handleLvEnd(e) {
   const lv = document.getElementById('lv');
   if(lv) lv.style.transform = "scale(1)";
-  if (allCorrect) {
+  if (holdTimer) {
     clearInterval(holdTimer);
-    if(timeHeld < 2000) {
-      timeHeld = 0;
-      document.getElementById('gauge').style.width = "0%";
-    }
-  } else {
-    const duration = Date.now() - touchStartTime;
-    if (duration < 500) chamberClick('lv');
+    holdTimer = null;
+  }
+  if (!allCorrect) {
+    timeHeld = 0;
+    document.getElementById('gauge').style.width = "0%";
   }
 }
 
@@ -746,6 +748,6 @@ function initHoldCPR() {
 function reviveCodeBlue() {
   toggleSiren(false); playSnd("success"); updateScore(-10); errorCount = 0;
   document.getElementById("cb-panel").classList.remove("active");
-  alert("V/S 극적 회복! 현재 구역부터 재시도합니다.");
+  alert("심장박동 극적 회복! 현재 구역부터 재시도합니다.");
   if (currentStageFunc) currentStageFunc();
 }
