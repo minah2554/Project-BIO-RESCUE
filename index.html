@@ -1398,8 +1398,7 @@
 
     <div id="screen-login" class="screen active">
       <div class="scene-wrap" id="sw-login">
-        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_1.png" class="scene-img" alt="BIO-RESCUE"
-          onerror="this.style.background='linear-gradient(135deg,#020a18,#0a1a35)';this.style.border='none'">
+        <video src="이미지/표지.mp4" class="scene-img" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
         <div class="scan-line"></div>
         <div class="hud-corner hud-tl"></div>
         <div class="hud-corner hud-tr"></div>
@@ -1410,12 +1409,11 @@
         <div class="stage-dot"></div>MISSION BRIEFING
       </div>
       <h2>&#128680; 특수 의료팀 원격 접속</h2>
-      <div class="instructions"><strong>환자 X</strong>가 응급실에 실려왔습니다! 심정지 상태로 골든타임 임박!<br>팀원 코드명을 입력하고 Medi-Bot으로 체내에
+      <div class="instructions"><strong>환자 X</strong>가 응급실에 실려왔습니다! 심정지 상태로 골든타임 임박!<br>학번과 코드명을 입력하고 Medi-Bot으로 체내에
         침투하십시오.</div>
-      <input type="text" id="studentId" placeholder="팀 번호 입력 (예: 1모둠)">
+      <input type="text" id="studentId" placeholder="학번 입력 (예: 20101)">
       <input type="text" id="studentName" placeholder="코드명 입력 (예: 홍길동)">
-      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 이 기기에만 저장되며
-        외부로 전송되지 않습니다.</p>
+      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글 시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
       <button class="btn-primary" onclick="startGame()">&#9889; 시스템 침투 승인</button>
     </div>
 
@@ -1784,9 +1782,11 @@
   </div>
   <script>
     // ── 전역 변수 ─────────────────────────────────────────────
-    var pData = { id: "", name: "", score: 100 };
+    var pData = { id: "", name: "", progress: 0, score: 100 };
     var errorCount = 0, currentStageFunc = null;
     var actx = null, sirenInt = null, flatSound = null;
+    var GAS_URL = "https://script.google.com/macros/s/AKfycbxf30pT9UPbkRzT9FjtxCYrQAuQbf5r_NBnar4UbW4VbSmdk-85qd-8H9XeqVa7xbEjsw/exec";
+    var SHEET_NAME = "[PROJECT: BIO-RESCUE]";
 
     // ── 진행도 트래커 ─────────────────────────────────────────
     function updateProgress(idx) {
@@ -2509,11 +2509,28 @@
     }
     function finishGame() {
       if (!epiNut || !epiO2) { alert("영양소와 산소를 모두 탭하여 활성화하세요!"); return; }
-      playSnd("success"); setBPM(100, "normal");
+      playSnd("success"); setBPM(100, "normal"); pData.progress = 100;
       document.getElementById("btn-finish").style.display = "none";
+      document.getElementById("sync-msg").innerText = "⏳ 구조 보고서 전송 중...";
       document.getElementById("app").style.animation = "victory-glow 1s infinite";
-      // 외부 서버 전송 없음 - 로컬 완료 처리만
-      document.getElementById("sync-msg").innerHTML = "🎉 임무 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+      fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sheetName: SHEET_NAME,
+          studentId: pData.id,
+          studentName: pData.name,
+          progress: pData.progress,
+          score: pData.score
+        })
+      })
+      .then(function () {
+        document.getElementById("sync-msg").innerHTML = "🎉 임무 완료 및 구조 보고서 전송 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+      })
+      .catch(function () {
+        document.getElementById("sync-msg").innerHTML = "⚠️ 네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong>";
+      });
     }
 
     // ── CODE BLUE ─────────────────────────────────────────────

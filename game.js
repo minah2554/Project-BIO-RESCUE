@@ -1,5 +1,5 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxf30pT9UPbkRzT9FjtxCYrQAuQbf5r_NBnar4UbW4VbSmdk-85qd-8H9XeqVa7xbEjsw/exec";
-const SHEET_NAME = "[PROJECT: BIO-RESCUE - Code Blue]";
+const SHEET_NAME = "[PROJECT: BIO-RESCUE]";
 let pData = { id:"", name:"", progress:0, score:100 };
 let errorCount = 0, currentStageFunc = null;
 let actx = null, sirenInt = null, flatSound = null;
