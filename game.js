@@ -54,9 +54,31 @@ document.addEventListener("touchmove", e => {
   img.style.transform = "scale(1.06) translate(" + dx + "px," + dy + "px)";
 }, { passive:true });
 
+let speechTimer = null;
+function speakCodeBlue(count) {
+  if (!count || count <= 0) return;
+  try {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      var utterance = new SpeechSynthesisUtterance("코드블루! 코드블루!");
+      utterance.lang = "ko-KR";
+      utterance.rate = 1.05;
+      utterance.volume = 1.0;
+      window.speechSynthesis.speak(utterance);
+      
+      if (count > 1) {
+        speechTimer = setTimeout(function() {
+          speakCodeBlue(count - 1);
+        }, 2500);
+      }
+    }
+  } catch (e) {}
+}
+
 function playSnd(type) {
   try {
     if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
     const osc = actx.createOscillator(), gn = actx.createGain();
     osc.connect(gn); gn.connect(actx.destination);
     if (type === "beep") { osc.frequency.value = 800; gn.gain.value = 0.08; osc.start(); osc.stop(actx.currentTime + 0.1); }
@@ -71,11 +93,39 @@ function playSnd(type) {
 
 function toggleSiren(on) {
   if (on) {
-    flatSound = playSnd("flat");
-    sirenInt = setInterval(() => { try { if(!actx) return; const o=actx.createOscillator(),g=actx.createGain(); o.connect(g); g.connect(actx.destination); o.frequency.value=880; g.gain.value=0.08; o.start(); o.stop(actx.currentTime+0.2); } catch(e) {} }, 800);
+    toggleSiren(false);
+    speakCodeBlue(2);
+    let toggle = false;
+    sirenInt = setInterval(() => {
+      try {
+        if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+        if (actx.state === "suspended") actx.resume();
+        const o = actx.createOscillator(), g = actx.createGain();
+        o.connect(g);
+        g.connect(actx.destination);
+        o.type = "sine";
+        o.frequency.value = toggle ? 784 : 659;
+        g.gain.setValueAtTime(0.06, actx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+        o.start();
+        o.stop(actx.currentTime + 0.5);
+        toggle = !toggle;
+      } catch (e) { }
+    }, 700);
   } else {
-    if (sirenInt) clearInterval(sirenInt);
-    if (flatSound) { try { flatSound.osc.stop(); } catch(e) {} }
+    if (sirenInt) {
+      clearInterval(sirenInt);
+      sirenInt = null;
+    }
+    if (speechTimer) {
+      clearTimeout(speechTimer);
+      speechTimer = null;
+    }
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    } catch(e) {}
   }
 }
 
@@ -291,28 +341,281 @@ function hitGas(type, el) {
 }
 function goStage4() { setBPM(70,"normal"); startStage4(); }
 
-let v1St=false, v2St=false, pumpTm=null;
+// ── STAGE 4 (순환계 루트 복구 작전) ─────────────────────────────────
+let currentTool = null;
+let allCorrect = false;
+let msgTimeout = null;
+let particles = [];
+let holdTimer = null;
+let timeHeld = 0;
+let touchStartTime = 0;
+
+const s4State = {
+    'pa': { type: 'vessel', word: '', color: 'gray', ansWord: '폐동맥', ansColor: 'blue' },
+    'pv': { type: 'vessel', word: '', color: 'gray', ansWord: '폐정맥', ansColor: 'red' },
+    'vc': { type: 'vessel', word: '', color: 'gray', ansWord: '대정맥', ansColor: 'blue' },
+    'ao': { type: 'vessel', word: '', color: 'gray', ansWord: '대동맥', ansColor: 'red' },
+    'ra': { type: 'chamber', color: 'gray', ansColor: 'blue' },
+    'la': { type: 'chamber', color: 'gray', ansColor: 'red' },
+    'rv': { type: 'chamber', color: 'gray', ansColor: 'blue' },
+    'lv': { type: 'chamber', color: 'gray', ansColor: 'red' },
+    'arr-lungs-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },   
+    'arr-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },         
+    'arr-lungs-pv': { type: 'arrow', dir: 'none', ansDir: 'down' }, 
+    'arr-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },       
+    'arr-ra-rv': { type: 'arrow', dir: 'none', ansDir: 'down' },    
+    'arr-la-lv': { type: 'arrow', dir: 'none', ansDir: 'down' },    
+    'arr-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },         
+    'arr-body-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },    
+    'arr-ao': { type: 'arrow', dir: 'none', ansDir: 'down' },       
+    'arr-ao-body': { type: 'arrow', dir: 'none', ansDir: 'down' }   
+};
+
 function startStage4(isRetry) {
   updateProgress(5); switchUI("screen-stage4");
-  if (!isRetry) {
-    v1St = false; v2St = false;
-    document.getElementById("v1").className = "valve-btn"; document.getElementById("v2").className = "valve-btn";
-    var pump = document.getElementById("s4-pump"); pump.className = "hold-pump"; pump.style.opacity = "0.4"; pump.style.pointerEvents = "none"; pump.innerText = "❤️ 좌심실 강력 펌핑 (HOLD 2초)";
-  }
   currentStageFunc = function () { startStage4(true); };
   errorCount = 0;
-  document.getElementById("btn-s4-next").style.display = "none"; initPump();
+  allCorrect = false;
+  currentTool = null;
+  timeHeld = 0;
+  
+  particles.forEach(p => { if(p.parentNode) p.parentNode.removeChild(p); });
+  particles = [];
+  
+  for (let key in s4State) {
+    if (s4State[key].type === 'vessel') {
+      s4State[key].word = '';
+      s4State[key].color = 'gray';
+      updateVesselUI(key);
+    } else if (s4State[key].type === 'chamber') {
+      s4State[key].color = 'gray';
+      updateChamberUI(key);
+    } else if (s4State[key].type === 'arrow') {
+      s4State[key].dir = 'none';
+      updateArrowUI(key);
+    }
+  }
+  
+  document.getElementById("message").style.opacity = 0;
+  document.getElementById("btn-s4-next").style.display = "none";
+  document.getElementById("gauge-container").style.display = "none";
+  document.getElementById("gauge").style.width = "0%";
+  document.getElementById("lv").classList.remove("pulse-ready");
+  document.getElementById("heart-area").classList.remove("pump-effect");
+  
+  const lv = document.getElementById("lv");
+  lv.onmousedown = handleLvStart;
+  lv.onmouseup = handleLvEnd;
+  lv.onmouseleave = handleLvEnd;
+  lv.ontouchstart = handleLvStart;
+  lv.ontouchend = handleLvEnd;
+  lv.ontouchcancel = handleLvEnd;
+  
+  document.querySelectorAll('.tool').forEach(el => el.classList.remove('selected'));
 }
-function toggleValve(num) {
+
+function selectTool(word) {
+  if (allCorrect) return;
+  currentTool = word;
+  document.querySelectorAll('.tool').forEach(el => {
+    el.classList.toggle('selected', el.innerText === word);
+  });
   playSnd("beep");
-  if(num===1){v1St=!v1St;document.getElementById("v1").className=v1St?"valve-btn open":"valve-btn";}
-  if(num===2){v2St=!v2St;document.getElementById("v2").className=v2St?"valve-btn open":"valve-btn";}
-  if(v1St&&v2St){const p=document.getElementById("s4-pump");p.className="hold-pump enabled";p.style.opacity="1";p.style.pointerEvents="auto";}
 }
-function initPump() {
-  const btn=document.getElementById("s4-pump");
-  btn.onpointerdown=(e)=>{e.preventDefault();if(!v1St||!v2St)return;playSnd("beep");btn.innerText="펌핑 중... 유지하세요!";pumpTm=setTimeout(()=>{playSnd("success");btn.innerText="✅ 순환 개방 완료!";btn.className="hold-pump";btn.style.background="rgba(72,229,194,0.15)";btn.style.borderColor="var(--neon-green)";document.getElementById("btn-s4-next").style.display="block";},2000);};
-  btn.onpointerup=btn.onpointerleave=()=>{if(pumpTm){clearTimeout(pumpTm);pumpTm=null;if(btn.innerText!=="✅ 순환 개방 완료!"){btn.innerText="실패! 다시 2초간 누르세요";triggerError(function () { startStage4(true); });}}};
+
+function vesselClick(id) {
+  if (allCorrect) return;
+  const s = s4State[id];
+
+  if (currentTool) {
+    s.word = currentTool;
+    s.color = 'gray'; 
+    currentTool = null;
+    document.querySelectorAll('.tool').forEach(e => e.classList.remove('selected'));
+    playSnd("beep");
+  } else if (s.word !== '') {
+    playSnd("beep");
+    if (s.color === 'gray') s.color = 'red';
+    else if (s.color === 'red') s.color = 'blue';
+    else s.color = 'gray';
+  }
+  updateVesselUI(id);
+  checkPuzzle();
+}
+
+function chamberClick(id) {
+  if (allCorrect) return;
+  const s = s4State[id];
+  playSnd("beep");
+  if (s.color === 'gray') s.color = 'red';
+  else if (s.color === 'red') s.color = 'blue';
+  else s.color = 'gray';
+  
+  updateChamberUI(id);
+  checkPuzzle();
+}
+
+function arrowClick(id) {
+  if (allCorrect) return;
+  const s = s4State[id];
+  playSnd("beep");
+  if (s.dir === 'none' || s.dir === 'down') s.dir = 'up';
+  else s.dir = 'down';
+  
+  updateArrowUI(id);
+  checkPuzzle();
+}
+
+function updateVesselUI(id) {
+  const el = document.getElementById('slot-' + id);
+  const s = s4State[id];
+  if(el) {
+    el.innerText = s.word || '빈칸';
+    el.className = 'slot ' + (s.word ? 'filled' : 'empty') + ' bg-' + s.color;
+  }
+}
+
+function updateChamberUI(id) {
+  const el = document.getElementById(id);
+  const s = s4State[id];
+  if(el) {
+    el.className = 'chamber bg-' + s.color;
+  }
+}
+
+function updateArrowUI(id) {
+  const el = document.getElementById(id);
+  const s = s4State[id];
+  if(el) {
+    el.className = 'arrow ' + (s.dir !== 'none' ? 'set' : 'empty');
+    if (s.dir === 'up') el.innerText = '▲';
+    else if (s.dir === 'down') el.innerText = '▼';
+    else el.innerText = '↕';
+  }
+}
+
+function showMessage(text, persist) {
+  const msg = document.getElementById('message');
+  if (msg) {
+    clearTimeout(msgTimeout);
+    msg.innerHTML = text;
+    msg.style.opacity = 1;
+    if (!persist) {
+      msgTimeout = setTimeout(() => { msg.style.opacity = 0; }, 2000);
+    }
+  }
+}
+
+function checkPuzzle() {
+  let correct = true;
+  for (let key in s4State) {
+    const s = s4State[key];
+    if (s.type === 'vessel' && (s.word !== s.ansWord || s.color !== s.ansColor)) correct = false;
+    if (s.type === 'chamber' && s.color !== s.ansColor) correct = false;
+    if (s.type === 'arrow' && s.dir !== s.ansDir) correct = false;
+  }
+
+  if (correct && !allCorrect) {
+    allCorrect = true;
+    playSnd("success");
+    showMessage("✅ 완벽합니다! 빛나는 <b>좌심실</b>을 2초간 길게 누르세요!", true);
+    document.getElementById('gauge-container').style.display = "block";
+    document.getElementById('lv').classList.add('pulse-ready');
+  }
+}
+
+function handleLvStart(e) {
+  if (e.type === 'touchstart') e.preventDefault();
+  touchStartTime = Date.now();
+
+  if (allCorrect) {
+    document.getElementById('lv').style.transform = "scale(0.95)";
+    timeHeld = 0;
+    document.getElementById('gauge').style.width = "0%";
+    holdTimer = setInterval(() => {
+      timeHeld += 50;
+      document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
+      if (timeHeld >= 2000) {
+        successPumping();
+        handleLvEnd();
+      }
+    }, 50);
+  }
+}
+
+function handleLvEnd(e) {
+  const lv = document.getElementById('lv');
+  if(lv) lv.style.transform = "scale(1)";
+  if (allCorrect) {
+    clearInterval(holdTimer);
+    if(timeHeld < 2000) {
+      timeHeld = 0;
+      document.getElementById('gauge').style.width = "0%";
+    }
+  } else {
+    const duration = Date.now() - touchStartTime;
+    if (duration < 500) chamberClick('lv');
+  }
+}
+
+function successPumping() {
+  showMessage("💥 펌핑 성공! 혈액이 힘차게 순환합니다!", true);
+  document.getElementById('gauge-container').style.display = "none";
+  document.getElementById('lv').classList.remove('pulse-ready');
+  document.getElementById('heart-area').classList.add('pump-effect');
+
+  startBloodFlow();
+
+  setTimeout(() => {
+    playSnd("success");
+    document.getElementById("btn-s4-next").style.display = "block";
+    showMessage("🎉 순환계 복구 완료! 다음 구역으로 출발하세요!", true);
+  }, 4500);
+}
+
+function startBloodFlow() {
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      spawnBloodParticle('red');
+      spawnBloodParticle('blue');
+    }, i * 600);
+  }
+}
+
+function spawnBloodParticle(type) {
+  const board = document.getElementById('board');
+  if(!board) return;
+  const particle = document.createElement('div');
+  particle.className = 'blood-particle ' + type;
+  board.appendChild(particle);
+  particles.push(particle);
+
+  const pathIds = type === 'red'
+    ? ['lungs', 'arr-lungs-pv', 'slot-pv', 'arr-pv', 'la', 'arr-la-lv', 'lv', 'arr-ao', 'slot-ao', 'arr-ao-body', 'body-cells']
+    : ['body-cells', 'arr-body-vc', 'slot-vc', 'arr-vc', 'ra', 'arr-ra-rv', 'rv', 'arr-pa', 'slot-pa', 'arr-lungs-pa', 'lungs'];
+
+  const keyframes = [];
+  let validPath = true;
+  for (let i = 0; i < pathIds.length; i++) {
+    const el = document.getElementById(pathIds[i]);
+    if (!el) { validPath = false; break; }
+    const rect = el.getBoundingClientRect();
+    const boardRect = board.getBoundingClientRect();
+    const x = rect.left - boardRect.left + rect.width / 2;
+    const y = rect.top - boardRect.top + rect.height / 2;
+    keyframes.push({
+      transform: 'translate(' + x + 'px, ' + y + 'px)',
+      opacity: (i === 0 || i === pathIds.length - 1) ? 0 : 1
+    });
+  }
+
+  if (validPath) {
+    particle.animate(keyframes, {
+      duration: 4500,
+      iterations: Infinity,
+      easing: 'linear'
+    });
+  }
 }
 function goStage5() { setBPM(80,"normal"); startStage5(); }
 
@@ -352,8 +655,9 @@ function spawnItem() {
   const rnd=Math.random();
   const sel = rnd<0.42 ? types[Math.floor(Math.random()*2)] : types[2+Math.floor(Math.random()*5)];
   const el=document.createElement("div"); el.className="falling-item"; el.innerText=sel.t;
-  el.style.background=sel.isGood?"linear-gradient(135deg,rgba(72,229,194,0.88),rgba(40,180,150,0.92))":"linear-gradient(135deg,rgba(255,80,60,0.88),rgba(180,30,20,0.92))";
-  el.style.color=sel.isGood?"#020a18":"white"; el.style.top="-35px"; el.style.left=(Math.random()*72+4)+"%";
+  // 학습을 위해 색깔을 동일하게 중립적인 블루톤으로 통일!
+  el.style.background = "linear-gradient(135deg, rgba(58, 134, 255, 0.85), rgba(34, 102, 221, 0.9))";
+  el.style.color = "white"; el.style.top="-35px"; el.style.left=(Math.random()*72+4)+"%";
   el.onpointerdown=()=>{
     if(sel.isGood){s6Save++;document.getElementById("s6-status").innerText="구출된 영양소: "+s6Save+"/"+S6_GOAL;playSnd("beep");el.remove();if(s6Save>=S6_GOAL){clearInterval(s6Int);playSnd("success");document.getElementById("btn-s6-next").style.display="block";}}
     else{el.remove();triggerError(function () { startStage6(true); });}
@@ -386,36 +690,61 @@ function initCodeBlue(restartFunc) {
   toggleSiren(true); setBPM(0,"danger");
   document.getElementById("cb-panel").classList.add("active");
   document.getElementById("cb-tap-ui").style.display="block"; document.getElementById("cb-hold-ui").style.display="none";
-  cbTaps=0; document.getElementById("cb-gauge").style.width="0%"; document.getElementById("cb-count").innerText="0 / 15";
+  cbTaps=0; document.getElementById("cb-gauge").style.width="0%"; document.getElementById("cb-count").innerText="0 / 10";
   const btn=document.getElementById("cbBtn");
-  btn.style.marginLeft="0%"; btn.style.transition="transform .08s, box-shadow .08s, margin-left .1s";
+  btn.style.marginLeft="0%"; btn.style.transition="none";
   btn.style.pointerEvents="auto";
   currentStageFunc=restartFunc;
 }
 function doCodeBlueCPR() {
-  if (cbTaps >= 15) return;
+  if (cbTaps >= 10) return;
   cbTaps++; playSnd("beep");
-  document.getElementById("cb-gauge").style.width=(cbTaps/15*100)+"%"; document.getElementById("cb-count").innerText=cbTaps+" / 15";
+  document.getElementById("cb-gauge").style.width=(cbTaps/10*100)+"%"; document.getElementById("cb-count").innerText=cbTaps+" / 10";
   const btn=document.getElementById("cbBtn"); btn.style.transform="scale(0.88)"; setTimeout(()=>btn.style.transform="scale(1)",80);
-  btn.style.marginLeft=Math.round((cbTaps/15)*80)+"%";
-  if(cbTaps>=15){
+  if(cbTaps>=10){
     btn.style.pointerEvents="none";
-    playSnd("success"); btn.style.marginLeft="0%";
-    setTimeout(()=>{
-      document.getElementById("cb-tap-ui").style.display="none";
-      document.getElementById("cb-hold-ui").style.display="block";
-      document.getElementById("cbHoldBtn").style.display="flex";
-      initHoldCPR();
-    }, 2500);
+    playSnd("success");
+    // 시간차 없이 즉시 홀드온 UI 노출!
+    document.getElementById("cb-tap-ui").style.display="none";
+    document.getElementById("cb-hold-ui").style.display="block";
+    document.getElementById("cbHoldBtn").style.display="flex";
+    initHoldCPR();
   }
 }
 function initHoldCPR() {
   const btn=document.getElementById("cbHoldBtn");
-  btn.onpointerdown=(e)=>{e.preventDefault();playSnd("beep");let timeLeft=5;btn.innerText=timeLeft+"s";cbHoldTm=setInterval(()=>{timeLeft--;btn.innerText=timeLeft+"s";playSnd("beep");if(timeLeft<=0){clearInterval(cbHoldTm);cbHoldTm=null;reviveCodeBlue();}},1000);};
-  btn.onpointerup=btn.onpointerleave=()=>{if(cbHoldTm){clearInterval(cbHoldTm);cbHoldTm=null;btn.innerText="HOLD 5s";playSnd("fail");alert("압박 실패! 손을 떼면 안 됩니다.");}};
+  btn.innerText = "HOLD 5s";
+  if (cbHoldTm) { clearInterval(cbHoldTm); cbHoldTm = null; }
+  btn.onpointerdown=(e)=>{
+    e.preventDefault();
+    playSnd("beep");
+    let timeLeft=5;
+    btn.innerText=timeLeft+"s";
+    cbHoldTm=setInterval(()=>{
+      timeLeft--;
+      btn.innerText=timeLeft+"s";
+      playSnd("beep");
+      if(timeLeft<=0){
+        clearInterval(cbHoldTm);
+        cbHoldTm=null;
+        reviveCodeBlue();
+      }
+    },1000);
+  };
+  btn.onpointerup=btn.onpointerleave=()=>{
+    if(cbHoldTm){
+      clearInterval(cbHoldTm);
+      cbHoldTm=null;
+      btn.innerText="HOLD 5s";
+      playSnd("fail");
+      updateScore(-5); // 홀드 실패 시 벌칙 감점 소량 부여
+      alert("압박 실패! 손을 떼면 안 됩니다. 다시 시도해 주세요.");
+      initHoldCPR(); // 홀드온 5초 다시 시도 가능하게 만듦
+    }
+  };
 }
 function reviveCodeBlue() {
-  toggleSiren(false); playSnd("success"); updateScore(-15); errorCount = 0;
+  toggleSiren(false); playSnd("success"); updateScore(-10); errorCount = 0;
   document.getElementById("cb-panel").classList.remove("active");
   alert("V/S 극적 회복! 현재 구역부터 재시도합니다.");
   if (currentStageFunc) currentStageFunc();
