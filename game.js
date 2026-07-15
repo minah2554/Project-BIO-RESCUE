@@ -218,12 +218,48 @@ function goStage3() { setBPM(60,"normal"); startStage3(); }
 let o2Cnt=0, co2Cnt=0;
 function startStage3(isRetry) {
   updateProgress(4); switchUI("screen-stage3");
+  
+  const container = document.getElementById("s3-bubbles");
+  const bubbles = container.querySelectorAll(".bubble");
+  
+  // 5 cols x 2 rows grid for random placement (prevents overlaps)
+  const positions = [];
+  const cols = 5;
+  const rows = 2;
+  const cellWidth = 90 / cols; 
+  const cellHeight = 90 / rows;
+  
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      positions.push({
+        x: c * cellWidth + 5 + Math.random() * (cellWidth - 16),
+        y: r * cellHeight + 5 + Math.random() * (cellHeight - 16)
+      });
+    }
+  }
+  // Shuffle positions
+  positions.sort(() => Math.random() - 0.5);
+  
+  bubbles.forEach((b, idx) => {
+    if (positions[idx]) {
+      b.style.left = positions[idx].x + "%";
+      b.style.top = positions[idx].y + "%";
+    }
+    
+    if (!isRetry) {
+      b.classList.remove("hit", "tapped-once"); 
+      b.dataset.taps = "0";
+      b.style.opacity = "1"; 
+      b.style.pointerEvents = "auto";
+      const hint = b.querySelector(".bubble-tap-hint");
+      if (hint) {
+        hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
+      }
+    }
+  });
+
   if (!isRetry) {
     o2Cnt = 0; co2Cnt = 0;
-    document.querySelectorAll(".bubble").forEach(b => {
-      b.classList.remove("hit", "tapped-once"); b.dataset.taps = "0";
-      b.style.opacity = "1"; b.style.pointerEvents = "auto";
-    });
   }
   currentStageFunc = function () { startStage3(true); };
   errorCount = 0; updS3();
@@ -353,14 +389,17 @@ function initCodeBlue(restartFunc) {
   cbTaps=0; document.getElementById("cb-gauge").style.width="0%"; document.getElementById("cb-count").innerText="0 / 15";
   const btn=document.getElementById("cbBtn");
   btn.style.marginLeft="0%"; btn.style.transition="transform .08s, box-shadow .08s, margin-left .1s";
+  btn.style.pointerEvents="auto";
   currentStageFunc=restartFunc;
 }
 function doCodeBlueCPR() {
+  if (cbTaps >= 15) return;
   cbTaps++; playSnd("beep");
   document.getElementById("cb-gauge").style.width=(cbTaps/15*100)+"%"; document.getElementById("cb-count").innerText=cbTaps+" / 15";
   const btn=document.getElementById("cbBtn"); btn.style.transform="scale(0.88)"; setTimeout(()=>btn.style.transform="scale(1)",80);
   btn.style.marginLeft=Math.round((cbTaps/15)*80)+"%";
   if(cbTaps>=15){
+    btn.style.pointerEvents="none";
     playSnd("success"); btn.style.marginLeft="0%";
     setTimeout(()=>{
       document.getElementById("cb-tap-ui").style.display="none";

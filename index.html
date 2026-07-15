@@ -685,19 +685,15 @@
     }
 
     .bubble-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      align-items: center;
-      gap: 14px 10px;
+      position: relative;
       margin: 10px 0;
-      padding: 0 4px;
-      min-height: 170px;
+      min-height: 250px;
+      width: 100%;
     }
 
     .bubble {
-      width: 72px;
-      height: 72px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
       display: flex;
       flex-direction: column;
@@ -708,7 +704,8 @@
       font-size: .72rem;
       gap: 2px;
       user-select: none;
-      transition: transform .12s, opacity .3s;
+      position: absolute;
+      transition: transform .12s, opacity .3s, left 0.5s ease-out, top 0.5s ease-out;
       animation: float 3s ease-in-out infinite;
     }
 
@@ -1831,12 +1828,48 @@
     var o2Cnt = 0, co2Cnt = 0;
     function startStage3(isRetry) {
       updateProgress(4); switchUI("screen-stage3");
+      
+      var container = document.getElementById("s3-bubbles");
+      var bubbles = container.querySelectorAll(".bubble");
+      
+      // 5 cols x 2 rows grid for random placement (prevents overlaps)
+      var positions = [];
+      var cols = 5;
+      var rows = 2;
+      var cellWidth = 90 / cols; 
+      var cellHeight = 90 / rows;
+      
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          positions.push({
+            x: c * cellWidth + 5 + Math.random() * (cellWidth - 16),
+            y: r * cellHeight + 5 + Math.random() * (cellHeight - 16)
+          });
+        }
+      }
+      // Shuffle positions
+      positions.sort(function() { return Math.random() - 0.5; });
+      
+      bubbles.forEach(function (b, idx) {
+        if (positions[idx]) {
+          b.style.left = positions[idx].x + "%";
+          b.style.top = positions[idx].y + "%";
+        }
+        
+        if (!isRetry) {
+          b.classList.remove("hit", "tapped-once"); 
+          b.dataset.taps = "0";
+          b.style.opacity = "1"; 
+          b.style.pointerEvents = "auto";
+          var hint = b.querySelector(".bubble-tap-hint");
+          if (hint) {
+            hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
+          }
+        }
+      });
+
       if (!isRetry) {
         o2Cnt = 0; co2Cnt = 0;
-        document.querySelectorAll(".bubble").forEach(function (b) {
-          b.classList.remove("hit", "tapped-once"); b.dataset.taps = "0";
-          b.style.opacity = "1"; b.style.pointerEvents = "auto";
-        });
       }
       currentStageFunc = function () { startStage3(true); };
       errorCount = 0; updS3();
@@ -1995,9 +2028,11 @@
       document.getElementById("cb-count").innerText = "0 / 15";
       var btn = document.getElementById("cbBtn");
       btn.style.left = "0%"; btn.style.position = "relative"; btn.style.transition = "left 0.1s";
+      btn.style.pointerEvents = "auto";
       currentStageFunc = restartFunc;
     }
     function doCodeBlueCPR() {
+      if (cbTaps >= 15) return;
       cbTaps++; playSnd("beep");
       document.getElementById("cb-gauge").style.width = (cbTaps / 15 * 100) + "%";
       document.getElementById("cb-count").innerText = cbTaps + " / 15";
@@ -2006,6 +2041,7 @@
       var pct = Math.round((cbTaps / 15) * 80);
       btn.style.marginLeft = pct + "%";
       if (cbTaps >= 15) {
+        btn.style.pointerEvents = "none";
         playSnd("success");
         btn.style.marginLeft = "0%";
         setTimeout(function () {
