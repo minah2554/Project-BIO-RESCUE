@@ -837,24 +837,382 @@ function spawnItem() {
   const riverH=document.getElementById("s6-river").offsetHeight||300;
   let y=-35; const fall=setInterval(()=>{y+=3.2;el.style.top=y+"px";if(y>riverH){clearInterval(fall);if(sel.isGood&&el.parentNode)triggerError(function () { startStage6(true); });el.remove();}},40);
 }
-function goEpilogue() { setBPM(90,"normal"); startEpilogue(); }
+// ── 에필로그 ─────────────────────────────────────────────
+const epiState = {
+  quizPicked: []
+};
 
-let epiNut=false, epiO2=false;
-function startEpilogue() { updateProgress(8); switchUI("screen-epilogue"); epiNut=false; epiO2=false; document.getElementById("epi-nut").classList.remove("active"); document.getElementById("epi-o2").classList.remove("active"); document.getElementById("btn-finish").style.display="block"; document.getElementById("sync-msg").innerText=""; }
-function toggleEpi(type) {
-  playSnd("beep");
-  if(type==="nut"){epiNut=!epiNut;document.getElementById("epi-nut").className=epiNut?"fusion-node active":"fusion-node";}
-  if(type==="o2"){epiO2=!epiO2;document.getElementById("epi-o2").className=epiO2?"fusion-node active":"fusion-node";}
+function startEpilogue() {
+  updateProgress(8);
+  switchUI("screen-epilogue");
+  goEpiPhase(0);
 }
-function finishGame() {
-  if(!epiNut||!epiO2)return alert("영양소와 산소를 모두 탭하여 활성화하세요!");
-  playSnd("success"); setBPM(100,"normal"); pData.progress=100;
-  document.getElementById("btn-finish").style.display="none"; document.getElementById("sync-msg").innerText="⏳ 동기화 중...";
-  document.getElementById("app").style.animation="victory-glow 1s infinite";
-  fetch(GAS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({sheetName:SHEET_NAME,studentId:pData.id,studentName:pData.name,progress:pData.progress,score:pData.score})})
-  .then(()=>{document.getElementById("sync-msg").innerHTML="✅ 구조 보고서 전송 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.2rem;'>"+pData.score+"점</strong>";})
-  .catch(()=>{document.getElementById("sync-msg").innerText="⚠️ 네트워크 오류로 기록 저장 실패.";});
+
+function showEpiDialogue(html) {
+  const textEl = document.getElementById('epiDialogueText');
+  if (textEl) textEl.innerHTML = html;
 }
+
+function goEpiPhase(n) {
+  document.querySelectorAll('.epi-phase').forEach(p => {
+    p.style.display = 'none';
+  });
+  const nextPhase = document.getElementById('epi-phase' + n);
+  if (nextPhase) {
+    nextPhase.style.display = 'flex';
+  }
+  if (n === 0) {
+    showEpiDialogue('에필로그 시스템 정상 기동... 임무를 시작하세요.');
+  }
+  if (n === 1) initEpiPhase1();
+  if (n === 2) initEpiPhase2();
+  if (n === 3) initEpiPhase3();
+  if (n === 4) initEpiPhase4();
+}
+
+/* ---------- Phase 1: 재료 선별 ---------- */
+const EPI_QUIZ_ITEMS = [
+  { id: 'nutrient', emoji: '🍞', label: '영양소', correct: true },
+  { id: 'oxygen',   emoji: '🫧', label: '산소',   correct: true },
+  { id: 'co2',      emoji: '💨', label: '이산화탄소', correct: false, why: '이산화탄소는 세포 호흡의 결과물이지 원료가 아니에요!' },
+  { id: 'urea',     emoji: '🧪', label: '요소',   correct: false, why: '요소는 콩팥에서 걸러지는 노폐물이에요.' },
+  { id: 'ammonia',  emoji: '☠️', label: '암모니아', correct: false, why: '암모니아는 간에서 해독해야 하는 독성 물질이에요.' },
+  { id: 'mineral',  emoji: '🧂', label: '무기염류', correct: false, why: '무기염류는 세포 호흡에 직접 쓰이지 않아요.' }
+];
+const EPI_QUIZ_POS = [
+  { top: '10px', left: '10px' }, { top: '10px', right: '10px' },
+  { top: '100px', left: '40px' }, { top: '100px', right: '40px' },
+  { top: '190px', left: '10px' }, { top: '190px', right: '10px' }
+];
+
+function initEpiPhase1() {
+  showEpiDialogue('그동안 모은 물질 중, 세포 호흡의 <b>원료</b> 2가지만 골라주세요.');
+  epiState.quizPicked = [];
+  document.getElementById('traySlot1').classList.remove('filled');
+  document.getElementById('traySlot1').textContent = '?';
+  document.getElementById('traySlot2').classList.remove('filled');
+  document.getElementById('traySlot2').textContent = '?';
+
+  const field = document.getElementById('quizField');
+  field.innerHTML = '';
+  EPI_QUIZ_ITEMS.forEach((item, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'icon-chip';
+    chip.id = 'chip-' + item.id;
+    chip.style.animationDelay = (i * 0.15) + 's';
+    for (let key in EPI_QUIZ_POS[i]) {
+      chip.style[key] = EPI_QUIZ_POS[i][key];
+    }
+    chip.innerHTML = `<span class="emoji">${item.emoji}</span>${item.label}`;
+    chip.onclick = () => { onEpiQuizPick(item, chip); };
+    field.appendChild(chip);
+  });
+}
+
+function onEpiQuizPick(item, chip) {
+  if (chip.classList.contains('correct-flash') || chip.classList.contains('wrong-flash')) return;
+  if (item.correct) {
+    chip.classList.add('correct-flash');
+    playSnd('success');
+    epiState.quizPicked.push(item.id);
+    const slot = document.getElementById(epiState.quizPicked.length === 1 ? 'traySlot1' : 'traySlot2');
+    if (slot) {
+      slot.textContent = item.emoji;
+      slot.classList.add('filled');
+    }
+    showEpiDialogue(`<b>${item.label}</b> 확보!`);
+    if (epiState.quizPicked.length === 2) {
+      setTimeout(() => { goEpiPhase(2); }, 800);
+    }
+  } else {
+    chip.classList.add('wrong-flash');
+    epiPenalize(5, item.why);
+    setTimeout(() => { chip.classList.remove('wrong-flash'); }, 500);
+  }
+}
+
+function epiPenalize(amount, msg) {
+  updateScore(-amount);
+  playSnd("fail");
+  const appEl = document.getElementById("app");
+  if (appEl) {
+    appEl.style.animation = "none"; void appEl.offsetHeight; appEl.style.animation = "app-shake 0.4s";
+    setTimeout(() => { appEl.style.animation = ""; }, 400);
+  }
+  const bpmText = document.getElementById("ui-bpm").innerText;
+  const cur = parseInt(bpmText.replace(/[^0-9]/g, "")) || 0;
+  if (cur > 40) setBPM(cur - amount, "danger");
+  if (msg) showEpiDialogue(msg);
+}
+
+/* ---------- Phase 2: 미토콘드리아 충돌 ---------- */
+function initEpiPhase2() {
+  showEpiDialogue('두 재료를 미토콘드리아 중앙으로 끌어와 충돌시키세요!');
+  const nutrient = document.getElementById('orbNutrient');
+  const oxygen = document.getElementById('orbOxygen');
+  nutrient.style.transform = '';
+  oxygen.style.transform = '';
+  nutrient.style.opacity = '1';
+  oxygen.style.opacity = '1';
+  document.getElementById('flashWhite').style.opacity = '0';
+  document.getElementById('equationText').style.opacity = '0';
+
+  const collided = { nutrient: false, oxygen: false };
+  makeEpiDraggable(nutrient, () => { checkEpiCollision('nutrient'); });
+  makeEpiDraggable(oxygen, () => { checkEpiCollision('oxygen'); });
+
+  function checkEpiCollision(which) {
+    const mitoRect = document.getElementById('mito').getBoundingClientRect();
+    const elRect = document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen').getBoundingClientRect();
+    const dx = (elRect.left + elRect.width / 2) - (mitoRect.left + mitoRect.width / 2);
+    const dy = (elRect.top + elRect.height / 2) - (mitoRect.top + mitoRect.height / 2);
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 70) {
+      collided[which] = true;
+      document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen').style.opacity = '0.3';
+    }
+    if (collided.nutrient && collided.oxygen) {
+      reactionEpiSuccess();
+    }
+  }
+}
+
+function reactionEpiSuccess() {
+  playSnd('success');
+  const flash = document.getElementById('flashWhite');
+  const eq = document.getElementById('equationText');
+  flash.style.transition = 'opacity 0.15s';
+  flash.style.opacity = '1';
+  setTimeout(() => {
+    flash.style.transition = 'opacity 1s';
+    flash.style.opacity = '0';
+  }, 200);
+  eq.style.transition = 'opacity 0.6s';
+  eq.style.opacity = '1';
+  showEpiDialogue('반응 성공! <b>영양소 + 산소 → 물 + 이산화 탄소 + 에너지</b>');
+  setTimeout(() => { goEpiPhase(3); }, 2500);
+}
+
+function makeEpiDraggable(el, onDrop) {
+  let startX, startY, origX = 0, origY = 0, dragging = false;
+  el.addEventListener('pointerdown', e => {
+    dragging = true;
+    el.setPointerCapture(e.pointerId);
+    startX = e.clientX; startY = e.clientY;
+    const style = window.getComputedStyle(el);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    origX = matrix.m41; origY = matrix.m42;
+    el.style.zIndex = '100';
+  });
+  el.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    if (onDrop) onDrop();
+  }
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
+}
+
+/* ---------- Phase 3: 생성물 순환 배치 ---------- */
+const EPI_PRODUCT_TARGETS = {
+  prodCO2: 'targetLung',
+  prodWater: 'targetKidney',
+  prodEnergy: 'targetHeart'
+};
+const EPI_PRODUCT_WHY_WRONG = '아직 알맞은 곳이 아니에요. 이 물질이 우리 몸에서 어디로 가야 하는지 생각해보세요!';
+
+function initEpiPhase3() {
+  showEpiDialogue('생성물을 알맞은 기관으로 보내 순환시키세요.');
+  for (let id in EPI_PRODUCT_TARGETS) {
+    const orb = document.getElementById(id);
+    if (orb) {
+      orb.dataset.locked = 'false';
+      orb.style.transform = '';
+      orb.style.opacity = '1';
+      makeEpiSortable(orb, EPI_PRODUCT_TARGETS[id]);
+    }
+  }
+  ['targetLung', 'targetHeart', 'targetKidney'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.className = 'target-slot';
+    }
+  });
+}
+
+function makeEpiSortable(el, correctTargetId) {
+  let startX, startY, origX = 0, origY = 0, dragging = false;
+  el.addEventListener('pointerdown', e => {
+    if (el.dataset.locked === 'true') return;
+    dragging = true;
+    el.setPointerCapture(e.pointerId);
+    startX = e.clientX; startY = e.clientY;
+    const style = window.getComputedStyle(el);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    origX = matrix.m41; origY = matrix.m42;
+    el.style.zIndex = '100';
+  });
+  el.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
+    highlightNearestEpiTarget(el);
+  });
+  el.addEventListener('pointerup', () => { dropEpiSort(el, correctTargetId, origX, origY); });
+  el.addEventListener('pointercancel', () => { dropEpiSort(el, correctTargetId, origX, origY); });
+}
+
+function getEpiTargetEls() {
+  return ['targetLung', 'targetHeart', 'targetKidney'].map(id => document.getElementById(id));
+}
+
+function nearestEpiTarget(el) {
+  const r = el.getBoundingClientRect();
+  let best = null, bestDist = Infinity;
+  getEpiTargetEls().forEach(t => {
+    if (!t || t.classList.contains('locked')) return;
+    const tr = t.getBoundingClientRect();
+    const dx = (r.left + r.width / 2) - (tr.left + tr.width / 2);
+    const dy = (r.top + r.height / 2) - (tr.top + tr.height / 2);
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < bestDist) { bestDist = d; best = t; }
+  });
+  return { target: best, dist: bestDist };
+}
+
+function highlightNearestEpiTarget(el) {
+  getEpiTargetEls().forEach(t => { if (t) t.classList.remove('hover'); });
+  const res = nearestEpiTarget(el);
+  if (res.target && res.dist < 70) res.target.classList.add('hover');
+}
+
+function dropEpiSort(el, correctTargetId, origX, origY) {
+  const res = nearestEpiTarget(el);
+  getEpiTargetEls().forEach(t => { if (t) t.classList.remove('hover'); });
+  if (res.target && res.dist < 70) {
+    if (res.target.id === correctTargetId) {
+      res.target.classList.add('locked');
+      el.dataset.locked = 'true';
+      const tr = res.target.getBoundingClientRect();
+      const pr = el.parentElement.getBoundingClientRect();
+      el.style.transition = 'transform 0.25s';
+      el.style.left = (tr.left - pr.left + tr.width / 2 - el.offsetWidth / 2) + 'px';
+      el.style.top = (tr.top - pr.top + tr.height / 2 - el.offsetHeight / 2) + 'px';
+      el.style.transform = 'translate(0,0)';
+      el.style.opacity = '0.9';
+      playSnd('success');
+      checkAllEpiSorted();
+      return;
+    } else {
+      epiPenalize(5, EPI_PRODUCT_WHY_WRONG);
+    }
+  }
+  el.style.transition = 'transform 0.3s';
+  el.style.transform = 'translate(' + origX + 'px, ' + origY + 'px)';
+  setTimeout(() => { el.style.transition = ''; }, 300);
+}
+
+function checkAllEpiSorted() {
+  const done = Object.keys(EPI_PRODUCT_TARGETS).every(id => {
+    const el = document.getElementById(id);
+    return el && el.dataset.locked === 'true';
+  });
+  if (done) {
+    showEpiDialogue('모든 기관계가 다시 연결되었습니다!');
+    setTimeout(() => { goEpiPhase(4); }, 1200);
+  }
+}
+
+/* ---------- Phase 4: 성공 화면 ---------- */
+function initEpiPhase4() {
+  playSnd('success');
+  showEpiDialogue('임무 완료. 환자가 안정을 되찾았습니다.');
+  animateEpiBpmTo(80);
+  launchEpiConfetti();
+  finishEpiGame();
+}
+
+function animateEpiBpmTo(target) {
+  const start = parseInt(document.getElementById("ui-bpm").innerText.replace(/[^0-9]/g, "")) || 40;
+  const duration = 1500;
+  const t0 = performance.now();
+  function step(t) {
+    const p = Math.min(1, (t - t0) / duration);
+    const currentBpm = start + (target - start) * p;
+    setBPM(Math.round(currentBpm), "normal");
+    const bigBpmEl = document.getElementById('bigBpm');
+    if (bigBpmEl) bigBpmEl.textContent = Math.round(currentBpm) + ' BPM';
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function launchEpiConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const frame = document.getElementById('app');
+  if (!canvas || !frame) return;
+  canvas.width = frame.clientWidth;
+  canvas.height = 300;
+  const ctx = canvas.getContext('2d');
+  const colors = ['#FFD166', '#4ADE80', '#3A86FF', '#F4A261'];
+  const particlesList = Array.from({ length: 60 }, () => ({
+    x: Math.random() * canvas.width,
+    y: -20 - Math.random() * 100,
+    r: 3 + Math.random() * 4,
+    c: colors[Math.floor(Math.random() * colors.length)],
+    vy: 2 + Math.random() * 3,
+    vx: -1 + Math.random() * 2,
+    rot: Math.random() * 360
+  }));
+  let framesCount = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particlesList.forEach(p => {
+      p.y += p.vy; p.x += p.vx; p.rot += 6;
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
+      ctx.restore();
+    });
+    framesCount++;
+    if (framesCount < 240) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+function finishEpiGame() {
+  pData.progress = 100;
+  document.getElementById("sync-msg").innerText = "⏳ 구조 보고서 전송 중...";
+  document.getElementById("app").style.animation = "victory-glow 1s infinite";
+  fetch(GAS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sheetName: SHEET_NAME,
+      studentId: pData.id,
+      studentName: pData.name,
+      progress: pData.progress,
+      score: pData.score
+    })
+  })
+    .then(() => {
+      document.getElementById("sync-msg").innerHTML = "🎉 임무 완료 및 구조 보고서 전송 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+    })
+    .catch(() => {
+      document.getElementById("sync-msg").innerHTML = "⚠️ 네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong>";
+    });
+}
+function goEpilogue() { setBPM(90, "normal"); startEpilogue(); }
 
 let cbTaps=0, cbHoldTm=null;
 function initCodeBlue(restartFunc) {

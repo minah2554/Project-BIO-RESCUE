@@ -220,3 +220,58 @@ select option{background:#0E1A30;color:white;}
   box-shadow: 0 0 12px rgba(255, 59, 48, 0.6) !important;
   animation: s4-shake 0.2s ease-in-out 2 !important;
 }
+
+/* ===== Epilogue Phase CSS ===== */
+.tray-slot.filled {
+  border-style: solid !important;
+  border-color: var(--neon-green) !important;
+  background: rgba(72, 229, 194, 0.1) !important;
+}
+.icon-chip {
+  position: absolute; width: 78px; height: 78px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.15);
+  font-size: 11px; font-weight: 700; color: var(--text); text-align: center;
+  animation: floaty 4s ease-in-out infinite; cursor: pointer; gap: 2px; padding: 4px;
+}
+.icon-chip .emoji { font-size: 24px; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.icon-chip.correct-flash {
+  border-color: var(--neon-green) !important;
+  box-shadow: 0 0 18px var(--neon-green) !important;
+  animation: none !important;
+}
+.icon-chip.wrong-flash {
+  border-color: var(--alert-red) !important;
+  box-shadow: 0 0 18px var(--alert-red) !important;
+  animation: none !important;
+}
+#mito {
+  width: 130px; height: 80px; border-radius: 50% / 60%;
+  background: radial-gradient(circle at 35% 35%, #6d4aff, #3a2178 70%);
+  box-shadow: 0 0 40px rgba(109,74,255,0.6), inset 0 0 20px rgba(0,0,0,0.4);
+  animation: beat 1.4s ease-in-out infinite; position: relative;
+}
+#mito::before, #mito::after {
+  content: ''; position: absolute; width: 70%; height: 6px; background: rgba(255,255,255,0.25);
+  border-radius: 4px; left: 15%;
+}
+#mito::before { top: 28%; }
+#mito::after { top: 60%; }
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.target-slot.hover {
+  border-color: var(--warn-yellow) !important;
+  background: rgba(255,209,102,0.12) !important;
+}
+.target-slot.locked {
+  border-style: solid !important;
+  border-color: var(--neon-green) !important;
+  color: var(--neon-green) !important;
+  background: rgba(72, 229, 194, 0.08) !important;
+}
