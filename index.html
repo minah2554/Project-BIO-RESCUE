@@ -2560,18 +2560,27 @@
       var sid = document.getElementById("studentId").value.trim();
       var sname = document.getElementById("studentName").value.trim();
       if (!sid || !sname) { alert("팀 번호와 코드명을 입력하세요."); return; }
-      if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } }
-      // 로컬에만 저장 - 외부 전송 없음
-      pData.id = sid; pData.name = sname;
-      updateProgress(1); switchUI("screen-cpr");
 
-      // 프롤로그 진입 시 사이렌 소리 재생
+      // UI 전환 애니메이션 실행 전 즉각 사이렌을 재생하여 반응 속도를 최대화
       var siren = document.getElementById("sirenAudio");
       if (siren) {
         siren.currentTime = 0;
         siren.play().catch(function (e) { console.log("Siren audio play blocked:", e); });
       }
+
+      if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } }
+      // 로컬에만 저장 - 외부 전송 없음
+      pData.id = sid; pData.name = sname;
+      updateProgress(1); switchUI("screen-cpr");
     }
+
+    // 초기 페이지 로드 시 백그라운드 캐싱 로드 강제
+    window.addEventListener("DOMContentLoaded", function () {
+      var siren = document.getElementById("sirenAudio");
+      if (siren) {
+        siren.load();
+      }
+    });
 
     // ── CPR ──────────────────────────────────────────────────
     var introCpr = 0;
@@ -3784,7 +3793,7 @@
       if (currentStageFunc) currentStageFunc();
     }
   </script>
-  <audio id="sirenAudio" src="이미지/siren_ambulance.m4a" loop></audio>
+  <audio id="sirenAudio" src="이미지/siren_ambulance.m4a" loop preload="auto"></audio>
 </body>
 
 </html>
