@@ -1,1 +1,37 @@
-﻿{"hosting":{"public":".","ignore":["firebase.json",".git",".gitignore","node_modules"],"rewrites":[{"source":"**","destination":"/index.html"}],"headers":[{"source":"**","headers":[{"key":"Cache-Control","value":"max-age=3600"}]}]}}
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".git",
+      ".gitignore",
+      "node_modules"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(mp4|m4a|png|jpg|jpeg|gif|css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=600"
+          }
+        ]
+      }
+    ]
+  }
+}

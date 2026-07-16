@@ -119,10 +119,15 @@
 
     /* 작은 폰에서 상단 이미지 높이 줄이기 */
     @media (max-height: 700px) {
-      .scene-wrap { height: 120px !important; }
+      .scene-wrap {
+        height: 120px !important;
+      }
     }
+
     @media (max-height: 600px) {
-      .scene-wrap { height: 90px !important; }
+      .scene-wrap {
+        height: 90px !important;
+      }
     }
 
     /* 로그인 저작권 푸터 */
@@ -132,6 +137,7 @@
       padding-top: 10px;
       border-top: 1px solid rgba(122, 149, 178, 0.18);
     }
+
     .login-studio-copy {
       font-size: 0.65rem;
       color: var(--muted);
@@ -1874,7 +1880,7 @@
 
     <div id="screen-login" class="screen active">
       <div class="scene-wrap" id="sw-login">
-        <video src="이미지/표지.mp4" class="scene-img" autoplay loop muted playsinline
+        <video src="이미지/cover.mp4" class="scene-img" autoplay loop muted playsinline
           style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
         <div class="scan-line"></div>
         <div class="hud-corner hud-tl"></div>
@@ -1910,7 +1916,8 @@
       </div>
       <input type="text" id="studentId" placeholder="침투번호 입력 (예: 2901)">
       <input type="text" id="studentName" placeholder="코드명 입력 (예: 미나리)">
-      <p style="font-size:.72rem;color:var(--muted);margin-bottom:8px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글 시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:8px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글 시트로
+        전송되며 이 기기에도 임시 저장됩니다.</p>
       <button class="btn-primary" onclick="startGame()">&#9889; 시스템 침투 승인</button>
       <div class="login-studio-footer">
         <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
@@ -1918,1863 +1925,1866 @@
     </div>
 
     <div id="screen-cpr" class="screen">
-        <div class="scene-wrap" id="sw-cpr">
-          <video src="이미지/심장박동.mp4" class="scene-img" autoplay loop muted playsinline
-            style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
-        </div>
-        <div class="stage-badge">
-          <div class="stage-dot"></div>PROLOGUE: CPR
-        </div>
-        <h2 class="red-title">&#128680; 환자 맥박·호흡 소실! 심정지!</h2>
-        <div class="instructions">나노 로봇 진입로 확보를 위해 메인 펌프(심장)를 수동 가동하십시오.<br><strong>15회 연타!</strong></div>
-        <div class="cpr-container">
-          <div class="heart-btn" id="cprBtn" onclick="doIntroCPR()">
-            <span style="font-size:2rem;">&#9829;</span>
-            <span class="heart-label" id="cpr-count">0 / 15</span>
-          </div>
-          <div class="gauge-bg">
-            <div class="gauge-fill" id="cpr-gauge"></div>
-          </div>
-        </div>
+      <div class="scene-wrap" id="sw-cpr">
+        <video src="이미지/heartbeat_cpr.mp4" class="scene-img" autoplay loop muted playsinline
+          style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
       </div>
-
-      <div id="screen-stage1" class="screen">
-        <div class="scene-wrap" id="sw-s1">
-          <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_3.png" class="scene-img" id="s1-img" alt="Stage 1"
-            onerror="this.style.background='#1a0800'">
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
-        </div>
-        <div class="stage-badge">
-          <div class="stage-dot"></div>STAGE 1: 소화 파쇄 라인
-        </div>
-        <h2 id="s1-zone-title">구역: 입</h2>
-        <div class="instructions" id="s1-desc">알맞은 소화 효소를 매칭하세요.</div>
-        <div class="match-grid" id="s1-nutrient-grid"></div>
-        <div class="divider-arrow">&#9660; 소화 효소 선택 &#9660;</div>
-        <div class="match-grid" id="s1-enzyme-grid">
-          <div class="match-item enzyme" onclick="selectItem(this,'enzyme','아밀레이스')">&#128300; 아밀레이스</div>
-          <div class="match-item enzyme" onclick="selectItem(this,'enzyme','펩신')">&#129514; 펩신(+염산)</div>
-          <div class="match-item enzyme" onclick="selectItem(this,'enzyme','라이페이스')">&#9879;&#65039; 라이페이스</div>
-          <div class="match-item enzyme" onclick="selectItem(this,'enzyme','탄수화물 소화 효소')">&#127806; 탄수화물 소화 효소</div>
-          <div class="match-item enzyme" onclick="selectItem(this,'enzyme','단백질 소화 효소')">&#129385; 단백질 소화 효소</div>
-          <div class="match-item enzyme" onclick="selectItem(this,'enzyme','통과')" style="border-color:var(--muted);">
-            &#8617; 그냥 통과</div>
-        </div>
-        <button class="btn-next" id="btn-s1-next" onclick="nextS1Zone()">다음 구역 이동 &#8594;</button>
+      <div class="stage-badge">
+        <div class="stage-dot"></div>PROLOGUE: CPR
       </div>
-
-      <div id="screen-stage2" class="screen">
-        <div class="scene-wrap" id="sw-s2">
-          <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_5.png" class="scene-img" alt="Stage 2"
-            onerror="this.style.background='#001a0a'">
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
+      <h2 class="red-title">&#128680; 환자 맥박·호흡 소실! 심정지!</h2>
+      <div class="instructions">나노 로봇 진입로 확보를 위해 메인 펌프(심장)를 수동 가동하십시오.<br><strong>15회 연타!</strong></div>
+      <div class="cpr-container">
+        <div class="heart-btn" id="cprBtn" onclick="doIntroCPR()">
+          <span style="font-size:2rem;">&#9829;</span>
+          <span class="heart-label" id="cpr-count">0 / 15</span>
         </div>
-        <div class="stage-badge">
-          <div class="stage-dot"></div>STAGE 2: 환승센터 &amp; 간 방어전
-        </div>
-        <div id="s2-p1">
-          <div class="instructions">수용성 영양소는 <strong>[모세혈관]</strong>으로, 지용성은 <strong>[암죽관]</strong>으로!</div>
-          <div class="swipe-card">
-            <div class="swipe-target" id="s2-target">포도당</div>
-            <div class="swipe-sub">어느 통로로 보내시겠습니까?</div>
-            <div class="swipe-btns">
-              <button class="swipe-btn swipe-btn-left" onclick="swipeS2('모세혈관')">&#128072; 모세혈관</button>
-              <button class="swipe-btn swipe-btn-right" onclick="swipeS2('암죽관')">암죽관 &#128073;</button>
-            </div>
-          </div>
-        </div>
-        <div id="s2-p2" style="display:none;">
-          <div class="instructions" style="border-color:var(--alert-red);">&#128680; 치명적인 <strong>암모니아</strong> 유출! 즉시
-            '간'으로 보내 해독하십시오!</div>
-          <div class="detox-panel">
-            <div class="toxin-node" id="s2-toxin" onclick="selectToxin()">&#9760;&#65039; 암모니아</div>
-            <span class="arrow-anim">&#10148;</span>
-            <div class="liver-node" onclick="triggerDetox()">&#129372; 간 (해독)</div>
-          </div>
-        </div>
-        <button class="btn-next" id="btn-s2-next" onclick="goStage3()">기체 교환소 이동 &#8594;</button>
-      </div>
-
-      <div id="screen-stage3" class="screen">
-        <div class="scene-wrap" id="sw-s3">
-          <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_7.png" class="scene-img" alt="Stage 3"
-            onerror="this.style.background='#001020'">
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
-        </div>
-        <div class="stage-badge">
-          <div class="stage-dot"></div>STAGE 3: 폐포 기체 확산
-        </div>
-        <div class="instructions">혈액 속 <strong>CO&#8322;는 두 번 터치해 방출</strong> 💥, 떠다니는 <strong>O&#8322;는 한 번 터치해
-            흡수</strong> ✅!</div>
-        <div class="s3-score-bar">
-          <div class="s3-stat" id="s3-o2" style="color:var(--neon-blue);">&#128309; O&#8322; 흡수: 0/5</div>
-          <div class="s3-stat" id="s3-co2" style="color:var(--alert-red);">&#128308; CO&#8322; 방출: 0/5</div>
-        </div>
-        <div class="bubble-container" id="s3-bubbles">
-          <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-            <span class="bubble-icon">&#128308;</span>CO&#8322;
-            <span class="bubble-tap-hint">2번 탭!</span>
-          </div>
-          <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-            <span class="bubble-icon">&#128309;</span>O&#8322;
-            <span class="bubble-tap-hint">탭!</span>
-          </div>
-          <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-            <span class="bubble-icon">&#128308;</span>CO&#8322;
-            <span class="bubble-tap-hint">2번 탭!</span>
-          </div>
-          <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-            <span class="bubble-icon">&#128309;</span>O&#8322;
-            <span class="bubble-tap-hint">탭!</span>
-          </div>
-          <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-            <span class="bubble-icon">&#128308;</span>CO&#8322;
-            <span class="bubble-tap-hint">2번 탭!</span>
-          </div>
-          <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-            <span class="bubble-icon">&#128309;</span>O&#8322;
-            <span class="bubble-tap-hint">탭!</span>
-          </div>
-          <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-            <span class="bubble-icon">&#128308;</span>CO&#8322;
-            <span class="bubble-tap-hint">2번 탭!</span>
-          </div>
-          <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-            <span class="bubble-icon">&#128309;</span>O&#8322;
-            <span class="bubble-tap-hint">탭!</span>
-          </div>
-          <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-            <span class="bubble-icon">&#128308;</span>CO&#8322;
-            <span class="bubble-tap-hint">2번 탭!</span>
-          </div>
-          <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-            <span class="bubble-icon">&#128309;</span>O&#8322;
-            <span class="bubble-tap-hint">탭!</span>
-          </div>
-        </div>
-        <button class="btn-next" id="btn-s3-next" onclick="goStage4()">순환 루프 연결 &#8594;</button>
-      </div>
-
-      <div id="screen-stage4" class="screen">
-        <div class="stage-badge">
-          <div class="stage-dot"></div>STAGE 4: 순환계 루트 복구
-        </div>
-
-        <div class="instructions" id="s4-instructions">
-          1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>
-          2. 심방과 심실도 눌러 색을 맞추세요.<br>
-          3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.
-        </div>
-
-        <div id="toolbox">
-          <div class="tool" onclick="selectTool('폐동맥')">폐동맥</div>
-          <div class="tool" onclick="selectTool('폐정맥')">폐정맥</div>
-          <div class="tool" onclick="selectTool('대동맥')">대동맥</div>
-          <div class="tool" onclick="selectTool('대정맥')">대정맥</div>
-        </div>
-        <button class="btn-check-s4" id="btn-s4-check" onclick="checkS4StageAnswers()">연결 상태 검사 (정답 확인)</button>
-
-        <div id="board"
-          style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 10px 0; overflow-y: auto; flex-grow: 1;">
-          <div id="message-wrap"
-            style="position: absolute; top: 10px; width: 100%; display: flex; justify-content: center; z-index: 20; pointer-events: none;">
-            <div id="message"
-              style="background: rgba(0,0,0,0.85); color: #ffd700; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; opacity: 0; transition: opacity 0.3s; text-align: center; border: 1px solid #ffd700;">
-            </div>
-          </div>
-
-          <!-- 폐(허파) 모세혈관 -->
-          <div id="lungs" class="organ">폐의 모세혈관</div>
-
-          <!-- 폐 연결 혈관 및 화살표 -->
-          <div class="row">
-            <div class="v-col">
-              <div id="arr-lungs-pa" class="arrow empty" onclick="arrowClick('arr-lungs-pa')">↕</div>
-              <div id="slot-pa" class="slot empty bg-gray" onclick="vesselClick('pa')">빈칸</div>
-              <div id="arr-pa" class="arrow empty" onclick="arrowClick('arr-pa')">↕</div>
-            </div>
-            <div class="v-col">
-              <div id="arr-lungs-pv" class="arrow empty" onclick="arrowClick('arr-lungs-pv')">↕</div>
-              <div id="slot-pv" class="slot empty bg-gray" onclick="vesselClick('pv')">빈칸</div>
-              <div id="arr-pv" class="arrow empty" onclick="arrowClick('arr-pv')">↕</div>
-            </div>
-          </div>
-
-          <div class="heart-container" id="heart-area">
-            <div class="heart-bg"></div>
-
-            <div class="row">
-              <div id="ra" class="chamber bg-gray" onclick="chamberClick('ra')">우심방</div>
-              <div id="la" class="chamber bg-gray" onclick="chamberClick('la')">좌심방</div>
-            </div>
-
-            <div class="row arrow-row">
-              <div id="arr-ra-rv" class="arrow empty" onclick="arrowClick('arr-ra-rv')">↕</div>
-              <div id="arr-la-lv" class="arrow empty" onclick="arrowClick('arr-la-lv')">↕</div>
-            </div>
-
-            <div class="row">
-              <div id="rv" class="chamber bg-gray" onclick="chamberClick('rv')">우심실</div>
-              <div id="lv" class="chamber bg-red">좌심실<br><span style="font-size:10px; color:#ccc;">(Hold)</span></div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="v-col">
-              <div id="arr-vc" class="arrow empty" onclick="arrowClick('arr-vc')">↕</div>
-              <div id="slot-vc" class="slot empty bg-gray" onclick="vesselClick('vc')">빈칸</div>
-              <div id="arr-body-vc" class="arrow empty" onclick="arrowClick('arr-body-vc')">↕</div>
-            </div>
-            <div class="v-col">
-              <div id="arr-ao" class="arrow empty" onclick="arrowClick('arr-ao')">↕</div>
-              <div id="slot-ao" class="slot empty bg-gray" onclick="vesselClick('ao')">빈칸</div>
-              <div id="arr-ao-body" class="arrow empty" onclick="arrowClick('arr-ao-body')">↕</div>
-            </div>
-          </div>
-
-          <!-- 온몸 모세혈관 -->
-          <div id="body-cells" class="organ">온몸의 모세혈관</div>
-        </div>
-
-        <div id="gauge-container"
-          style="position: absolute; bottom: 65px; left: 10%; width: 80%; height: 20px; background: rgba(0,0,0,0.8); border: 2px solid #ffd700; border-radius: 10px; display: none; overflow: hidden; z-index: 10;">
-          <div id="gauge"
-            style="height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff6b00);border-radius:8px;transition:width 0.05s;box-shadow:0 0 10px #ffd700;">
-          </div>
-        </div>
-
-        <button class="btn-next" id="btn-s4-next" style="display:none;" onclick="goStage5()">전신 순환 출발 &#8594;</button>
-      </div>
-
-      <div id="screen-stage5" class="screen">
-        <div class="scene-wrap" id="sw-s5">
-          <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_10.png" class="scene-img" alt="Stage 5"
-            onerror="this.style.background='#100010'">
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
-        </div>
-        <div class="stage-badge">
-          <div class="stage-dot"></div>STAGE 5: 혈구 특공대 파견
-        </div>
-        <div class="instructions">비상 징후 발생! 알맞은 <strong>혈액 성분</strong>을 즉시 파견하십시오.</div>
-        <div class="mission-item">
-          <div class="mission-label">&#128680; 출혈 발생! 딱지를 만들어라!</div>
-          <select id="s5-a1">
-            <option value="">&#8594; 혈액 성분 선택</option>
-            <option value="적혈구">적혈구</option>
-            <option value="백혈구">백혈구</option>
-            <option value="혈소판">혈소판</option>
-          </select>
-        </div>
-        <div class="mission-item">
-          <div class="mission-label">&#129440; 미확인 세균 침입! 식균 작용!</div>
-          <select id="s5-a2">
-            <option value="">&#8594; 혈액 성분 선택</option>
-            <option value="적혈구">적혈구</option>
-            <option value="백혈구">백혈구</option>
-            <option value="혈소판">혈소판</option>
-          </select>
-        </div>
-        <div class="mission-item">
-          <div class="mission-label">&#128168; 뇌세포 산소 기아 상태! 산소 배달!</div>
-          <select id="s5-a3">
-            <option value="">&#8594; 혈액 성분 선택</option>
-            <option value="적혈구">적혈구</option>
-            <option value="백혈구">백혈구</option>
-            <option value="혈소판">혈소판</option>
-          </select>
-        </div>
-        <button class="btn-primary" onclick="checkStage5()">&#9889; 특공대 일제 투입</button>
-      </div>
-
-      <div id="screen-stage6" class="screen">
-        <div class="scene-wrap" id="sw-s6">
-          <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_11.png" class="scene-img" alt="Stage 6"
-            onerror="this.style.background='#001020'">
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
-        </div>
-        <div class="stage-badge">
-          <div class="stage-dot"></div>STAGE 6: 세뇨관 정수 필터
-        </div>
-        <div class="instructions">급류에 쓸려가는 물질 중 <strong>신장에서 꼭 재흡수해야 하는 영양소</strong>를 터치하여 구출하고, 노폐물이나 여과되지 않는 물질은 그대로
-          통과시키세요!</div>
-        <div class="river-box" id="s6-river"></div>
-        <div class="s6-status-txt" id="s6-status">구출된 영양소: 0/8</div>
-        <button class="btn-next" id="btn-s6-next" onclick="goEpilogue()">최종 발전소 진입 &#8594;</button>
-      </div>
-
-
-      <div id="screen-epilogue" class="screen">
-        <div class="scene-wrap" id="sw-epi">
-          <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_12.png" class="scene-img" alt="Epilogue"
-            onerror="this.style.background='#1a1000'">
-          <div class="scan-line"></div>
-          <div class="hud-corner hud-tl"></div>
-          <div class="hud-corner hud-tr"></div>
-          <div class="hud-corner hud-bl"></div>
-          <div class="hud-corner hud-br"></div>
-        </div>
-        <div class="stage-badge"
-          style="background:rgba(255,204,0,.08);border-color:var(--warn-yellow);color:var(--warn-yellow);">
-          <div class="stage-dot" style="background:var(--warn-yellow);"></div>EPILOGUE: SYSTEM STABLE
-        </div>
-
-        <!-- 에필로그 단계별 페이즈 영역 -->
-        <div id="epi-stage"
-          style="position: relative; width: 100%; display: flex; flex-direction: column; flex-grow: 1;">
-          <!-- Phase 0: 인트로 -->
-          <div class="epi-phase active" id="epi-phase0"
-            style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex-grow: 1; padding: 15px 0;">
-            <h2 class="green-title" style="margin-bottom: 10px;">미토콘드리아 도착!</h2>
-            <div class="instructions" style="width: 100%;">모든 기관계의 협력으로<br>영양소와 산소가 온몸의 조직 세포,<br><strong
-                style="color:var(--warn-yellow)">미토콘드리아</strong>에 도착했습니다.<br><br>이제 마지막 단계, <strong>세포 호흡</strong>을
-              완성하세요.</div>
-            <button class="btn-primary" onclick="goEpiPhase(1)">임무 시작</button>
-          </div>
-
-          <!-- Phase 1: 재료 선별 퀴즈 -->
-          <div class="epi-phase" id="epi-phase1"
-            style="display: none; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%;">
-            <div class="instructions" style="width: 100%;"><strong>STEP 1. 원료 선별</strong><br>세포 호흡의 <strong
-                style="color:var(--warn-yellow)">원료(재료)</strong> 2가지만 골라 트레이로 보내세요.</div>
-            <div id="quizField" style="position:relative; width:100%; height:280px; margin-bottom: 10px;"></div>
-            <div id="tray"
-              style="display:flex; gap:14px; margin-top:16px; min-height:70px; align-items:center; justify-content:center; width:100%;">
-              <div class="tray-slot" id="traySlot1"
-                style="width:60px; height:60px; border-radius:12px; border:2px dashed rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--muted);">
-                ?</div>
-              <div class="tray-slot" id="traySlot2"
-                style="width:60px; height:60px; border-radius:12px; border:2px dashed rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--muted);">
-                ?</div>
-            </div>
-          </div>
-
-          <!-- Phase 2: 미토콘드리아 충돌 -->
-          <div class="epi-phase" id="epi-phase2"
-            style="display: none; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%;">
-            <div class="instructions" style="width: 100%;"><strong>STEP 2. 세포 호흡 반응</strong><br>두 재료를 각각 하나씩 미토콘드리아 중앙으로 끌어와 충돌시키세요.</div>
-            <div id="mitoWrap"
-              style="position:relative; width:100%; height:320px; display:flex; align-items:center; justify-content:center;">
-              <div id="mito"></div>
-              <div class="draggable" id="orbNutrient"
-                style="position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #ffd9a0, #F4A261); color:#020a18;">
-                영양소</div>
-              <div class="draggable" id="orbOxygen"
-                style="position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #b9f1ff, #3A86FF); color:#ffffff;">
-                산소</div>
-              <div id="flashWhite"
-                style="position:absolute; inset:0; background:#fff; opacity:0; z-index:60; pointer-events:none;"></div>
-              <div id="equationText"
-                style="position:absolute; z-index:65; text-align:center; opacity:0; width:100%; padding:0 20px; font-size:16px; font-weight:700; color:#ffffff; text-shadow: 0 0 10px rgba(0,0,0,0.9); line-height:1.8;">
-                영양소 + 산소 → 물 + 이산화 탄소 + 에너지</div>
-            </div>
-          </div>
-
-          <!-- Phase 3: 생성물 순환 배치 -->
-          <div class="epi-phase" id="epi-phase3"
-            style="display: none; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%;">
-            <div class="instructions" style="width: 100%;"><strong>STEP 3. 생성물을 몸 곳곳으로!</strong><br>만들어진 물질을 알맞은 기관으로 보내
-              모든 기관계를 다시 연결하세요.</div>
-            <div id="sortField" style="position:relative; width:100%; height:340px; margin-top:10px;">
-              <div class="target-slot" id="targetLung"
-                style="position:absolute; top:10px; left:10px; width:100px; height:100px; border-radius:16px; background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; color:var(--muted); gap:4px;">
-                <span style="font-size:26px;">🫁</span>폐 (호흡계)</div>
-              <div class="target-slot" id="targetHeart"
-                style="position:absolute; top:10px; right:10px; width:100px; height:100px; border-radius:16px; background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; color:var(--muted); gap:4px;">
-                <span style="font-size:26px;">❤️</span>심장 (순환계)</div>
-              <div class="target-slot" id="targetKidney"
-                style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); width:100px; height:100px; border-radius:16px; background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; color:var(--muted); gap:4px;">
-                <span style="font-size:26px;">💧</span>혈관·콩팥</div>
-              <div class="product-orb" id="prodCO2"
-                style="position:absolute; width:58px; height:58px; border-radius:50%; z-index:25; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #e5e7eb, #9CA3AF); color:#020a18; top:150px; left:30px;">
-                CO₂</div>
-              <div class="product-orb" id="prodWater"
-                style="position:absolute; width:58px; height:58px; border-radius:50%; z-index:25; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #e0f7ff, #7DD3FC); color:#020a18; top:150px; left:140px;">
-                물</div>
-              <div class="product-orb" id="prodEnergy"
-                style="position:absolute; width:58px; height:58px; border-radius:50%; z-index:25; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; touch-action:none; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #fff2c2, var(--warn-yellow)); color:#020a18; top:150px; left:250px;">
-                ⚡</div>
-            </div>
-          </div>
-
-          <!-- Phase 4: 성공 화면 -->
-          <div class="epi-phase" id="epi-phase4"
-            style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex-grow: 1; width: 100%; position:relative;">
-            <canvas id="confettiCanvas"
-              style="position:absolute; inset:0; z-index:70; pointer-events:none; width:100%; height:100%;"></canvas>
-            <div class="title-badge" style="color:var(--neon-green); font-size:1.1rem;">MISSION COMPLETE</div>
-            <div id="bigBpm"
-              style="font-size:42px; font-weight:800; color:var(--neon-green); text-shadow:0 0 20px rgba(72,229,194,0.6); margin: 15px 0;">
-              80 BPM</div>
-            <div id="successMsg"
-              style="font-size:13px; color:var(--text); text-align:center; padding:0 15px; line-height:1.6;">환자 바이탈 사인
-              안정화.<br>생명 활동 에너지 100% 충전 완료.<br><br><strong style="color:var(--warn-yellow)">의료진 여러분, 수고하셨습니다!</strong>
-            </div>
-            <div id="sync-msg" style="margin-top: 15px; font-weight: 700; color: var(--neon-blue);"></div>
-          </div>
-        </div>
-
-        <!-- 하단 에필로그 다이얼로그 -->
-        <div id="epiDialogueBox"
-          style="background:rgba(5,15,34,0.85); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px; line-height:1.4; margin-top:10px; width:100%; box-shadow:0 0 10px rgba(72, 229, 194, 0.1);">
-          <span id="epiDialogueText" style="color:var(--text);">에필로그 시스템 정상 기동...</span>
-        </div>
-      </div>
-
-      <!-- 혈액공급 성공 팝업 -->
-      <div class="blood-supply-popup" id="bloodSupplyPopup">
-        <div class="popup-inner" style="max-width: 95%; width: 420px; padding: 20px;">
-          <div
-            style="font-size:1.3rem;font-weight:700;color:var(--neon-green);margin-bottom:12px;font-family:'SebangGothic',sans-serif;">
-            ❤️ 혈액 순환 시뮬레이션</div>
-          <div
-            style="position:relative; width:100%; border-radius:10px; overflow:hidden; border:2px solid var(--neon-blue); background:#000; margin-bottom:15px; display: flex; align-items: center; justify-content: center;">
-            <video id="s4CirculationVideo" src="이미지/스테이지4 심장순환.mp4" muted autoplay playsinline
-              style="width:100%; display:block;"></video>
-          </div>
-          <div style="font-size:.85rem;color:#fff;line-height:1.6;margin-bottom:15px;">
-            좌심실 펌핑 성공! 혈액이 온몸으로 순환합니다!
-          </div>
-          <button onclick="closeS4VideoAndGoNext()"
-            style="width:100%;padding:12px;background:var(--neon-green);color:#020a18;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 0 12px var(--neon-green);font-family:'SebangGothic',sans-serif;">
-            다음 단계로 이동 &rarr;
-          </button>
-        </div>
-      </div>
-
-      <div class="codeblue-overlay" id="cb-panel">
-        <div class="cb-img-wrap">
-          <video id="cbBgVideo" class="cb-bg-video" src="이미지/코드블루 심박동 소리.mp4" loop muted playsinline
-            onerror="this.style.background='#300000'"></video>
-          <div class="scan-line"></div>
-        </div>
-        <div class="cb-content">
-          <div class="cb-title">&#128680; CODE BLUE! &#128680;</div>
-          <div class="cb-sub">환자 맥박·호흡 소실! 즉시 심폐소생술(CPR)을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: CPR 시행
-              횟수만큼 최종 점수 감점)</span></div>
-          <div id="cb-tap-ui"
-            style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;">
-            <div class="heart-btn" id="cbBtn" onclick="doCodeBlueCPR()"
-              style="margin:18px auto;position:relative;left:auto;transform:none;">
-              <span style="font-size:2rem;">&#9829;</span>
-              <span class="heart-label" id="cb-count">0 / 10</span>
-            </div>
-            <div class="gauge-bg" style="width:80%;margin:0 auto;">
-              <div class="gauge-fill" id="cb-gauge"></div>
-            </div>
-            <p style="color:var(--warn-yellow);margin-top:10px;font-size:.85rem;">빨간 하트를 연타하여 게이지를 채우세요!</p>
-          </div>
-          <div id="cb-hold-ui" style="display:none;width:100%;text-align:center;">
-            <div class="hold-circle" id="cbHoldBtn" style="display:none;left:auto;transform:none;margin:18px auto;">HOLD
-              5s</div>
-            <p style="color:var(--neon-green);margin-top:10px;font-size:.85rem;">5초간 화면을 꾹 누르고 떼지 마세요!</p>
-          </div>
+        <div class="gauge-bg">
+          <div class="gauge-fill" id="cpr-gauge"></div>
         </div>
       </div>
     </div>
-    <script>
-      // ── 전역 변수 ─────────────────────────────────────────────
-      var pData = { id: "", name: "", progress: 0, score: 100 };
-      var errorCount = 0, currentStageFunc = null;
-      var actx = null, sirenInt = null, flatSound = null;
-      var GAS_URL = "https://script.google.com/macros/s/AKfycbxf30pT9UPbkRzT9FjtxCYrQAuQbf5r_NBnar4UbW4VbSmdk-85qd-8H9XeqVa7xbEjsw/exec";
-      var SHEET_NAME = "[PROJECT: BIO-RESCUE]";
 
-      // ── 진행도 트래커 ─────────────────────────────────────────
-      function updateProgress(idx) {
-        for (var i = 0; i < 9; i++) {
-          var dot = document.getElementById("pd-" + i);
-          if (!dot) continue;
-          dot.className = "progress-dot" + (i < idx ? " done" : i === idx ? " active" : "");
+    <div id="screen-stage1" class="screen">
+      <div class="scene-wrap" id="sw-s1">
+        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_3.png" class="scene-img" id="s1-img" alt="Stage 1"
+          onerror="this.style.background='#1a0800'">
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+      <div class="stage-badge">
+        <div class="stage-dot"></div>STAGE 1: 소화 파쇄 라인
+      </div>
+      <h2 id="s1-zone-title">구역: 입</h2>
+      <div class="instructions" id="s1-desc">알맞은 소화 효소를 매칭하세요.</div>
+      <div class="match-grid" id="s1-nutrient-grid"></div>
+      <div class="divider-arrow">&#9660; 소화 효소 선택 &#9660;</div>
+      <div class="match-grid" id="s1-enzyme-grid">
+        <div class="match-item enzyme" onclick="selectItem(this,'enzyme','아밀레이스')">&#128300; 아밀레이스</div>
+        <div class="match-item enzyme" onclick="selectItem(this,'enzyme','펩신')">&#129514; 펩신(+염산)</div>
+        <div class="match-item enzyme" onclick="selectItem(this,'enzyme','라이페이스')">&#9879;&#65039; 라이페이스</div>
+        <div class="match-item enzyme" onclick="selectItem(this,'enzyme','탄수화물 소화 효소')">&#127806; 탄수화물 소화 효소</div>
+        <div class="match-item enzyme" onclick="selectItem(this,'enzyme','단백질 소화 효소')">&#129385; 단백질 소화 효소</div>
+        <div class="match-item enzyme" onclick="selectItem(this,'enzyme','통과')" style="border-color:var(--muted);">
+          &#8617; 그냥 통과</div>
+      </div>
+      <button class="btn-next" id="btn-s1-next" onclick="nextS1Zone()">다음 구역 이동 &#8594;</button>
+    </div>
+
+    <div id="screen-stage2" class="screen">
+      <div class="scene-wrap" id="sw-s2">
+        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_5.png" class="scene-img" alt="Stage 2"
+          onerror="this.style.background='#001a0a'">
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+      <div class="stage-badge">
+        <div class="stage-dot"></div>STAGE 2: 환승센터 &amp; 간 방어전
+      </div>
+      <div id="s2-p1">
+        <div class="instructions">수용성 영양소는 <strong>[모세혈관]</strong>으로, 지용성은 <strong>[암죽관]</strong>으로!</div>
+        <div class="swipe-card">
+          <div class="swipe-target" id="s2-target">포도당</div>
+          <div class="swipe-sub">어느 통로로 보내시겠습니까?</div>
+          <div class="swipe-btns">
+            <button class="swipe-btn swipe-btn-left" onclick="swipeS2('모세혈관')">&#128072; 모세혈관</button>
+            <button class="swipe-btn swipe-btn-right" onclick="swipeS2('암죽관')">암죽관 &#128073;</button>
+          </div>
+        </div>
+      </div>
+      <div id="s2-p2" style="display:none;">
+        <div class="instructions" style="border-color:var(--alert-red);">&#128680; 치명적인 <strong>암모니아</strong> 유출! 즉시
+          '간'으로 보내 해독하십시오!</div>
+        <div class="detox-panel">
+          <div class="toxin-node" id="s2-toxin" onclick="selectToxin()">&#9760;&#65039; 암모니아</div>
+          <span class="arrow-anim">&#10148;</span>
+          <div class="liver-node" onclick="triggerDetox()">&#129372; 간 (해독)</div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-s2-next" onclick="goStage3()">기체 교환소 이동 &#8594;</button>
+    </div>
+
+    <div id="screen-stage3" class="screen">
+      <div class="scene-wrap" id="sw-s3">
+        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_7.png" class="scene-img" alt="Stage 3"
+          onerror="this.style.background='#001020'">
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+      <div class="stage-badge">
+        <div class="stage-dot"></div>STAGE 3: 폐포 기체 확산
+      </div>
+      <div class="instructions">혈액 속 <strong>CO&#8322;는 두 번 터치해 방출</strong> 💥, 떠다니는 <strong>O&#8322;는 한 번 터치해
+          흡수</strong> ✅!</div>
+      <div class="s3-score-bar">
+        <div class="s3-stat" id="s3-o2" style="color:var(--neon-blue);">&#128309; O&#8322; 흡수: 0/5</div>
+        <div class="s3-stat" id="s3-co2" style="color:var(--alert-red);">&#128308; CO&#8322; 방출: 0/5</div>
+      </div>
+      <div class="bubble-container" id="s3-bubbles">
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-s3-next" onclick="goStage4()">순환 루프 연결 &#8594;</button>
+    </div>
+
+    <div id="screen-stage4" class="screen">
+      <div class="stage-badge">
+        <div class="stage-dot"></div>STAGE 4: 순환계 루트 복구
+      </div>
+
+      <div class="instructions" id="s4-instructions">
+        1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>
+        2. 심방과 심실도 눌러 색을 맞추세요.<br>
+        3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.
+      </div>
+
+      <div id="toolbox">
+        <div class="tool" onclick="selectTool('폐동맥')">폐동맥</div>
+        <div class="tool" onclick="selectTool('폐정맥')">폐정맥</div>
+        <div class="tool" onclick="selectTool('대동맥')">대동맥</div>
+        <div class="tool" onclick="selectTool('대정맥')">대정맥</div>
+      </div>
+      <button class="btn-check-s4" id="btn-s4-check" onclick="checkS4StageAnswers()">연결 상태 검사 (정답 확인)</button>
+
+      <div id="board"
+        style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 10px 0; overflow-y: auto; flex-grow: 1;">
+        <div id="message-wrap"
+          style="position: absolute; top: 10px; width: 100%; display: flex; justify-content: center; z-index: 20; pointer-events: none;">
+          <div id="message"
+            style="background: rgba(0,0,0,0.85); color: #ffd700; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; opacity: 0; transition: opacity 0.3s; text-align: center; border: 1px solid #ffd700;">
+          </div>
+        </div>
+
+        <!-- 폐(허파) 모세혈관 -->
+        <div id="lungs" class="organ">폐의 모세혈관</div>
+
+        <!-- 폐 연결 혈관 및 화살표 -->
+        <div class="row">
+          <div class="v-col">
+            <div id="arr-lungs-pa" class="arrow empty" onclick="arrowClick('arr-lungs-pa')">↕</div>
+            <div id="slot-pa" class="slot empty bg-gray" onclick="vesselClick('pa')">빈칸</div>
+            <div id="arr-pa" class="arrow empty" onclick="arrowClick('arr-pa')">↕</div>
+          </div>
+          <div class="v-col">
+            <div id="arr-lungs-pv" class="arrow empty" onclick="arrowClick('arr-lungs-pv')">↕</div>
+            <div id="slot-pv" class="slot empty bg-gray" onclick="vesselClick('pv')">빈칸</div>
+            <div id="arr-pv" class="arrow empty" onclick="arrowClick('arr-pv')">↕</div>
+          </div>
+        </div>
+
+        <div class="heart-container" id="heart-area">
+          <div class="heart-bg"></div>
+
+          <div class="row">
+            <div id="ra" class="chamber bg-gray" onclick="chamberClick('ra')">우심방</div>
+            <div id="la" class="chamber bg-gray" onclick="chamberClick('la')">좌심방</div>
+          </div>
+
+          <div class="row arrow-row">
+            <div id="arr-ra-rv" class="arrow empty" onclick="arrowClick('arr-ra-rv')">↕</div>
+            <div id="arr-la-lv" class="arrow empty" onclick="arrowClick('arr-la-lv')">↕</div>
+          </div>
+
+          <div class="row">
+            <div id="rv" class="chamber bg-gray" onclick="chamberClick('rv')">우심실</div>
+            <div id="lv" class="chamber bg-red">좌심실<br><span style="font-size:10px; color:#ccc;">(Hold)</span></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="v-col">
+            <div id="arr-vc" class="arrow empty" onclick="arrowClick('arr-vc')">↕</div>
+            <div id="slot-vc" class="slot empty bg-gray" onclick="vesselClick('vc')">빈칸</div>
+            <div id="arr-body-vc" class="arrow empty" onclick="arrowClick('arr-body-vc')">↕</div>
+          </div>
+          <div class="v-col">
+            <div id="arr-ao" class="arrow empty" onclick="arrowClick('arr-ao')">↕</div>
+            <div id="slot-ao" class="slot empty bg-gray" onclick="vesselClick('ao')">빈칸</div>
+            <div id="arr-ao-body" class="arrow empty" onclick="arrowClick('arr-ao-body')">↕</div>
+          </div>
+        </div>
+
+        <!-- 온몸 모세혈관 -->
+        <div id="body-cells" class="organ">온몸의 모세혈관</div>
+      </div>
+
+      <div id="gauge-container"
+        style="position: absolute; bottom: 65px; left: 10%; width: 80%; height: 20px; background: rgba(0,0,0,0.8); border: 2px solid #ffd700; border-radius: 10px; display: none; overflow: hidden; z-index: 10;">
+        <div id="gauge"
+          style="height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff6b00);border-radius:8px;transition:width 0.05s;box-shadow:0 0 10px #ffd700;">
+        </div>
+      </div>
+
+      <button class="btn-next" id="btn-s4-next" style="display:none;" onclick="goStage5()">전신 순환 출발 &#8594;</button>
+    </div>
+
+    <div id="screen-stage5" class="screen">
+      <div class="scene-wrap" id="sw-s5">
+        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_10.png" class="scene-img" alt="Stage 5"
+          onerror="this.style.background='#100010'">
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+      <div class="stage-badge">
+        <div class="stage-dot"></div>STAGE 5: 혈구 특공대 파견
+      </div>
+      <div class="instructions">비상 징후 발생! 알맞은 <strong>혈액 성분</strong>을 즉시 파견하십시오.</div>
+      <div class="mission-item">
+        <div class="mission-label">&#128680; 출혈 발생! 딱지를 만들어라!</div>
+        <select id="s5-a1">
+          <option value="">&#8594; 혈액 성분 선택</option>
+          <option value="적혈구">적혈구</option>
+          <option value="백혈구">백혈구</option>
+          <option value="혈소판">혈소판</option>
+        </select>
+      </div>
+      <div class="mission-item">
+        <div class="mission-label">&#129440; 미확인 세균 침입! 식균 작용!</div>
+        <select id="s5-a2">
+          <option value="">&#8594; 혈액 성분 선택</option>
+          <option value="적혈구">적혈구</option>
+          <option value="백혈구">백혈구</option>
+          <option value="혈소판">혈소판</option>
+        </select>
+      </div>
+      <div class="mission-item">
+        <div class="mission-label">&#128168; 뇌세포 산소 기아 상태! 산소 배달!</div>
+        <select id="s5-a3">
+          <option value="">&#8594; 혈액 성분 선택</option>
+          <option value="적혈구">적혈구</option>
+          <option value="백혈구">백혈구</option>
+          <option value="혈소판">혈소판</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="checkStage5()">&#9889; 특공대 일제 투입</button>
+    </div>
+
+    <div id="screen-stage6" class="screen">
+      <div class="scene-wrap" id="sw-s6">
+        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_11.png" class="scene-img" alt="Stage 6"
+          onerror="this.style.background='#001020'">
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+      <div class="stage-badge">
+        <div class="stage-dot"></div>STAGE 6: 세뇨관 정수 필터
+      </div>
+      <div class="instructions">급류에 쓸려가는 물질 중 <strong>신장에서 꼭 재흡수해야 하는 영양소</strong>를 터치하여 구출하고, 노폐물이나 여과되지 않는 물질은 그대로
+        통과시키세요!</div>
+      <div class="river-box" id="s6-river"></div>
+      <div class="s6-status-txt" id="s6-status">구출된 영양소: 0/8</div>
+      <button class="btn-next" id="btn-s6-next" onclick="goEpilogue()">최종 발전소 진입 &#8594;</button>
+    </div>
+
+
+    <div id="screen-epilogue" class="screen">
+      <div class="scene-wrap" id="sw-epi">
+        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_12.png" class="scene-img" alt="Epilogue"
+          onerror="this.style.background='#1a1000'">
+        <div class="scan-line"></div>
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+      <div class="stage-badge"
+        style="background:rgba(255,204,0,.08);border-color:var(--warn-yellow);color:var(--warn-yellow);">
+        <div class="stage-dot" style="background:var(--warn-yellow);"></div>EPILOGUE: SYSTEM STABLE
+      </div>
+
+      <!-- 에필로그 단계별 페이즈 영역 -->
+      <div id="epi-stage" style="position: relative; width: 100%; display: flex; flex-direction: column; flex-grow: 1;">
+        <!-- Phase 0: 인트로 -->
+        <div class="epi-phase active" id="epi-phase0"
+          style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex-grow: 1; padding: 15px 0;">
+          <h2 class="green-title" style="margin-bottom: 10px;">미토콘드리아 도착!</h2>
+          <div class="instructions" style="width: 100%;">모든 기관계의 협력으로<br>영양소와 산소가 온몸의 조직 세포,<br><strong
+              style="color:var(--warn-yellow)">미토콘드리아</strong>에 도착했습니다.<br><br>이제 마지막 단계, <strong>세포 호흡</strong>을
+            완성하세요.</div>
+          <button class="btn-primary" onclick="goEpiPhase(1)">임무 시작</button>
+        </div>
+
+        <!-- Phase 1: 재료 선별 퀴즈 -->
+        <div class="epi-phase" id="epi-phase1"
+          style="display: none; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%;">
+          <div class="instructions" style="width: 100%;"><strong>STEP 1. 원료 선별</strong><br>세포 호흡의 <strong
+              style="color:var(--warn-yellow)">원료(재료)</strong> 2가지만 골라 트레이로 보내세요.</div>
+          <div id="quizField" style="position:relative; width:100%; height:280px; margin-bottom: 10px;"></div>
+          <div id="tray"
+            style="display:flex; gap:14px; margin-top:16px; min-height:70px; align-items:center; justify-content:center; width:100%;">
+            <div class="tray-slot" id="traySlot1"
+              style="width:60px; height:60px; border-radius:12px; border:2px dashed rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--muted);">
+              ?</div>
+            <div class="tray-slot" id="traySlot2"
+              style="width:60px; height:60px; border-radius:12px; border:2px dashed rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--muted);">
+              ?</div>
+          </div>
+        </div>
+
+        <!-- Phase 2: 미토콘드리아 충돌 -->
+        <div class="epi-phase" id="epi-phase2"
+          style="display: none; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%;">
+          <div class="instructions" style="width: 100%;"><strong>STEP 2. 세포 호흡 반응</strong><br>두 재료를 각각 하나씩 미토콘드리아 중앙으로
+            끌어와 충돌시키세요.</div>
+          <div id="mitoWrap"
+            style="position:relative; width:100%; height:320px; display:flex; align-items:center; justify-content:center;">
+            <div id="mito"></div>
+            <div class="draggable" id="orbNutrient"
+              style="position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #ffd9a0, #F4A261); color:#020a18;">
+              영양소</div>
+            <div class="draggable" id="orbOxygen"
+              style="position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #b9f1ff, #3A86FF); color:#ffffff;">
+              산소</div>
+            <div id="flashWhite"
+              style="position:absolute; inset:0; background:#fff; opacity:0; z-index:60; pointer-events:none;"></div>
+            <div id="equationText"
+              style="position:absolute; z-index:65; text-align:center; opacity:0; width:100%; padding:0 20px; font-size:16px; font-weight:700; color:#ffffff; text-shadow: 0 0 10px rgba(0,0,0,0.9); line-height:1.8;">
+              영양소 + 산소 → 물 + 이산화 탄소 + 에너지</div>
+          </div>
+        </div>
+
+        <!-- Phase 3: 생성물 순환 배치 -->
+        <div class="epi-phase" id="epi-phase3"
+          style="display: none; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%;">
+          <div class="instructions" style="width: 100%;"><strong>STEP 3. 생성물을 몸 곳곳으로!</strong><br>만들어진 물질을 알맞은 기관으로 보내
+            모든 기관계를 다시 연결하세요.</div>
+          <div id="sortField" style="position:relative; width:100%; height:340px; margin-top:10px;">
+            <div class="target-slot" id="targetLung"
+              style="position:absolute; top:10px; left:10px; width:100px; height:100px; border-radius:16px; background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; color:var(--muted); gap:4px;">
+              <span style="font-size:26px;">🫁</span>폐 (호흡계)
+            </div>
+            <div class="target-slot" id="targetHeart"
+              style="position:absolute; top:10px; right:10px; width:100px; height:100px; border-radius:16px; background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; color:var(--muted); gap:4px;">
+              <span style="font-size:26px;">❤️</span>심장 (순환계)
+            </div>
+            <div class="target-slot" id="targetKidney"
+              style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); width:100px; height:100px; border-radius:16px; background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; color:var(--muted); gap:4px;">
+              <span style="font-size:26px;">💧</span>혈관·콩팥
+            </div>
+            <div class="product-orb" id="prodCO2"
+              style="position:absolute; width:58px; height:58px; border-radius:50%; z-index:25; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #e5e7eb, #9CA3AF); color:#020a18; top:150px; left:30px;">
+              CO₂</div>
+            <div class="product-orb" id="prodWater"
+              style="position:absolute; width:58px; height:58px; border-radius:50%; z-index:25; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #e0f7ff, #7DD3FC); color:#020a18; top:150px; left:140px;">
+              물</div>
+            <div class="product-orb" id="prodEnergy"
+              style="position:absolute; width:58px; height:58px; border-radius:50%; z-index:25; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; touch-action:none; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #fff2c2, var(--warn-yellow)); color:#020a18; top:150px; left:250px;">
+              ⚡</div>
+          </div>
+        </div>
+
+        <!-- Phase 4: 성공 화면 -->
+        <div class="epi-phase" id="epi-phase4"
+          style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex-grow: 1; width: 100%; position:relative;">
+          <canvas id="confettiCanvas"
+            style="position:absolute; inset:0; z-index:70; pointer-events:none; width:100%; height:100%;"></canvas>
+          <div class="title-badge" style="color:var(--neon-green); font-size:1.1rem;">MISSION COMPLETE</div>
+          <div id="bigBpm"
+            style="font-size:42px; font-weight:800; color:var(--neon-green); text-shadow:0 0 20px rgba(72,229,194,0.6); margin: 15px 0;">
+            80 BPM</div>
+          <div id="successMsg"
+            style="font-size:13px; color:var(--text); text-align:center; padding:0 15px; line-height:1.6;">환자 바이탈 사인
+            안정화.<br>생명 활동 에너지 100% 충전 완료.<br><br><strong style="color:var(--warn-yellow)">의료진 여러분, 수고하셨습니다!</strong>
+          </div>
+          <div id="sync-msg" style="margin-top: 15px; font-weight: 700; color: var(--neon-blue);"></div>
+        </div>
+      </div>
+
+      <!-- 하단 에필로그 다이얼로그 -->
+      <div id="epiDialogueBox"
+        style="background:rgba(5,15,34,0.85); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px; line-height:1.4; margin-top:10px; width:100%; box-shadow:0 0 10px rgba(72, 229, 194, 0.1);">
+        <span id="epiDialogueText" style="color:var(--text);">에필로그 시스템 정상 기동...</span>
+      </div>
+    </div>
+
+    <!-- 혈액공급 성공 팝업 -->
+    <div class="blood-supply-popup" id="bloodSupplyPopup">
+      <div class="popup-inner" style="max-width: 95%; width: 420px; padding: 20px;">
+        <div
+          style="font-size:1.3rem;font-weight:700;color:var(--neon-green);margin-bottom:12px;font-family:'SebangGothic',sans-serif;">
+          ❤️ 혈액 순환 시뮬레이션</div>
+        <div
+          style="position:relative; width:100%; border-radius:10px; overflow:hidden; border:2px solid var(--neon-blue); background:#000; margin-bottom:15px; display: flex; align-items: center; justify-content: center;">
+          <video id="s4CirculationVideo" src="이미지/stage4_circulation.mp4" muted autoplay playsinline
+            style="width:100%; display:block;"></video>
+        </div>
+        <div style="font-size:.85rem;color:#fff;line-height:1.6;margin-bottom:15px;">
+          좌심실 펌핑 성공! 혈액이 온몸으로 순환합니다!
+        </div>
+        <button onclick="closeS4VideoAndGoNext()"
+          style="width:100%;padding:12px;background:var(--neon-green);color:#020a18;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 0 12px var(--neon-green);font-family:'SebangGothic',sans-serif;">
+          다음 단계로 이동 &rarr;
+        </button>
+      </div>
+    </div>
+
+    <div class="codeblue-overlay" id="cb-panel">
+      <div class="cb-img-wrap">
+        <video id="cbBgVideo" class="cb-bg-video" src="이미지/codeblue_heartbeat.mp4" loop muted playsinline
+          onerror="this.style.background='#300000'"></video>
+        <div class="scan-line"></div>
+      </div>
+      <div class="cb-content">
+        <div class="cb-title">&#128680; CODE BLUE! &#128680;</div>
+        <div class="cb-sub">환자 맥박·호흡 소실! 즉시 심폐소생술(CPR)을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: CPR 시행
+            횟수만큼 최종 점수 감점)</span></div>
+        <div id="cb-tap-ui"
+          style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;">
+          <div class="heart-btn" id="cbBtn" onclick="doCodeBlueCPR()"
+            style="margin:18px auto;position:relative;left:auto;transform:none;">
+            <span style="font-size:2rem;">&#9829;</span>
+            <span class="heart-label" id="cb-count">0 / 10</span>
+          </div>
+          <div class="gauge-bg" style="width:80%;margin:0 auto;">
+            <div class="gauge-fill" id="cb-gauge"></div>
+          </div>
+          <p style="color:var(--warn-yellow);margin-top:10px;font-size:.85rem;">빨간 하트를 연타하여 게이지를 채우세요!</p>
+        </div>
+        <div id="cb-hold-ui" style="display:none;width:100%;text-align:center;">
+          <div class="hold-circle" id="cbHoldBtn" style="display:none;left:auto;transform:none;margin:18px auto;">HOLD
+            5s</div>
+          <p style="color:var(--neon-green);margin-top:10px;font-size:.85rem;">5초간 화면을 꾹 누르고 떼지 마세요!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ── 전역 변수 ─────────────────────────────────────────────
+    var pData = { id: "", name: "", progress: 0, score: 100 };
+    var errorCount = 0, currentStageFunc = null;
+    var actx = null, sirenInt = null, flatSound = null;
+    var GAS_URL = "https://script.google.com/macros/s/AKfycbxf30pT9UPbkRzT9FjtxCYrQAuQbf5r_NBnar4UbW4VbSmdk-85qd-8H9XeqVa7xbEjsw/exec";
+    var SHEET_NAME = "[PROJECT: BIO-RESCUE]";
+
+    // ── 진행도 트래커 ─────────────────────────────────────────
+    function updateProgress(idx) {
+      for (var i = 0; i < 9; i++) {
+        var dot = document.getElementById("pd-" + i);
+        if (!dot) continue;
+        dot.className = "progress-dot" + (i < idx ? " done" : i === idx ? " active" : "");
+      }
+    }
+
+    // ── 이미지 리플 효과 ──────────────────────────────────────
+    function spawnRipple(e, wrapperId) {
+      var wrap = document.getElementById(wrapperId);
+      if (!wrap) return;
+      var rect = wrap.getBoundingClientRect();
+      var cx = (e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : rect.left + rect.width / 2));
+      var cy = (e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : rect.top + rect.height / 2));
+      var rip = document.createElement("div");
+      rip.className = "ripple";
+      rip.style.cssText = "width:30px;height:30px;left:" + (cx - rect.left - 15) + "px;top:" + (cy - rect.top - 15) + "px;";
+      wrap.appendChild(rip);
+      setTimeout(function () { rip.parentNode && rip.parentNode.removeChild(rip); }, 720);
+    }
+
+    // 모든 scene-wrap에 클릭/터치 이벤트
+    document.querySelectorAll(".scene-wrap").forEach(function (wrap) {
+      wrap.addEventListener("click", function (e) { spawnRipple(e, wrap.id); });
+      wrap.addEventListener("touchstart", function (e) { if (e.touches[0]) spawnRipple(e.touches[0], wrap.id); }, { passive: true });
+    });
+
+    // ── 마우스 시차 효과 ──────────────────────────────────────
+    document.addEventListener("mousemove", function (e) {
+      var wrap = document.querySelector(".screen.active .scene-wrap");
+      if (!wrap) return;
+      var img = wrap.querySelector(".scene-img");
+      if (!img) return;
+      var rect = wrap.getBoundingClientRect();
+      var dx = (e.clientX - rect.left - rect.width / 2) / rect.width * 9;
+      var dy = (e.clientY - rect.top - rect.height / 2) / rect.height * 5;
+      img.style.transform = "scale(1.07) translate(" + dx + "px," + dy + "px)";
+    });
+
+    document.addEventListener("touchmove", function (e) {
+      if (!e.touches[0]) return;
+      var wrap = document.querySelector(".screen.active .scene-wrap");
+      if (!wrap) return;
+      var img = wrap.querySelector(".scene-img");
+      if (!img) return;
+      var rect = wrap.getBoundingClientRect();
+      var dx = (e.touches[0].clientX - rect.left - rect.width / 2) / rect.width * 7;
+      var dy = (e.touches[0].clientY - rect.top - rect.height / 2) / rect.height * 4;
+      img.style.transform = "scale(1.06) translate(" + dx + "px," + dy + "px)";
+    }, { passive: true });
+
+    // ── 오디오 ───────────────────────────────────────────────
+    var speechTimer = null;
+    function speakCodeBlue(count) {
+      if (!count || count <= 0) return;
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          var utterance = new SpeechSynthesisUtterance("코드블루! 코드블루!");
+          utterance.lang = "ko-KR";
+          utterance.rate = 1.05;
+          utterance.volume = 1.0;
+          window.speechSynthesis.speak(utterance);
+
+          if (count > 1) {
+            speechTimer = setTimeout(function () {
+              speakCodeBlue(count - 1);
+            }, 2500);
+          }
         }
-      }
+      } catch (e) { }
+    }
 
-      // ── 이미지 리플 효과 ──────────────────────────────────────
-      function spawnRipple(e, wrapperId) {
-        var wrap = document.getElementById(wrapperId);
-        if (!wrap) return;
-        var rect = wrap.getBoundingClientRect();
-        var cx = (e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : rect.left + rect.width / 2));
-        var cy = (e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : rect.top + rect.height / 2));
-        var rip = document.createElement("div");
-        rip.className = "ripple";
-        rip.style.cssText = "width:30px;height:30px;left:" + (cx - rect.left - 15) + "px;top:" + (cy - rect.top - 15) + "px;";
-        wrap.appendChild(rip);
-        setTimeout(function () { rip.parentNode && rip.parentNode.removeChild(rip); }, 720);
-      }
+    function playSnd(type) {
+      try {
+        if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+        if (actx.state === "suspended") actx.resume();
+        var osc = actx.createOscillator(), gn = actx.createGain();
+        osc.connect(gn); gn.connect(actx.destination);
+        if (type === "beep") { osc.frequency.value = 800; gn.gain.value = 0.08; osc.start(); osc.stop(actx.currentTime + 0.1); }
+        else if (type === "fail") { osc.frequency.value = 150; gn.gain.value = 0.18; osc.start(); osc.stop(actx.currentTime + 0.3); }
+        else if (type === "success") {
+          osc.frequency.value = 523; gn.gain.value = 0.09; osc.start(); osc.stop(actx.currentTime + 0.1);
+          setTimeout(function () { try { var o2 = actx.createOscillator(), g2 = actx.createGain(); o2.connect(g2); g2.connect(actx.destination); o2.frequency.value = 659; g2.gain.value = 0.09; o2.start(); o2.stop(actx.currentTime + 0.2); } catch (e) { } }, 120);
+        }
+        else if (type === "flat") { osc.frequency.value = 400; gn.gain.value = 0.04; osc.start(); return { osc: osc, gn: gn }; }
+      } catch (e) { } return null;
+    }
 
-      // 모든 scene-wrap에 클릭/터치 이벤트
-      document.querySelectorAll(".scene-wrap").forEach(function (wrap) {
-        wrap.addEventListener("click", function (e) { spawnRipple(e, wrap.id); });
-        wrap.addEventListener("touchstart", function (e) { if (e.touches[0]) spawnRipple(e.touches[0], wrap.id); }, { passive: true });
-      });
-
-      // ── 마우스 시차 효과 ──────────────────────────────────────
-      document.addEventListener("mousemove", function (e) {
-        var wrap = document.querySelector(".screen.active .scene-wrap");
-        if (!wrap) return;
-        var img = wrap.querySelector(".scene-img");
-        if (!img) return;
-        var rect = wrap.getBoundingClientRect();
-        var dx = (e.clientX - rect.left - rect.width / 2) / rect.width * 9;
-        var dy = (e.clientY - rect.top - rect.height / 2) / rect.height * 5;
-        img.style.transform = "scale(1.07) translate(" + dx + "px," + dy + "px)";
-      });
-
-      document.addEventListener("touchmove", function (e) {
-        if (!e.touches[0]) return;
-        var wrap = document.querySelector(".screen.active .scene-wrap");
-        if (!wrap) return;
-        var img = wrap.querySelector(".scene-img");
-        if (!img) return;
-        var rect = wrap.getBoundingClientRect();
-        var dx = (e.touches[0].clientX - rect.left - rect.width / 2) / rect.width * 7;
-        var dy = (e.touches[0].clientY - rect.top - rect.height / 2) / rect.height * 4;
-        img.style.transform = "scale(1.06) translate(" + dx + "px," + dy + "px)";
-      }, { passive: true });
-
-      // ── 오디오 ───────────────────────────────────────────────
-      var speechTimer = null;
-      function speakCodeBlue(count) {
-        if (!count || count <= 0) return;
+    function toggleSiren(on) {
+      if (on) {
+        toggleSiren(false);
+        speakCodeBlue(2);
+        // 배경 영상의 소리를 사용하므로 beep 사이렌 비활성
+        // (영상 소리는 initCodeBlue에서 재생)
+      } else {
+        if (sirenInt) {
+          clearInterval(sirenInt);
+          sirenInt = null;
+        }
+        if (speechTimer) {
+          clearTimeout(speechTimer);
+          speechTimer = null;
+        }
         try {
           if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            var utterance = new SpeechSynthesisUtterance("코드블루! 코드블루!");
-            utterance.lang = "ko-KR";
-            utterance.rate = 1.05;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-
-            if (count > 1) {
-              speechTimer = setTimeout(function () {
-                speakCodeBlue(count - 1);
-              }, 2500);
-            }
           }
         } catch (e) { }
       }
+    }
 
-      function playSnd(type) {
-        try {
-          if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-          if (actx.state === "suspended") actx.resume();
-          var osc = actx.createOscillator(), gn = actx.createGain();
-          osc.connect(gn); gn.connect(actx.destination);
-          if (type === "beep") { osc.frequency.value = 800; gn.gain.value = 0.08; osc.start(); osc.stop(actx.currentTime + 0.1); }
-          else if (type === "fail") { osc.frequency.value = 150; gn.gain.value = 0.18; osc.start(); osc.stop(actx.currentTime + 0.3); }
-          else if (type === "success") {
-            osc.frequency.value = 523; gn.gain.value = 0.09; osc.start(); osc.stop(actx.currentTime + 0.1);
-            setTimeout(function () { try { var o2 = actx.createOscillator(), g2 = actx.createGain(); o2.connect(g2); g2.connect(actx.destination); o2.frequency.value = 659; g2.gain.value = 0.09; o2.start(); o2.stop(actx.currentTime + 0.2); } catch (e) { } }, 120);
-          }
-          else if (type === "flat") { osc.frequency.value = 400; gn.gain.value = 0.04; osc.start(); return { osc: osc, gn: gn }; }
-        } catch (e) { } return null;
+    // ── UI 헬퍼 ──────────────────────────────────────────────
+    function switchUI(id) {
+      document.querySelectorAll(".screen").forEach(function (s) { s.classList.remove("active"); });
+      document.getElementById(id).classList.add("active");
+      setTimeout(function () { var img = document.querySelector(".screen.active .scene-img"); if (img) img.style.transform = "scale(1)"; }, 50);
+    }
+
+    function setBPM(val, status) {
+      var el = document.getElementById("ui-bpm");
+      el.innerText = "♥ " + val + " BPM";
+      el.className = status === "danger" ? "status-bpm pulse-danger" : "status-bpm pulse-normal";
+    }
+
+    function updateScore(amt) {
+      pData.score = Math.max(0, pData.score + amt);
+      document.getElementById("ui-score").innerText = pData.score + "점";
+    }
+
+    function triggerError(restartFunc) {
+      errorCount++; playSnd("fail"); updateScore(-5);
+      var appEl = document.getElementById("app");
+      appEl.style.animation = "none"; void appEl.offsetHeight; appEl.style.animation = "app-shake 0.4s";
+      setTimeout(function () { appEl.style.animation = ""; }, 400);
+      if (errorCount >= 3) { setTimeout(function () { initCodeBlue(restartFunc); }, 500); }
+      else { var txt = document.getElementById("ui-bpm").innerText; var cur = parseInt(txt.replace(/[^0-9]/g, "")) || 0; if (cur > 40) setBPM(cur - 5, "danger"); }
+    }
+
+    // ── 게임 시작 ─────────────────────────────────────────────
+    function startGame() {
+      var sid = document.getElementById("studentId").value.trim();
+      var sname = document.getElementById("studentName").value.trim();
+      if (!sid || !sname) { alert("팀 번호와 코드명을 입력하세요."); return; }
+      if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } }
+      // 로컬에만 저장 - 외부 전송 없음
+      pData.id = sid; pData.name = sname;
+      updateProgress(1); switchUI("screen-cpr");
+
+      // 프롤로그 진입 시 사이렌 소리 재생
+      var siren = document.getElementById("sirenAudio");
+      if (siren) {
+        siren.currentTime = 0;
+        siren.play().catch(function (e) { console.log("Siren audio play blocked:", e); });
       }
+    }
 
-      function toggleSiren(on) {
-        if (on) {
-          toggleSiren(false);
-          speakCodeBlue(2);
-          // 배경 영상의 소리를 사용하므로 beep 사이렌 비활성
-          // (영상 소리는 initCodeBlue에서 재생)
-        } else {
-          if (sirenInt) {
-            clearInterval(sirenInt);
-            sirenInt = null;
-          }
-          if (speechTimer) {
-            clearTimeout(speechTimer);
-            speechTimer = null;
-          }
-          try {
-            if ('speechSynthesis' in window) {
-              window.speechSynthesis.cancel();
-            }
-          } catch (e) { }
-        }
-      }
+    // ── CPR ──────────────────────────────────────────────────
+    var introCpr = 0;
+    function doIntroCPR() {
+      introCpr++; playSnd("beep");
+      document.getElementById("cpr-gauge").style.width = (introCpr / 15 * 100) + "%";
+      document.getElementById("cpr-count").innerText = introCpr + " / 15";
+      var btn = document.getElementById("cprBtn");
+      btn.style.transform = "scale(0.88)"; setTimeout(function () { btn.style.transform = "scale(1)"; }, 100);
+      if (introCpr >= 15) {
+        setBPM(40, "normal");
+        playSnd("success");
 
-      // ── UI 헬퍼 ──────────────────────────────────────────────
-      function switchUI(id) {
-        document.querySelectorAll(".screen").forEach(function (s) { s.classList.remove("active"); });
-        document.getElementById(id).classList.add("active");
-        setTimeout(function () { var img = document.querySelector(".screen.active .scene-img"); if (img) img.style.transform = "scale(1)"; }, 50);
-      }
-
-      function setBPM(val, status) {
-        var el = document.getElementById("ui-bpm");
-        el.innerText = "♥ " + val + " BPM";
-        el.className = status === "danger" ? "status-bpm pulse-danger" : "status-bpm pulse-normal";
-      }
-
-      function updateScore(amt) {
-        pData.score = Math.max(0, pData.score + amt);
-        document.getElementById("ui-score").innerText = pData.score + "점";
-      }
-
-      function triggerError(restartFunc) {
-        errorCount++; playSnd("fail"); updateScore(-5);
-        var appEl = document.getElementById("app");
-        appEl.style.animation = "none"; void appEl.offsetHeight; appEl.style.animation = "app-shake 0.4s";
-        setTimeout(function () { appEl.style.animation = ""; }, 400);
-        if (errorCount >= 3) { setTimeout(function () { initCodeBlue(restartFunc); }, 500); }
-        else { var txt = document.getElementById("ui-bpm").innerText; var cur = parseInt(txt.replace(/[^0-9]/g, "")) || 0; if (cur > 40) setBPM(cur - 5, "danger"); }
-      }
-
-      // ── 게임 시작 ─────────────────────────────────────────────
-      function startGame() {
-        var sid = document.getElementById("studentId").value.trim();
-        var sname = document.getElementById("studentName").value.trim();
-        if (!sid || !sname) { alert("팀 번호와 코드명을 입력하세요."); return; }
-        if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } }
-        // 로컬에만 저장 - 외부 전송 없음
-        pData.id = sid; pData.name = sname;
-        updateProgress(1); switchUI("screen-cpr");
-
-        // 프롤로그 진입 시 사이렌 소리 재생
+        // 프롤로그 완료 시 사이렌 소리 정지
         var siren = document.getElementById("sirenAudio");
         if (siren) {
-          siren.currentTime = 0;
-          siren.play().catch(function (e) { console.log("Siren audio play blocked:", e); });
+          siren.pause();
         }
+
+        setTimeout(function () { startStage1(); }, 600);
       }
+    }
 
-      // ── CPR ──────────────────────────────────────────────────
-      var introCpr = 0;
-      function doIntroCPR() {
-        introCpr++; playSnd("beep");
-        document.getElementById("cpr-gauge").style.width = (introCpr / 15 * 100) + "%";
-        document.getElementById("cpr-count").innerText = introCpr + " / 15";
-        var btn = document.getElementById("cprBtn");
-        btn.style.transform = "scale(0.88)"; setTimeout(function () { btn.style.transform = "scale(1)"; }, 100);
-        if (introCpr >= 15) {
-          setBPM(40, "normal");
-          playSnd("success");
+    // ── STAGE 1 ───────────────────────────────────────────────
+    var s1Zone = 0, s1SelNut = null, s1SelEnz = null;
+    var s1Logic = [
+      { name: "입", img: "이미지/Bio_Rescue_Code_Blue_-_Slide_3.png", items: ["녹말", "단백질", "지방"], rule: { "녹말": "아밀레이스", "단백질": "통과", "지방": "통과" } },
+      { name: "위", img: "이미지/Bio_Rescue_Code_Blue_-_Slide_4.png", items: ["엿당", "단백질", "지방"], rule: { "단백질": "펩신", "엿당": "통과", "지방": "통과" } },
+      { name: "작은창자", img: "이미지/Bio_Rescue_Code_Blue_-_Slide_6.png", items: ["엿당", "중간단백질", "지방"], rule: { "지방": "라이페이스", "엿당": "탄수화물 소화 효소", "중간단백질": "단백질 소화 효소" } }
+    ];
 
-          // 프롤로그 완료 시 사이렌 소리 정지
-          var siren = document.getElementById("sirenAudio");
-          if (siren) {
-            siren.pause();
-          }
+    function startStage1(isRetry) {
+      updateProgress(2); switchUI("screen-stage1");
+      if (!isRetry) { s1Zone = 0; }
+      currentStageFunc = function () { startStage1(true); };
+      errorCount = 0; renderS1();
+    }
 
-          setTimeout(function () { startStage1(); }, 600);
-        }
+    function renderS1() {
+      var data = s1Logic[s1Zone];
+      document.getElementById("s1-img").src = data.img;
+      document.getElementById("s1-zone-title").innerText = "구역: " + data.name;
+      document.getElementById("s1-desc").innerHTML = "[" + data.name + "] 알맞은 소화 효소를 매칭하세요. 분해 안 되면 [그냥 통과]를 선택하세요.";
+      var grid = document.getElementById("s1-nutrient-grid"); grid.innerHTML = "";
+      data.items.forEach(function (itm) {
+        var div = document.createElement("div"); div.className = "match-item nutrient"; div.innerText = itm;
+        div.onclick = function () { document.querySelectorAll(".nutrient").forEach(function (el) { el.classList.remove("selected"); }); div.classList.add("selected"); s1SelNut = { el: div, val: itm }; checkS1Match(); };
+        grid.appendChild(div);
+      });
+      document.querySelectorAll(".enzyme").forEach(function (el) { el.classList.remove("selected"); });
+      s1SelNut = null; s1SelEnz = null; document.getElementById("btn-s1-next").style.display = "none";
+    }
+
+    function selectItem(el, type, val) {
+      if (type === "enzyme") {
+        document.querySelectorAll(".enzyme").forEach(function (e) { e.classList.remove("selected"); });
+        el.classList.add("selected"); s1SelEnz = { el: el, val: val }; checkS1Match();
       }
+    }
 
-      // ── STAGE 1 ───────────────────────────────────────────────
-      var s1Zone = 0, s1SelNut = null, s1SelEnz = null;
-      var s1Logic = [
-        { name: "입", img: "이미지/Bio_Rescue_Code_Blue_-_Slide_3.png", items: ["녹말", "단백질", "지방"], rule: { "녹말": "아밀레이스", "단백질": "통과", "지방": "통과" } },
-        { name: "위", img: "이미지/Bio_Rescue_Code_Blue_-_Slide_4.png", items: ["엿당", "단백질", "지방"], rule: { "단백질": "펩신", "엿당": "통과", "지방": "통과" } },
-        { name: "작은창자", img: "이미지/Bio_Rescue_Code_Blue_-_Slide_6.png", items: ["엿당", "중간단백질", "지방"], rule: { "지방": "라이페이스", "엿당": "탄수화물 소화 효소", "중간단백질": "단백질 소화 효소" } }
-      ];
-
-      function startStage1(isRetry) {
-        updateProgress(2); switchUI("screen-stage1");
-        if (!isRetry) { s1Zone = 0; }
-        currentStageFunc = function () { startStage1(true); };
-        errorCount = 0; renderS1();
+    function checkS1Match() {
+      if (!s1SelNut || !s1SelEnz) return;
+      var rule = s1Logic[s1Zone].rule;
+      if (rule[s1SelNut.val] === s1SelEnz.val) {
+        playSnd("success");
+        s1SelNut.el.classList.add(s1SelEnz.val === "통과" ? "bypassed" : "digested");
+        s1SelNut.el.classList.remove("selected", "nutrient");
+        s1SelNut.el.innerText = s1SelEnz.val === "통과" ? s1SelNut.val + " ↪패스" : s1SelNut.val + " ✅분해됨";
+        s1SelNut = null; s1SelEnz = null;
+        if (document.querySelectorAll(".nutrient:not(.digested):not(.bypassed)").length === 0)
+          document.getElementById("btn-s1-next").style.display = "block";
+      } else {
+        s1SelNut.el.classList.remove("selected"); s1SelEnz.el.classList.remove("selected");
+        s1SelNut = null; s1SelEnz = null; triggerError(function () { startStage1(true); });
       }
+    }
 
-      function renderS1() {
-        var data = s1Logic[s1Zone];
-        document.getElementById("s1-img").src = data.img;
-        document.getElementById("s1-zone-title").innerText = "구역: " + data.name;
-        document.getElementById("s1-desc").innerHTML = "[" + data.name + "] 알맞은 소화 효소를 매칭하세요. 분해 안 되면 [그냥 통과]를 선택하세요.";
-        var grid = document.getElementById("s1-nutrient-grid"); grid.innerHTML = "";
-        data.items.forEach(function (itm) {
-          var div = document.createElement("div"); div.className = "match-item nutrient"; div.innerText = itm;
-          div.onclick = function () { document.querySelectorAll(".nutrient").forEach(function (el) { el.classList.remove("selected"); }); div.classList.add("selected"); s1SelNut = { el: div, val: itm }; checkS1Match(); };
-          grid.appendChild(div);
-        });
-        document.querySelectorAll(".enzyme").forEach(function (el) { el.classList.remove("selected"); });
-        s1SelNut = null; s1SelEnz = null; document.getElementById("btn-s1-next").style.display = "none";
-      }
+    function nextS1Zone() {
+      s1Zone++;
+      if (s1Zone > 2) { setBPM(50, "normal"); startStage2(); }
+      else { setBPM(40 + s1Zone * 5, "normal"); renderS1(); }
+    }
 
-      function selectItem(el, type, val) {
-        if (type === "enzyme") {
-          document.querySelectorAll(".enzyme").forEach(function (e) { e.classList.remove("selected"); });
-          el.classList.add("selected"); s1SelEnz = { el: el, val: val }; checkS1Match();
-        }
-      }
+    // ── STAGE 2 ───────────────────────────────────────────────
+    var s2Items = [{ name: "포도당", ans: "모세혈관" }, { name: "지방산", ans: "암죽관" }, { name: "아미노산", ans: "모세혈관" }];
+    var s2Idx = 0, toxSel = false;
 
-      function checkS1Match() {
-        if (!s1SelNut || !s1SelEnz) return;
-        var rule = s1Logic[s1Zone].rule;
-        if (rule[s1SelNut.val] === s1SelEnz.val) {
-          playSnd("success");
-          s1SelNut.el.classList.add(s1SelEnz.val === "통과" ? "bypassed" : "digested");
-          s1SelNut.el.classList.remove("selected", "nutrient");
-          s1SelNut.el.innerText = s1SelEnz.val === "통과" ? s1SelNut.val + " ↪패스" : s1SelNut.val + " ✅분해됨";
-          s1SelNut = null; s1SelEnz = null;
-          if (document.querySelectorAll(".nutrient:not(.digested):not(.bypassed)").length === 0)
-            document.getElementById("btn-s1-next").style.display = "block";
+    function startStage2(isRetry) {
+      updateProgress(3); switchUI("screen-stage2");
+      if (!isRetry) {
+        s2Idx = 0; toxSel = false;
+        document.getElementById("s2-p1").style.display = "block";
+        document.getElementById("s2-p2").style.display = "none";
+      } else {
+        if (s2Idx >= s2Items.length) {
+          document.getElementById("s2-p1").style.display = "none";
+          document.getElementById("s2-p2").style.display = "block";
+          toxSel = false;
+          var tox = document.getElementById("s2-toxin");
+          tox.className = "toxin-node";
+          tox.style.background = "";
+          tox.style.color = "";
+          tox.style.animation = "shake .5s infinite";
+          tox.innerHTML = "&#9760;&#65039; 암모니아";
         } else {
-          s1SelNut.el.classList.remove("selected"); s1SelEnz.el.classList.remove("selected");
-          s1SelNut = null; s1SelEnz = null; triggerError(function () { startStage1(true); });
-        }
-      }
-
-      function nextS1Zone() {
-        s1Zone++;
-        if (s1Zone > 2) { setBPM(50, "normal"); startStage2(); }
-        else { setBPM(40 + s1Zone * 5, "normal"); renderS1(); }
-      }
-
-      // ── STAGE 2 ───────────────────────────────────────────────
-      var s2Items = [{ name: "포도당", ans: "모세혈관" }, { name: "지방산", ans: "암죽관" }, { name: "아미노산", ans: "모세혈관" }];
-      var s2Idx = 0, toxSel = false;
-
-      function startStage2(isRetry) {
-        updateProgress(3); switchUI("screen-stage2");
-        if (!isRetry) {
-          s2Idx = 0; toxSel = false;
           document.getElementById("s2-p1").style.display = "block";
           document.getElementById("s2-p2").style.display = "none";
-        } else {
-          if (s2Idx >= s2Items.length) {
-            document.getElementById("s2-p1").style.display = "none";
-            document.getElementById("s2-p2").style.display = "block";
-            toxSel = false;
-            var tox = document.getElementById("s2-toxin");
-            tox.className = "toxin-node";
-            tox.style.background = "";
-            tox.style.color = "";
-            tox.style.animation = "shake .5s infinite";
-            tox.innerHTML = "&#9760;&#65039; 암모니아";
-          } else {
-            document.getElementById("s2-p1").style.display = "block";
-            document.getElementById("s2-p2").style.display = "none";
-          }
-        }
-        document.getElementById("btn-s2-next").style.display = "none";
-        currentStageFunc = function () { startStage2(true); };
-        errorCount = 0; updS2Card();
-      }
-      function updS2Card() { if (s2Idx >= s2Items.length) { document.getElementById("s2-p1").style.display = "none"; document.getElementById("s2-p2").style.display = "block"; return; } document.getElementById("s2-target").innerText = s2Items[s2Idx].name; }
-      function swipeS2(dir) { if (s2Items[s2Idx].ans === dir) { playSnd("success"); s2Idx++; updS2Card(); } else triggerError(function () { startStage2(true); }); }
-      function selectToxin() { toxSel = true; document.getElementById("s2-toxin").classList.add("selected"); playSnd("beep"); }
-      function triggerDetox() {
-        if (!toxSel) return triggerError(function () { startStage2(true); });
-        playSnd("success");
-        var tox = document.getElementById("s2-toxin");
-        tox.className = "toxin-node"; tox.style.background = "var(--neon-green)"; tox.style.color = "#000"; tox.style.animation = "none"; tox.innerText = "✅ 안전한 요소";
-        document.getElementById("btn-s2-next").style.display = "block";
-      }
-      function goStage3() { setBPM(60, "normal"); startStage3(); }
-
-      // ── STAGE 3 ───────────────────────────────────────────────
-      var o2Cnt = 0, co2Cnt = 0;
-      function startStage3(isRetry) {
-        updateProgress(4); switchUI("screen-stage3");
-
-        var container = document.getElementById("s3-bubbles");
-        var bubbles = container.querySelectorAll(".bubble");
-
-        // 5 cols x 2 rows grid for random placement (prevents overlaps)
-        var positions = [];
-        var cols = 5;
-        var rows = 2;
-        var cellWidth = 90 / cols;
-        var cellHeight = 90 / rows;
-
-        for (var r = 0; r < rows; r++) {
-          for (var c = 0; c < cols; c++) {
-            positions.push({
-              x: c * cellWidth + 5 + Math.random() * (cellWidth - 16),
-              y: r * cellHeight + 5 + Math.random() * (cellHeight - 16)
-            });
-          }
-        }
-        // Shuffle positions
-        positions.sort(function () { return Math.random() - 0.5; });
-
-        bubbles.forEach(function (b, idx) {
-          if (positions[idx]) {
-            b.style.left = positions[idx].x + "%";
-            b.style.top = positions[idx].y + "%";
-          }
-
-          if (!isRetry) {
-            b.classList.remove("hit", "tapped-once");
-            b.dataset.taps = "0";
-            b.style.opacity = "1";
-            b.style.pointerEvents = "auto";
-            var hint = b.querySelector(".bubble-tap-hint");
-            if (hint) {
-              hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
-            }
-          }
-        });
-
-        if (!isRetry) {
-          o2Cnt = 0; co2Cnt = 0;
-        }
-        currentStageFunc = function () { startStage3(true); };
-        errorCount = 0; updS3();
-        document.getElementById("btn-s3-next").style.display = (o2Cnt >= 5 && co2Cnt >= 5) ? "block" : "none";
-      }
-      function updS3() {
-        document.getElementById("s3-o2").innerText = "🔵 O₂ 흡수: " + o2Cnt + "/5";
-        document.getElementById("s3-co2").innerText = "🔴 CO₂ 방출: " + co2Cnt + "/5";
-      }
-      function hitGas(type, el) {
-        if (el.classList.contains("hit")) return;
-        playSnd("beep");
-        if (type === "co2") {
-          var taps = parseInt(el.dataset.taps || "0") + 1;
-          el.dataset.taps = taps;
-          if (taps === 1) {
-            el.classList.add("tapped-once");
-            el.querySelector(".bubble-tap-hint").innerText = "한 번 더!";
-          } else {
-            el.classList.remove("tapped-once"); el.classList.add("hit");
-            co2Cnt++; updS3();
-            if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
-          }
-        } else {
-          el.classList.add("hit");
-          o2Cnt++; updS3();
-          if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
         }
       }
-      function goStage4() { setBPM(70, "normal"); startStage4(); }
+      document.getElementById("btn-s2-next").style.display = "none";
+      currentStageFunc = function () { startStage2(true); };
+      errorCount = 0; updS2Card();
+    }
+    function updS2Card() { if (s2Idx >= s2Items.length) { document.getElementById("s2-p1").style.display = "none"; document.getElementById("s2-p2").style.display = "block"; return; } document.getElementById("s2-target").innerText = s2Items[s2Idx].name; }
+    function swipeS2(dir) { if (s2Items[s2Idx].ans === dir) { playSnd("success"); s2Idx++; updS2Card(); } else triggerError(function () { startStage2(true); }); }
+    function selectToxin() { toxSel = true; document.getElementById("s2-toxin").classList.add("selected"); playSnd("beep"); }
+    function triggerDetox() {
+      if (!toxSel) return triggerError(function () { startStage2(true); });
+      playSnd("success");
+      var tox = document.getElementById("s2-toxin");
+      tox.className = "toxin-node"; tox.style.background = "var(--neon-green)"; tox.style.color = "#000"; tox.style.animation = "none"; tox.innerText = "✅ 안전한 요소";
+      document.getElementById("btn-s2-next").style.display = "block";
+    }
+    function goStage3() { setBPM(60, "normal"); startStage3(); }
 
-      // ── STAGE 4 (순환계 루트 복구 작전) ─────────────────────────────────
-      var currentTool = null;
-      var allCorrect = false;
-      var msgTimeout = null;
-      var particles = [];
-      var holdTimer = null;
-      var timeHeld = 0;
-      var touchStartTime = 0;
+    // ── STAGE 3 ───────────────────────────────────────────────
+    var o2Cnt = 0, co2Cnt = 0;
+    function startStage3(isRetry) {
+      updateProgress(4); switchUI("screen-stage3");
 
-      var s4State = {
-        'pa': { type: 'vessel', word: '', color: 'gray', ansWord: '폐동맥', ansColor: 'blue' },
-        'pv': { type: 'vessel', word: '', color: 'gray', ansWord: '폐정맥', ansColor: 'red' },
-        'vc': { type: 'vessel', word: '', color: 'gray', ansWord: '대정맥', ansColor: 'blue' },
-        'ao': { type: 'vessel', word: '', color: 'gray', ansWord: '대동맥', ansColor: 'red' },
-        'ra': { type: 'chamber', color: 'gray', ansColor: 'blue' },
-        'la': { type: 'chamber', color: 'gray', ansColor: 'red' },
-        'rv': { type: 'chamber', color: 'gray', ansColor: 'blue' },
-        'lv': { type: 'chamber', color: 'red', ansColor: 'red' },
-        'arr-lungs-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },
-        'arr-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },
-        'arr-lungs-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },
-        'arr-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },
-        'arr-ra-rv': { type: 'arrow', dir: 'none', ansDir: 'down' },
-        'arr-la-lv': { type: 'arrow', dir: 'none', ansDir: 'down' },
-        'arr-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },
-        'arr-body-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },
-        'arr-ao': { type: 'arrow', dir: 'none', ansDir: 'down' },
-        'arr-ao-body': { type: 'arrow', dir: 'none', ansDir: 'down' }
-      };
+      var container = document.getElementById("s3-bubbles");
+      var bubbles = container.querySelectorAll(".bubble");
 
-      var s4Step123Done = false; // 1,2,3 완료 여부
+      // 5 cols x 2 rows grid for random placement (prevents overlaps)
+      var positions = [];
+      var cols = 5;
+      var rows = 2;
+      var cellWidth = 90 / cols;
+      var cellHeight = 90 / rows;
 
-      function startStage4(isRetry) {
-        updateProgress(5); switchUI("screen-stage4");
-        currentStageFunc = function () { startStage4(true); };
-        errorCount = 0;
-        allCorrect = false;
-        currentTool = null;
-        timeHeld = 0;
-        s4Step123Done = false;
-
-        // 연결 검사 버튼 표시
-        var checkBtn = document.getElementById("btn-s4-check");
-        if (checkBtn) checkBtn.style.display = "block";
-
-        // 혈액 공급 팝업 닫기
-        var bsp = document.getElementById('bloodSupplyPopup');
-        if (bsp) {
-          bsp.classList.remove('active');
-          var s4Video = document.getElementById('s4CirculationVideo');
-          if (s4Video) s4Video.pause();
-        }
-        document.getElementById('screen-stage4').classList.remove('blood-flow-glow');
-
-        particles.forEach(function (p) { if (p.parentNode) p.parentNode.removeChild(p); });
-        particles = [];
-
-        for (var key in s4State) {
-          if (s4State[key].type === 'vessel') {
-            s4State[key].word = '';
-            s4State[key].color = 'gray';
-            updateVesselUI(key);
-          } else if (s4State[key].type === 'chamber') {
-            if (key === 'lv') {
-              s4State[key].color = 'red';
-            } else {
-              s4State[key].color = 'gray';
-            }
-            updateChamberUI(key);
-          } else if (s4State[key].type === 'arrow') {
-            s4State[key].dir = 'none';
-            updateArrowUI(key);
-          }
-        }
-
-        document.getElementById("message").style.opacity = 0;
-        document.getElementById("btn-s4-next").style.display = "none";
-        // 게이지는 처음엔 숨김 (4번 미션 활성화 전)
-        document.getElementById("gauge-container").style.display = "none";
-        document.getElementById("gauge").style.width = "0%";
-        document.getElementById("heart-area").classList.remove("pump-effect");
-
-        // 좌심실은 항상 붉은색, pulse-ready 제거
-        document.getElementById("lv").classList.remove("pulse-ready");
-        // 처음엔 좌심실 클릭 비활성
-        var lv = document.getElementById("lv");
-        lv.onmousedown = null;
-        lv.onmouseup = null;
-        lv.onmouseleave = null;
-        lv.ontouchstart = null;
-        lv.ontouchend = null;
-        lv.ontouchcancel = null;
-        lv.style.cursor = 'default';
-
-        // 지시사항 초기화 (1~3만 표시)
-        document.getElementById('s4-instructions').innerHTML =
-          '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
-          '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
-          '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.';
-
-        document.querySelectorAll('.tool').forEach(function (el) { el.classList.remove('selected'); });
-      }
-
-      // 1,2,3 완료 체크 - vesselClick, chamberClick, arrowClick 마다 호출
-      function checkS4Step123() {
-        if (s4Step123Done || allCorrect) return;
-        // 1,2,3이 모두 올바른지 확인
-        var done123 = true;
-        for (var key in s4State) {
-          var s = s4State[key];
-          if (s.type === 'vessel' && (s.word !== s.ansWord || s.color !== s.ansColor)) { done123 = false; break; }
-          if (s.type === 'chamber' && key !== 'lv' && s.color !== s.ansColor) { done123 = false; break; }
-          if (s.type === 'arrow' && s.dir !== s.ansDir) { done123 = false; break; }
-        }
-        if (done123) {
-          s4Step123Done = true;
-          activate4thMission();
-        }
-      }
-
-      function activate4thMission() {
-        // 4번 지시사항 추가
-        document.getElementById('s4-instructions').innerHTML =
-          '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
-          '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
-          '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.<br>' +
-          '<strong style="color:#ff6b6b;">4. ✅ 좌심실을 2초간 눌러 혈액을 공급하세요!</strong>';
-        // 게이지 표시
-        document.getElementById('gauge-container').style.display = 'block';
-        document.getElementById('gauge').style.width = '0%';
-        // 연결 검사 버튼 숨김
-        var checkBtn = document.getElementById("btn-s4-check");
-        if (checkBtn) checkBtn.style.display = "none";
-        // 좌심실 활성화
-        var lv = document.getElementById('lv');
-        lv.classList.add('pulse-ready');
-        lv.style.cursor = 'pointer';
-        lv.onmousedown = handleLvStart;
-        lv.onmouseup = handleLvEnd;
-        lv.onmouseleave = handleLvEnd;
-        lv.ontouchstart = handleLvStart;
-        lv.ontouchend = handleLvEnd;
-        lv.ontouchcancel = handleLvEnd;
-        playSnd('success');
-        showMessage('✅ 1~3 완료! 이제 좌심실을 2초간 길게 누르세요!', false);
-      }
-
-      function checkS4StageAnswers() {
-        if (allCorrect) return;
-        if (s4Step123Done) {
-          showMessage("✅ 이미 1~3단계 연결이 완료되었습니다! 좌심실을 2초간 누르세요.", false);
-          return;
-        }
-        var wrongKeys = [];
-        for (var key in s4State) {
-          var s = s4State[key];
-          var isCorrect = true;
-          if (s.type === 'vessel') {
-            if (s.word !== s.ansWord || s.color !== s.ansColor) isCorrect = false;
-          } else if (s.type === 'chamber') {
-            if (s.color !== s.ansColor) isCorrect = false;
-          } else if (s.type === 'arrow') {
-            if (s.dir !== s.ansDir) isCorrect = false;
-          }
-          if (!isCorrect) wrongKeys.push(key);
-        }
-
-        if (wrongKeys.length === 0) {
-          s4Step123Done = true;
-          activate4thMission();
-        } else {
-          playSnd('fail');
-          showMessage("⚠️ " + wrongKeys.length + "개의 연결이 올바르지 않습니다. 다시 확인하세요!", false);
-
-          wrongKeys.forEach(function (key) {
-            var el;
-            if (s4State[key].type === 'vessel') {
-              el = document.getElementById('slot-' + key);
-            } else {
-              el = document.getElementById(key);
-            }
-            if (el) {
-              el.classList.add('s4-wrong');
-              setTimeout(function () {
-                el.classList.remove('s4-wrong');
-              }, 1500);
-            }
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          positions.push({
+            x: c * cellWidth + 5 + Math.random() * (cellWidth - 16),
+            y: r * cellHeight + 5 + Math.random() * (cellHeight - 16)
           });
         }
       }
+      // Shuffle positions
+      positions.sort(function () { return Math.random() - 0.5; });
 
-      function closeS4VideoAndGoNext() {
+      bubbles.forEach(function (b, idx) {
+        if (positions[idx]) {
+          b.style.left = positions[idx].x + "%";
+          b.style.top = positions[idx].y + "%";
+        }
+
+        if (!isRetry) {
+          b.classList.remove("hit", "tapped-once");
+          b.dataset.taps = "0";
+          b.style.opacity = "1";
+          b.style.pointerEvents = "auto";
+          var hint = b.querySelector(".bubble-tap-hint");
+          if (hint) {
+            hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
+          }
+        }
+      });
+
+      if (!isRetry) {
+        o2Cnt = 0; co2Cnt = 0;
+      }
+      currentStageFunc = function () { startStage3(true); };
+      errorCount = 0; updS3();
+      document.getElementById("btn-s3-next").style.display = (o2Cnt >= 5 && co2Cnt >= 5) ? "block" : "none";
+    }
+    function updS3() {
+      document.getElementById("s3-o2").innerText = "🔵 O₂ 흡수: " + o2Cnt + "/5";
+      document.getElementById("s3-co2").innerText = "🔴 CO₂ 방출: " + co2Cnt + "/5";
+    }
+    function hitGas(type, el) {
+      if (el.classList.contains("hit")) return;
+      playSnd("beep");
+      if (type === "co2") {
+        var taps = parseInt(el.dataset.taps || "0") + 1;
+        el.dataset.taps = taps;
+        if (taps === 1) {
+          el.classList.add("tapped-once");
+          el.querySelector(".bubble-tap-hint").innerText = "한 번 더!";
+        } else {
+          el.classList.remove("tapped-once"); el.classList.add("hit");
+          co2Cnt++; updS3();
+          if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
+        }
+      } else {
+        el.classList.add("hit");
+        o2Cnt++; updS3();
+        if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
+      }
+    }
+    function goStage4() { setBPM(70, "normal"); startStage4(); }
+
+    // ── STAGE 4 (순환계 루트 복구 작전) ─────────────────────────────────
+    var currentTool = null;
+    var allCorrect = false;
+    var msgTimeout = null;
+    var particles = [];
+    var holdTimer = null;
+    var timeHeld = 0;
+    var touchStartTime = 0;
+
+    var s4State = {
+      'pa': { type: 'vessel', word: '', color: 'gray', ansWord: '폐동맥', ansColor: 'blue' },
+      'pv': { type: 'vessel', word: '', color: 'gray', ansWord: '폐정맥', ansColor: 'red' },
+      'vc': { type: 'vessel', word: '', color: 'gray', ansWord: '대정맥', ansColor: 'blue' },
+      'ao': { type: 'vessel', word: '', color: 'gray', ansWord: '대동맥', ansColor: 'red' },
+      'ra': { type: 'chamber', color: 'gray', ansColor: 'blue' },
+      'la': { type: 'chamber', color: 'gray', ansColor: 'red' },
+      'rv': { type: 'chamber', color: 'gray', ansColor: 'blue' },
+      'lv': { type: 'chamber', color: 'red', ansColor: 'red' },
+      'arr-lungs-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-pa': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-lungs-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-pv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-ra-rv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-la-lv': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-body-vc': { type: 'arrow', dir: 'none', ansDir: 'up' },
+      'arr-ao': { type: 'arrow', dir: 'none', ansDir: 'down' },
+      'arr-ao-body': { type: 'arrow', dir: 'none', ansDir: 'down' }
+    };
+
+    var s4Step123Done = false; // 1,2,3 완료 여부
+
+    function startStage4(isRetry) {
+      updateProgress(5); switchUI("screen-stage4");
+      currentStageFunc = function () { startStage4(true); };
+      errorCount = 0;
+      allCorrect = false;
+      currentTool = null;
+      timeHeld = 0;
+      s4Step123Done = false;
+
+      // 연결 검사 버튼 표시
+      var checkBtn = document.getElementById("btn-s4-check");
+      if (checkBtn) checkBtn.style.display = "block";
+
+      // 혈액 공급 팝업 닫기
+      var bsp = document.getElementById('bloodSupplyPopup');
+      if (bsp) {
+        bsp.classList.remove('active');
         var s4Video = document.getElementById('s4CirculationVideo');
-        if (s4Video) {
-          s4Video.pause();
+        if (s4Video) s4Video.pause();
+      }
+      document.getElementById('screen-stage4').classList.remove('blood-flow-glow');
+
+      particles.forEach(function (p) { if (p.parentNode) p.parentNode.removeChild(p); });
+      particles = [];
+
+      for (var key in s4State) {
+        if (s4State[key].type === 'vessel') {
+          s4State[key].word = '';
+          s4State[key].color = 'gray';
+          updateVesselUI(key);
+        } else if (s4State[key].type === 'chamber') {
+          if (key === 'lv') {
+            s4State[key].color = 'red';
+          } else {
+            s4State[key].color = 'gray';
+          }
+          updateChamberUI(key);
+        } else if (s4State[key].type === 'arrow') {
+          s4State[key].dir = 'none';
+          updateArrowUI(key);
         }
-        var popup = document.getElementById('bloodSupplyPopup');
-        if (popup) popup.classList.remove('active');
-        goStage5();
       }
 
-      function selectTool(word) {
-        if (allCorrect) return;
-        currentTool = word;
-        document.querySelectorAll('.tool').forEach(function (el) {
-          el.classList.toggle('selected', el.innerText === word);
+      document.getElementById("message").style.opacity = 0;
+      document.getElementById("btn-s4-next").style.display = "none";
+      // 게이지는 처음엔 숨김 (4번 미션 활성화 전)
+      document.getElementById("gauge-container").style.display = "none";
+      document.getElementById("gauge").style.width = "0%";
+      document.getElementById("heart-area").classList.remove("pump-effect");
+
+      // 좌심실은 항상 붉은색, pulse-ready 제거
+      document.getElementById("lv").classList.remove("pulse-ready");
+      // 처음엔 좌심실 클릭 비활성
+      var lv = document.getElementById("lv");
+      lv.onmousedown = null;
+      lv.onmouseup = null;
+      lv.onmouseleave = null;
+      lv.ontouchstart = null;
+      lv.ontouchend = null;
+      lv.ontouchcancel = null;
+      lv.style.cursor = 'default';
+
+      // 지시사항 초기화 (1~3만 표시)
+      document.getElementById('s4-instructions').innerHTML =
+        '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
+        '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
+        '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.';
+
+      document.querySelectorAll('.tool').forEach(function (el) { el.classList.remove('selected'); });
+    }
+
+    // 1,2,3 완료 체크 - vesselClick, chamberClick, arrowClick 마다 호출
+    function checkS4Step123() {
+      if (s4Step123Done || allCorrect) return;
+      // 1,2,3이 모두 올바른지 확인
+      var done123 = true;
+      for (var key in s4State) {
+        var s = s4State[key];
+        if (s.type === 'vessel' && (s.word !== s.ansWord || s.color !== s.ansColor)) { done123 = false; break; }
+        if (s.type === 'chamber' && key !== 'lv' && s.color !== s.ansColor) { done123 = false; break; }
+        if (s.type === 'arrow' && s.dir !== s.ansDir) { done123 = false; break; }
+      }
+      if (done123) {
+        s4Step123Done = true;
+        activate4thMission();
+      }
+    }
+
+    function activate4thMission() {
+      // 4번 지시사항 추가
+      document.getElementById('s4-instructions').innerHTML =
+        '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
+        '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
+        '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.<br>' +
+        '<strong style="color:#ff6b6b;">4. ✅ 좌심실을 2초간 눌러 혈액을 공급하세요!</strong>';
+      // 게이지 표시
+      document.getElementById('gauge-container').style.display = 'block';
+      document.getElementById('gauge').style.width = '0%';
+      // 연결 검사 버튼 숨김
+      var checkBtn = document.getElementById("btn-s4-check");
+      if (checkBtn) checkBtn.style.display = "none";
+      // 좌심실 활성화
+      var lv = document.getElementById('lv');
+      lv.classList.add('pulse-ready');
+      lv.style.cursor = 'pointer';
+      lv.onmousedown = handleLvStart;
+      lv.onmouseup = handleLvEnd;
+      lv.onmouseleave = handleLvEnd;
+      lv.ontouchstart = handleLvStart;
+      lv.ontouchend = handleLvEnd;
+      lv.ontouchcancel = handleLvEnd;
+      playSnd('success');
+      showMessage('✅ 1~3 완료! 이제 좌심실을 2초간 길게 누르세요!', false);
+    }
+
+    function checkS4StageAnswers() {
+      if (allCorrect) return;
+      if (s4Step123Done) {
+        showMessage("✅ 이미 1~3단계 연결이 완료되었습니다! 좌심실을 2초간 누르세요.", false);
+        return;
+      }
+      var wrongKeys = [];
+      for (var key in s4State) {
+        var s = s4State[key];
+        var isCorrect = true;
+        if (s.type === 'vessel') {
+          if (s.word !== s.ansWord || s.color !== s.ansColor) isCorrect = false;
+        } else if (s.type === 'chamber') {
+          if (s.color !== s.ansColor) isCorrect = false;
+        } else if (s.type === 'arrow') {
+          if (s.dir !== s.ansDir) isCorrect = false;
+        }
+        if (!isCorrect) wrongKeys.push(key);
+      }
+
+      if (wrongKeys.length === 0) {
+        s4Step123Done = true;
+        activate4thMission();
+      } else {
+        playSnd('fail');
+        showMessage("⚠️ " + wrongKeys.length + "개의 연결이 올바르지 않습니다. 다시 확인하세요!", false);
+
+        wrongKeys.forEach(function (key) {
+          var el;
+          if (s4State[key].type === 'vessel') {
+            el = document.getElementById('slot-' + key);
+          } else {
+            el = document.getElementById(key);
+          }
+          if (el) {
+            el.classList.add('s4-wrong');
+            setTimeout(function () {
+              el.classList.remove('s4-wrong');
+            }, 1500);
+          }
         });
+      }
+    }
+
+    function closeS4VideoAndGoNext() {
+      var s4Video = document.getElementById('s4CirculationVideo');
+      if (s4Video) {
+        s4Video.pause();
+      }
+      var popup = document.getElementById('bloodSupplyPopup');
+      if (popup) popup.classList.remove('active');
+      goStage5();
+    }
+
+    function selectTool(word) {
+      if (allCorrect) return;
+      currentTool = word;
+      document.querySelectorAll('.tool').forEach(function (el) {
+        el.classList.toggle('selected', el.innerText === word);
+      });
+      playSnd("beep");
+    }
+
+    function vesselClick(id) {
+      if (allCorrect) return;
+      var s = s4State[id];
+
+      if (currentTool) {
+        s.word = currentTool;
+        s.color = 'gray';
+        currentTool = null;
+        document.querySelectorAll('.tool').forEach(function (e) { e.classList.remove('selected'); });
         playSnd("beep");
-      }
-
-      function vesselClick(id) {
-        if (allCorrect) return;
-        var s = s4State[id];
-
-        if (currentTool) {
-          s.word = currentTool;
-          s.color = 'gray';
-          currentTool = null;
-          document.querySelectorAll('.tool').forEach(function (e) { e.classList.remove('selected'); });
-          playSnd("beep");
-        } else if (s.word !== '') {
-          playSnd("beep");
-          if (s.color === 'gray') s.color = 'red';
-          else if (s.color === 'red') s.color = 'blue';
-          else s.color = 'gray';
-        }
-        updateVesselUI(id);
-        checkS4Step123();
-      }
-
-      function chamberClick(id) {
-        if (allCorrect) return;
-        if (id === 'lv') return; // 좌심실은 붉은색 고정!
-        var s = s4State[id];
+      } else if (s.word !== '') {
         playSnd("beep");
         if (s.color === 'gray') s.color = 'red';
         else if (s.color === 'red') s.color = 'blue';
         else s.color = 'gray';
-
-        updateChamberUI(id);
-        checkS4Step123();
       }
+      updateVesselUI(id);
+      checkS4Step123();
+    }
 
-      function arrowClick(id) {
-        if (allCorrect) return;
-        var s = s4State[id];
-        playSnd("beep");
-        if (s.dir === 'none' || s.dir === 'down') s.dir = 'up';
-        else s.dir = 'down';
+    function chamberClick(id) {
+      if (allCorrect) return;
+      if (id === 'lv') return; // 좌심실은 붉은색 고정!
+      var s = s4State[id];
+      playSnd("beep");
+      if (s.color === 'gray') s.color = 'red';
+      else if (s.color === 'red') s.color = 'blue';
+      else s.color = 'gray';
 
-        updateArrowUI(id);
-        checkS4Step123();
+      updateChamberUI(id);
+      checkS4Step123();
+    }
+
+    function arrowClick(id) {
+      if (allCorrect) return;
+      var s = s4State[id];
+      playSnd("beep");
+      if (s.dir === 'none' || s.dir === 'down') s.dir = 'up';
+      else s.dir = 'down';
+
+      updateArrowUI(id);
+      checkS4Step123();
+    }
+
+    function updateVesselUI(id) {
+      var el = document.getElementById('slot-' + id);
+      var s = s4State[id];
+      if (el) {
+        el.innerText = s.word || '빈칸';
+        el.className = 'slot ' + (s.word ? 'filled' : 'empty') + ' bg-' + s.color;
       }
+    }
 
-      function updateVesselUI(id) {
-        var el = document.getElementById('slot-' + id);
-        var s = s4State[id];
-        if (el) {
-          el.innerText = s.word || '빈칸';
-          el.className = 'slot ' + (s.word ? 'filled' : 'empty') + ' bg-' + s.color;
+    function updateChamberUI(id) {
+      var el = document.getElementById(id);
+      var s = s4State[id];
+      if (el) {
+        el.className = 'chamber bg-' + s.color;
+      }
+    }
+
+    function updateArrowUI(id) {
+      var el = document.getElementById(id);
+      var s = s4State[id];
+      if (el) {
+        el.className = 'arrow ' + (s.dir !== 'none' ? 'set' : 'empty');
+        if (s.dir === 'up') el.innerText = '▲';
+        else if (s.dir === 'down') el.innerText = '▼';
+        else el.innerText = '↕';
+      }
+    }
+
+    function showMessage(text, persist) {
+      var msg = document.getElementById('message');
+      if (msg) {
+        clearTimeout(msgTimeout);
+        msg.innerHTML = text;
+        msg.style.opacity = 1;
+        if (!persist) {
+          msgTimeout = setTimeout(function () { msg.style.opacity = 0; }, 2000);
         }
       }
+    }
 
-      function updateChamberUI(id) {
-        var el = document.getElementById(id);
-        var s = s4State[id];
-        if (el) {
-          el.className = 'chamber bg-' + s.color;
-        }
+    function isPuzzleCorrect() {
+      var correct = true;
+      for (var key in s4State) {
+        var s = s4State[key];
+        if (s.type === 'vessel' && (s.word !== s.ansWord || s.color !== s.ansColor)) correct = false;
+        if (s.type === 'chamber' && s.color !== s.ansColor) correct = false;
+        if (s.type === 'arrow' && s.dir !== s.ansDir) correct = false;
       }
+      return correct;
+    }
 
-      function updateArrowUI(id) {
-        var el = document.getElementById(id);
-        var s = s4State[id];
-        if (el) {
-          el.className = 'arrow ' + (s.dir !== 'none' ? 'set' : 'empty');
-          if (s.dir === 'up') el.innerText = '▲';
-          else if (s.dir === 'down') el.innerText = '▼';
-          else el.innerText = '↕';
-        }
-      }
+    function handleLvStart(e) {
+      if (allCorrect) return;
+      if (e.type === 'touchstart') e.preventDefault();
+      touchStartTime = Date.now();
 
-      function showMessage(text, persist) {
-        var msg = document.getElementById('message');
-        if (msg) {
-          clearTimeout(msgTimeout);
-          msg.innerHTML = text;
-          msg.style.opacity = 1;
-          if (!persist) {
-            msgTimeout = setTimeout(function () { msg.style.opacity = 0; }, 2000);
-          }
-        }
-      }
-
-      function isPuzzleCorrect() {
-        var correct = true;
-        for (var key in s4State) {
-          var s = s4State[key];
-          if (s.type === 'vessel' && (s.word !== s.ansWord || s.color !== s.ansColor)) correct = false;
-          if (s.type === 'chamber' && s.color !== s.ansColor) correct = false;
-          if (s.type === 'arrow' && s.dir !== s.ansDir) correct = false;
-        }
-        return correct;
-      }
-
-      function handleLvStart(e) {
-        if (allCorrect) return;
-        if (e.type === 'touchstart') e.preventDefault();
-        touchStartTime = Date.now();
-
-        document.getElementById('lv').style.transform = "scale(0.95)";
-        timeHeld = 0;
-        document.getElementById('gauge').style.width = "0%";
-        holdTimer = setInterval(function () {
-          timeHeld += 50;
-          document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
-          if (timeHeld >= 2000) {
-            clearInterval(holdTimer);
-            holdTimer = null;
-            // 2초 충전 시 정답 판정
-            if (isPuzzleCorrect()) {
-              allCorrect = true;
-              handleLvEnd();
-              successPumping();
-            } else {
-              handleLvEnd();
-              playSnd("fail");
-              // 오답 팝업
-              showFailPopup();
-            }
-          }
-        }, 50);
-      }
-
-      function handleLvEnd(e) {
-        var lv = document.getElementById('lv');
-        if (lv) lv.style.transform = "scale(1)";
-        if (holdTimer) {
+      document.getElementById('lv').style.transform = "scale(0.95)";
+      timeHeld = 0;
+      document.getElementById('gauge').style.width = "0%";
+      holdTimer = setInterval(function () {
+        timeHeld += 50;
+        document.getElementById('gauge').style.width = (timeHeld / 2000 * 100) + "%";
+        if (timeHeld >= 2000) {
           clearInterval(holdTimer);
           holdTimer = null;
-        }
-        if (!allCorrect) {
-          timeHeld = 0;
-          document.getElementById('gauge').style.width = "0%";
-        }
-      }
-
-      function showFailPopup() {
-        // 커스텀 오답 팝업
-        var popup = document.createElement('div');
-        popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.6);';
-        popup.innerHTML = '<div style="background:linear-gradient(135deg,rgba(139,0,0,0.9),rgba(80,0,0,0.95));border:2px solid #ff3b30;border-radius:18px;padding:28px 24px;text-align:center;max-width:80%;animation:popupFadeIn 0.3s ease-out;">' +
-          '<div style="font-size:2.2rem;margin-bottom:10px;">&#128683;</div>' +
-          '<div style="font-size:1.4rem;font-weight:700;color:#ff6b6b;margin-bottom:8px;">혈액공급 실패!</div>' +
-          '<div style="font-size:.85rem;color:#ffcccc;line-height:1.7;margin-bottom:16px;">심방·심실 색깔, 혈관 단어,<br>화살표 방향을 다시 확인하세요.</div>' +
-          '<button onclick="this.parentNode.parentNode.remove()" style="padding:10px 26px;background:var(--alert-red);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#128260; 다시 도전</button>' +
-          '</div>';
-        document.body.appendChild(popup);
-      }
-
-      function successPumping() {
-        showMessage("💥 펌핑 성공! 혈액이 힘차게 순환합니다!", true);
-        document.getElementById('gauge-container').style.display = "none";
-        document.getElementById('lv').classList.remove('pulse-ready');
-        document.getElementById('heart-area').classList.add('pump-effect');
-
-        // 화면 테두리 글로우 효과
-        document.getElementById('screen-stage4').classList.add('blood-flow-glow');
-
-        // 혈액 공급 시작 팝업
-        var popup = document.getElementById('bloodSupplyPopup');
-        if (popup) {
-          popup.classList.add('active');
-          var s4Video = document.getElementById('s4CirculationVideo');
-          if (s4Video) {
-            s4Video.currentTime = 0;
-            s4Video.play().catch(function (e) {
-              console.log("Video autoplay blocked, waiting for user click.", e);
-            });
-            s4Video.onended = function () {
-              closeS4VideoAndGoNext();
-            };
+          // 2초 충전 시 정답 판정
+          if (isPuzzleCorrect()) {
+            allCorrect = true;
+            handleLvEnd();
+            successPumping();
+          } else {
+            handleLvEnd();
+            playSnd("fail");
+            // 오답 팝업
+            showFailPopup();
           }
         }
+      }, 50);
+    }
 
-        startBloodFlow();
-
-        setTimeout(function () {
-          playSnd("success");
-          document.getElementById("btn-s4-next").style.display = "block";
-          showMessage("🎉 순환계 복구 완료! 다음 구역으로 출발하세요!", true);
-        }, 4500);
+    function handleLvEnd(e) {
+      var lv = document.getElementById('lv');
+      if (lv) lv.style.transform = "scale(1)";
+      if (holdTimer) {
+        clearInterval(holdTimer);
+        holdTimer = null;
       }
-
-      function closeBloodSupplyPopup() {
-        closeS4VideoAndGoNext();
+      if (!allCorrect) {
+        timeHeld = 0;
+        document.getElementById('gauge').style.width = "0%";
       }
+    }
 
-      function startBloodFlow() {
-        for (var i = 0; i < 6; i++) {
-          (function (index) {
-            setTimeout(function () {
-              spawnBloodParticle('red');
-              spawnBloodParticle('blue');
-            }, index * 600);
-          })(i);
-        }
-      }
+    function showFailPopup() {
+      // 커스텀 오답 팝업
+      var popup = document.createElement('div');
+      popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.6);';
+      popup.innerHTML = '<div style="background:linear-gradient(135deg,rgba(139,0,0,0.9),rgba(80,0,0,0.95));border:2px solid #ff3b30;border-radius:18px;padding:28px 24px;text-align:center;max-width:80%;animation:popupFadeIn 0.3s ease-out;">' +
+        '<div style="font-size:2.2rem;margin-bottom:10px;">&#128683;</div>' +
+        '<div style="font-size:1.4rem;font-weight:700;color:#ff6b6b;margin-bottom:8px;">혈액공급 실패!</div>' +
+        '<div style="font-size:.85rem;color:#ffcccc;line-height:1.7;margin-bottom:16px;">심방·심실 색깔, 혈관 단어,<br>화살표 방향을 다시 확인하세요.</div>' +
+        '<button onclick="this.parentNode.parentNode.remove()" style="padding:10px 26px;background:var(--alert-red);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#128260; 다시 도전</button>' +
+        '</div>';
+      document.body.appendChild(popup);
+    }
 
-      function spawnBloodParticle(type) {
-        var board = document.getElementById('board');
-        if (!board) return;
-        var particle = document.createElement('div');
-        particle.className = 'blood-particle ' + type;
-        board.appendChild(particle);
-        particles.push(particle);
+    function successPumping() {
+      showMessage("💥 펌핑 성공! 혈액이 힘차게 순환합니다!", true);
+      document.getElementById('gauge-container').style.display = "none";
+      document.getElementById('lv').classList.remove('pulse-ready');
+      document.getElementById('heart-area').classList.add('pump-effect');
 
-        var pathIds = type === 'red'
-          ? ['lungs', 'arr-lungs-pv', 'slot-pv', 'arr-pv', 'la', 'arr-la-lv', 'lv', 'arr-ao', 'slot-ao', 'arr-ao-body', 'body-cells']
-          : ['body-cells', 'arr-body-vc', 'slot-vc', 'arr-vc', 'ra', 'arr-ra-rv', 'rv', 'arr-pa', 'slot-pa', 'arr-lungs-pa', 'lungs'];
+      // 화면 테두리 글로우 효과
+      document.getElementById('screen-stage4').classList.add('blood-flow-glow');
 
-        var keyframes = [];
-        var validPath = true;
-        for (var i = 0; i < pathIds.length; i++) {
-          var el = document.getElementById(pathIds[i]);
-          if (!el) { validPath = false; break; }
-          var rect = el.getBoundingClientRect();
-          var boardRect = board.getBoundingClientRect();
-          var x = rect.left - boardRect.left + rect.width / 2;
-          var y = rect.top - boardRect.top + rect.height / 2;
-          keyframes.push({
-            transform: 'translate(' + x + 'px, ' + y + 'px)',
-            opacity: (i === 0 || i === pathIds.length - 1) ? 0 : 1
+      // 혈액 공급 시작 팝업
+      var popup = document.getElementById('bloodSupplyPopup');
+      if (popup) {
+        popup.classList.add('active');
+        var s4Video = document.getElementById('s4CirculationVideo');
+        if (s4Video) {
+          s4Video.currentTime = 0;
+          s4Video.play().catch(function (e) {
+            console.log("Video autoplay blocked, waiting for user click.", e);
           });
-        }
-
-        if (validPath) {
-          particle.animate(keyframes, {
-            duration: 4500,
-            iterations: Infinity,
-            easing: 'linear'
-          });
-        }
-      }
-      function goStage5() { setBPM(80, "normal"); startStage5(); }
-
-      // ── STAGE 5 ───────────────────────────────────────────────
-      function startStage5(isRetry) {
-        updateProgress(6); switchUI("screen-stage5");
-        if (!isRetry) {
-          ["s5-a1", "s5-a2", "s5-a3"].forEach(function (id) { document.getElementById(id).value = ""; });
-        }
-        currentStageFunc = function () { startStage5(true); };
-        errorCount = 0;
-      }
-      function checkStage5() {
-        var a1 = document.getElementById("s5-a1").value, a2 = document.getElementById("s5-a2").value, a3 = document.getElementById("s5-a3").value;
-        if (a1 === "혈소판" && a2 === "백혈구" && a3 === "적혈구") { playSnd("success"); setBPM(85, "normal"); startStage6(); } else triggerError(function () { startStage5(true); });
-      }
-
-      // ── STAGE 6 ───────────────────────────────────────────────
-      var s6Int = null, s6Save = 0;
-      var S6_GOAL = 8;
-      function startStage6(isRetry) {
-        updateProgress(7); switchUI("screen-stage6");
-        if (!isRetry) { s6Save = 0; }
-        document.getElementById("s6-status").innerText = "구출된 영양소: " + s6Save + "/" + S6_GOAL;
-        document.getElementById("s6-river").innerHTML = "";
-        document.getElementById("btn-s6-next").style.display = s6Save >= S6_GOAL ? "block" : "none";
-        if (s6Int) clearInterval(s6Int);
-        if (s6Save < S6_GOAL) s6Int = setInterval(spawnItem, 780);
-        currentStageFunc = function () { startStage6(true); };
-        errorCount = 0;
-      }
-      function spawnItem() {
-        if (!document.getElementById("screen-stage6").classList.contains("active")) { clearInterval(s6Int); return; }
-        var types = [
-          { t: "🍬 포도당", isGood: true },
-          { t: "🥩 아미노산", isGood: true },
-          { t: "☠️ 요소", isGood: false },
-          { t: "🔴 단백질", isGood: false },
-          { t: "🟡 탄수화물", isGood: false },
-          { t: "🟫 지방", isGood: false },
-          { t: "🔴 혈구", isGood: false }
-        ];
-        var rnd = Math.random();
-        var sel;
-        if (rnd < 0.42) { sel = types[Math.floor(Math.random() * 2)]; }
-        else { sel = types[2 + Math.floor(Math.random() * 5)]; }
-        var el = document.createElement("div"); el.className = "falling-item"; el.innerText = sel.t;
-        // 학습을 위해 색깔을 동일하게 중립적인 블루톤으로 통일!
-        el.style.background = "linear-gradient(135deg, rgba(58, 134, 255, 0.85), rgba(34, 102, 221, 0.9))";
-        el.style.color = "white";
-        el.style.top = "-35px";
-        el.style.left = (Math.random() * 72 + 4) + "%";
-        el.onpointerdown = function () {
-          if (sel.isGood) {
-            s6Save++;
-            document.getElementById("s6-status").innerText = "구출된 영양소: " + s6Save + "/" + S6_GOAL;
-            playSnd("beep"); el.parentNode && el.parentNode.removeChild(el);
-            if (s6Save >= S6_GOAL) { clearInterval(s6Int); playSnd("success"); document.getElementById("btn-s6-next").style.display = "block"; }
-          } else {
-            el.parentNode && el.parentNode.removeChild(el);
-            triggerError(function () { startStage6(true); });
-          }
-        };
-        document.getElementById("s6-river").appendChild(el);
-        var y = -35;
-        var riverH = document.getElementById("s6-river").offsetHeight || 300;
-        var fall = setInterval(function () {
-          y += 3.2; el.style.top = y + "px";
-          if (y > riverH) {
-            clearInterval(fall);
-            if (sel.isGood && el.parentNode) triggerError(function () { startStage6(true); });
-            el.parentNode && el.parentNode.removeChild(el);
-          }
-        }, 40);
-      }
-      function goEpilogue() { setBPM(90, "normal"); startEpilogue(); }
-
-      // ── 에필로그 ─────────────────────────────────────────────
-      var epiState = {
-        quizPicked: []
-      };
-
-      function startEpilogue() {
-        updateProgress(8);
-        switchUI("screen-epilogue");
-        goEpiPhase(0);
-      }
-
-      function showEpiDialogue(html) {
-        var textEl = document.getElementById('epiDialogueText');
-        if (textEl) textEl.innerHTML = html;
-      }
-
-      function goEpiPhase(n) {
-        document.querySelectorAll('.epi-phase').forEach(function (p) {
-          p.style.display = 'none';
-        });
-        var nextPhase = document.getElementById('epi-phase' + n);
-        if (nextPhase) {
-          nextPhase.style.display = 'flex';
-        }
-        if (n === 0) {
-          showEpiDialogue('에필로그 시스템 정상 기동... 임무를 시작하세요.');
-        }
-        if (n === 1) initEpiPhase1();
-        if (n === 2) initEpiPhase2();
-        if (n === 3) initEpiPhase3();
-        if (n === 4) initEpiPhase4();
-      }
-
-      /* ---------- Phase 1: 재료 선별 ---------- */
-      var EPI_QUIZ_ITEMS = [
-        { id: 'nutrient', emoji: '🍞', label: '영양소', correct: true },
-        { id: 'oxygen', emoji: '🫧', label: '산소', correct: true },
-        { id: 'co2', emoji: '💨', label: '이산화탄소', correct: false, why: '이산화탄소는 세포 호흡의 결과물이지 원료가 아니에요!' },
-        { id: 'urea', emoji: '🧪', label: '요소', correct: false, why: '요소는 콩팥에서 걸러지는 노폐물이에요.' },
-        { id: 'ammonia', emoji: '☠️', label: '암모니아', correct: false, why: '암모니아는 간에서 해독해야 하는 독성 물질이에요.' },
-        { id: 'mineral', emoji: '🧂', label: '무기염류', correct: false, why: '무기염류는 세포 호흡에 직접 쓰이지 않아요.' }
-      ];
-      var EPI_QUIZ_POS = [
-        { top: '10px', left: '10px' }, { top: '10px', right: '10px' },
-        { top: '100px', left: '40px' }, { top: '100px', right: '40px' },
-        { top: '190px', left: '10px' }, { top: '190px', right: '10px' }
-      ];
-
-      function initEpiPhase1() {
-        showEpiDialogue('그동안 모은 물질 중, 세포 호흡의 <b>원료</b> 2가지만 골라주세요.');
-        epiState.quizPicked = [];
-        document.getElementById('traySlot1').classList.remove('filled');
-        document.getElementById('traySlot1').textContent = '?';
-        document.getElementById('traySlot2').classList.remove('filled');
-        document.getElementById('traySlot2').textContent = '?';
-
-        var field = document.getElementById('quizField');
-        field.innerHTML = '';
-        EPI_QUIZ_ITEMS.forEach(function (item, i) {
-          var chip = document.createElement('div');
-          chip.className = 'icon-chip';
-          chip.id = 'chip-' + item.id;
-          chip.style.animationDelay = (i * 0.15) + 's';
-          for (var key in EPI_QUIZ_POS[i]) {
-            chip.style[key] = EPI_QUIZ_POS[i][key];
-          }
-          chip.innerHTML = '<span class="emoji">' + item.emoji + '</span>' + item.label;
-          chip.onclick = function () { onEpiQuizPick(item, chip); };
-          field.appendChild(chip);
-        });
-      }
-
-      function onEpiQuizPick(item, chip) {
-        if (chip.classList.contains('correct-flash') || chip.classList.contains('wrong-flash')) return;
-        if (item.correct) {
-          chip.classList.add('correct-flash');
-          playSnd('success');
-          epiState.quizPicked.push(item.id);
-          var slot = document.getElementById(epiState.quizPicked.length === 1 ? 'traySlot1' : 'traySlot2');
-          if (slot) {
-            slot.textContent = item.emoji;
-            slot.classList.add('filled');
-          }
-          showEpiDialogue('<b>' + item.label + '</b> 확보!');
-          if (epiState.quizPicked.length === 2) {
-            setTimeout(function () { goEpiPhase(2); }, 800);
-          }
-        } else {
-          chip.classList.add('wrong-flash');
-          epiPenalize(5, item.why);
-          setTimeout(function () { chip.classList.remove('wrong-flash'); }, 500);
-        }
-      }
-
-      function epiPenalize(amount, msg) {
-        updateScore(-amount);
-        playSnd("fail");
-        var appEl = document.getElementById("app");
-        if (appEl) {
-          appEl.style.animation = "none"; void appEl.offsetHeight; appEl.style.animation = "app-shake 0.4s";
-          setTimeout(function () { appEl.style.animation = ""; }, 400);
-        }
-        var bpmText = document.getElementById("ui-bpm").innerText;
-        var cur = parseInt(bpmText.replace(/[^0-9]/g, "")) || 0;
-        if (cur > 40) setBPM(cur - amount, "danger");
-        if (msg) showEpiDialogue(msg);
-      }
-
-      /* ---------- Phase 2: 미토콘드리아 충돌 ---------- */
-      function initEpiPhase2() {
-        showEpiDialogue('두 재료를 각각 하나씩 미토콘드리아 중앙으로 끌어와 충돌시키세요.');
-        var nutrient = document.getElementById('orbNutrient');
-        var oxygen = document.getElementById('orbOxygen');
-        nutrient.style.transform = '';
-        oxygen.style.transform = '';
-        nutrient.style.opacity = '1';
-        oxygen.style.opacity = '1';
-        nutrient.dataset.locked = 'false';
-        oxygen.dataset.locked = 'false';
-        document.getElementById('flashWhite').style.opacity = '0';
-        document.getElementById('equationText').style.opacity = '0';
-
-        var collided = { nutrient: false, oxygen: false };
-        makeEpiDraggable(nutrient, function () { checkEpiCollision('nutrient'); });
-        makeEpiDraggable(oxygen, function () { checkEpiCollision('oxygen'); });
-
-        function checkEpiCollision(which) {
-          var el = document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen');
-          var mitoRect = document.getElementById('mito').getBoundingClientRect();
-          var elRect = el.getBoundingClientRect();
-          var dx = (elRect.left + elRect.width / 2) - (mitoRect.left + mitoRect.width / 2);
-          var dy = (elRect.top + elRect.height / 2) - (mitoRect.top + mitoRect.height / 2);
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 80) {
-            collided[which] = true;
-            
-            // 중앙에 부드럽게 고정
-            var style = window.getComputedStyle(el);
-            var matrix = new DOMMatrixReadOnly(style.transform);
-            var curDx = matrix.m41;
-            var curDy = matrix.m42;
-            var mitoCenterX = mitoRect.left + mitoRect.width / 2;
-            var mitoCenterY = mitoRect.top + mitoRect.height / 2;
-            var elCenterX = elRect.left + elRect.width / 2;
-            var elCenterY = elRect.top + elRect.height / 2;
-            
-            var targetDx = curDx + (mitoCenterX - elCenterX);
-            var targetDy = curDy + (mitoCenterY - elCenterY);
-            
-            el.style.transition = 'transform 0.3s ease-out';
-            el.style.transform = 'translate(' + targetDx + 'px, ' + targetDy + 'px)';
-            el.dataset.locked = 'true';
-            el.style.opacity = '0.5';
-            playSnd('success');
-            
-            if (collided.nutrient && collided.oxygen) {
-              setTimeout(reactionEpiSuccess, 450);
-            }
-            return true;
-          } else {
-            // 충돌 안 했으면 원래 위치로 되돌리기
-            el.style.transition = 'transform 0.3s ease-out';
-            el.style.transform = 'translate(0px, 0px)';
-            setTimeout(function() { el.style.transition = ''; }, 300);
-            return false;
-          }
-        }
-      }
-
-      function reactionEpiSuccess() {
-        playSnd('success');
-        var flash = document.getElementById('flashWhite');
-        var eq = document.getElementById('equationText');
-        flash.style.transition = 'opacity 0.15s';
-        flash.style.opacity = '1';
-        setTimeout(function () {
-          flash.style.transition = 'opacity 1s';
-          flash.style.opacity = '0';
-        }, 200);
-        eq.style.transition = 'opacity 0.6s';
-        eq.style.opacity = '1';
-        showEpiDialogue('반응 성공! <b>영양소 + 산소 → 물 + 이산화 탄소 + 에너지</b>');
-        setTimeout(function () { goEpiPhase(3); }, 2500);
-      }
-
-      function makeEpiDraggable(el, onDrop) {
-        var startX, startY, origX = 0, origY = 0, dragging = false;
-        el.addEventListener('pointerdown', function (e) {
-          if (el.dataset.locked === 'true') return;
-          dragging = true;
-          el.setPointerCapture(e.pointerId);
-          startX = e.clientX; startY = e.clientY;
-          el.style.transition = ''; // 드래그 시작 시 transition 제거
-          var style = window.getComputedStyle(el);
-          var matrix = new DOMMatrixReadOnly(style.transform);
-          origX = matrix.m41; origY = matrix.m42;
-          el.style.zIndex = '100';
-        });
-        el.addEventListener('pointermove', function (e) {
-          if (!dragging) return;
-          var dx = e.clientX - startX;
-          var dy = e.clientY - startY;
-          el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
-        });
-        function endDrag(e) {
-          if (!dragging) return;
-          dragging = false;
-          if (onDrop) onDrop();
-        }
-        el.addEventListener('pointerup', endDrag);
-        el.addEventListener('pointercancel', endDrag);
-      }
-
-      /* ---------- Phase 3: 생성물 순환 배치 ---------- */
-      var EPI_PRODUCT_TARGETS = {
-        prodCO2: 'targetLung',
-        prodWater: 'targetKidney',
-        prodEnergy: 'targetHeart'
-      };
-      var EPI_PRODUCT_WHY_WRONG = '아직 알맞은 곳이 아니에요. 이 물질이 우리 몸에서 어디로 가야 하는지 생각해보세요!';
-
-      function initEpiPhase3() {
-        showEpiDialogue('생성물을 알맞은 기관으로 보내 순환시키세요.');
-        for (var id in EPI_PRODUCT_TARGETS) {
-          var orb = document.getElementById(id);
-          if (orb) {
-            orb.dataset.locked = 'false';
-            orb.style.transform = '';
-            orb.style.opacity = '1';
-            makeEpiSortable(orb, EPI_PRODUCT_TARGETS[id]);
-          }
-        }
-        ['targetLung', 'targetHeart', 'targetKidney'].forEach(function (id) {
-          var el = document.getElementById(id);
-          if (el) {
-            el.className = 'target-slot';
-          }
-        });
-      }
-
-      function makeEpiSortable(el, correctTargetId) {
-        var startX, startY, origX = 0, origY = 0, dragging = false;
-        el.addEventListener('pointerdown', function (e) {
-          if (el.dataset.locked === 'true') return;
-          dragging = true;
-          el.setPointerCapture(e.pointerId);
-          startX = e.clientX; startY = e.clientY;
-          var style = window.getComputedStyle(el);
-          var matrix = new DOMMatrixReadOnly(style.transform);
-          origX = matrix.m41; origY = matrix.m42;
-          el.style.zIndex = '100';
-        });
-        el.addEventListener('pointermove', function (e) {
-          if (!dragging) return;
-          var dx = e.clientX - startX;
-          var dy = e.clientY - startY;
-          el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
-          highlightNearestEpiTarget(el);
-        });
-        el.addEventListener('pointerup', function () { dropEpiSort(el, correctTargetId, origX, origY); });
-        el.addEventListener('pointercancel', function () { dropEpiSort(el, correctTargetId, origX, origY); });
-      }
-
-      function getEpiTargetEls() {
-        return ['targetLung', 'targetHeart', 'targetKidney'].map(function (id) { return document.getElementById(id); });
-      }
-
-      function nearestEpiTarget(el) {
-        var r = el.getBoundingClientRect();
-        var best = null, bestDist = Infinity;
-        getEpiTargetEls().forEach(function (t) {
-          if (!t || t.classList.contains('locked')) return;
-          var tr = t.getBoundingClientRect();
-          var dx = (r.left + r.width / 2) - (tr.left + tr.width / 2);
-          var dy = (r.top + r.height / 2) - (tr.top + tr.height / 2);
-          var d = Math.sqrt(dx * dx + dy * dy);
-          if (d < bestDist) { bestDist = d; best = t; }
-        });
-        return { target: best, dist: bestDist };
-      }
-
-      function highlightNearestEpiTarget(el) {
-        getEpiTargetEls().forEach(function (t) { if (t) t.classList.remove('hover'); });
-        var res = nearestEpiTarget(el);
-        if (res.target && res.dist < 70) res.target.classList.add('hover');
-      }
-
-      function dropEpiSort(el, correctTargetId, origX, origY) {
-        var res = nearestEpiTarget(el);
-        getEpiTargetEls().forEach(function (t) { if (t) t.classList.remove('hover'); });
-        if (res.target && res.dist < 70) {
-          if (res.target.id === correctTargetId) {
-            res.target.classList.add('locked');
-            el.dataset.locked = 'true';
-            var tr = res.target.getBoundingClientRect();
-            var pr = el.parentElement.getBoundingClientRect();
-            el.style.transition = 'transform 0.25s';
-            el.style.left = (tr.left - pr.left + tr.width / 2 - el.offsetWidth / 2) + 'px';
-            el.style.top = (tr.top - pr.top + tr.height / 2 - el.offsetHeight / 2) + 'px';
-            el.style.transform = 'translate(0,0)';
-            el.style.opacity = '0.9';
-            playSnd('success');
-            checkAllEpiSorted();
-            return;
-          } else {
-            epiPenalize(5, EPI_PRODUCT_WHY_WRONG);
-          }
-        }
-        el.style.transition = 'transform 0.3s';
-        el.style.transform = 'translate(' + origX + 'px, ' + origY + 'px)';
-        setTimeout(function () { el.style.transition = ''; }, 300);
-      }
-
-      function checkAllEpiSorted() {
-        var done = Object.keys(EPI_PRODUCT_TARGETS).every(function (id) {
-          var el = document.getElementById(id);
-          return el && el.dataset.locked === 'true';
-        });
-        if (done) {
-          showEpiDialogue('모든 기관계가 다시 연결되었습니다!');
-          setTimeout(function () { goEpiPhase(4); }, 1200);
-        }
-      }
-
-      /* ---------- Phase 4: 성공 화면 ---------- */
-      function initEpiPhase4() {
-        playSnd('success');
-        showEpiDialogue('임무 완료. 환자가 안정을 되찾았습니다.');
-        animateEpiBpmTo(80);
-        launchEpiConfetti();
-        finishEpiGame();
-      }
-
-      function animateEpiBpmTo(target) {
-        var start = parseInt(document.getElementById("ui-bpm").innerText.replace(/[^0-9]/g, "")) || 40;
-        var duration = 1500;
-        var t0 = performance.now();
-        function step(t) {
-          var p = Math.min(1, (t - t0) / duration);
-          var currentBpm = start + (target - start) * p;
-          setBPM(Math.round(currentBpm), "normal");
-          var bigBpmEl = document.getElementById('bigBpm');
-          if (bigBpmEl) bigBpmEl.textContent = Math.round(currentBpm) + ' BPM';
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      }
-
-      function launchEpiConfetti() {
-        var canvas = document.getElementById('confettiCanvas');
-        var frame = document.getElementById('app');
-        if (!canvas || !frame) return;
-        canvas.width = frame.clientWidth;
-        canvas.height = 300;
-        var ctx = canvas.getContext('2d');
-        var colors = ['#FFD166', '#4ADE80', '#3A86FF', '#F4A261'];
-        var particlesList = Array.from({ length: 60 }, function () {
-          return {
-            x: Math.random() * canvas.width,
-            y: -20 - Math.random() * 100,
-            r: 3 + Math.random() * 4,
-            c: colors[Math.floor(Math.random() * colors.length)],
-            vy: 2 + Math.random() * 3,
-            vx: -1 + Math.random() * 2,
-            rot: Math.random() * 360
+          s4Video.onended = function () {
+            closeS4VideoAndGoNext();
           };
+        }
+      }
+
+      startBloodFlow();
+
+      setTimeout(function () {
+        playSnd("success");
+        document.getElementById("btn-s4-next").style.display = "block";
+        showMessage("🎉 순환계 복구 완료! 다음 구역으로 출발하세요!", true);
+      }, 4500);
+    }
+
+    function closeBloodSupplyPopup() {
+      closeS4VideoAndGoNext();
+    }
+
+    function startBloodFlow() {
+      for (var i = 0; i < 6; i++) {
+        (function (index) {
+          setTimeout(function () {
+            spawnBloodParticle('red');
+            spawnBloodParticle('blue');
+          }, index * 600);
+        })(i);
+      }
+    }
+
+    function spawnBloodParticle(type) {
+      var board = document.getElementById('board');
+      if (!board) return;
+      var particle = document.createElement('div');
+      particle.className = 'blood-particle ' + type;
+      board.appendChild(particle);
+      particles.push(particle);
+
+      var pathIds = type === 'red'
+        ? ['lungs', 'arr-lungs-pv', 'slot-pv', 'arr-pv', 'la', 'arr-la-lv', 'lv', 'arr-ao', 'slot-ao', 'arr-ao-body', 'body-cells']
+        : ['body-cells', 'arr-body-vc', 'slot-vc', 'arr-vc', 'ra', 'arr-ra-rv', 'rv', 'arr-pa', 'slot-pa', 'arr-lungs-pa', 'lungs'];
+
+      var keyframes = [];
+      var validPath = true;
+      for (var i = 0; i < pathIds.length; i++) {
+        var el = document.getElementById(pathIds[i]);
+        if (!el) { validPath = false; break; }
+        var rect = el.getBoundingClientRect();
+        var boardRect = board.getBoundingClientRect();
+        var x = rect.left - boardRect.left + rect.width / 2;
+        var y = rect.top - boardRect.top + rect.height / 2;
+        keyframes.push({
+          transform: 'translate(' + x + 'px, ' + y + 'px)',
+          opacity: (i === 0 || i === pathIds.length - 1) ? 0 : 1
         });
-        var framesCount = 0;
-        function draw() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          particlesList.forEach(function (p) {
-            p.y += p.vy; p.x += p.vx; p.rot += 6;
-            ctx.save();
-            ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180);
-            ctx.fillStyle = p.c;
-            ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
-            ctx.restore();
-          });
-          framesCount++;
-          if (framesCount < 240) requestAnimationFrame(draw);
-          else ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        draw();
       }
 
-      function finishEpiGame() {
-        pData.progress = 100;
-        document.getElementById("sync-msg").innerText = "⏳ 구조 보고서 전송 중...";
-        document.getElementById("app").style.animation = "victory-glow 1s infinite";
-        fetch(GAS_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sheetName: SHEET_NAME,
-            studentId: pData.id,
-            studentName: pData.name,
-            progress: pData.progress,
-            score: pData.score
-          })
-        })
-          .then(function () {
-            document.getElementById("sync-msg").innerHTML = "🎉 <span style='color:var(--alert-red);font-weight:bold;'>임무 완료 및 구조 보고서 전송 완료!</span><br><span style='color:var(--alert-red);font-weight:bold;'>최종 점수: </span><strong style='color:var(--alert-red);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
-          })
-          .catch(function () {
-            document.getElementById("sync-msg").innerHTML = "⚠️ <span style='color:var(--alert-red);font-weight:bold;'>네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.</span><br><span style='color:var(--alert-red);font-weight:bold;'>최종 점수: </span><strong style='color:var(--alert-red);font-size:1.4rem;'>" + pData.score + "점</strong>";
-          });
+      if (validPath) {
+        particle.animate(keyframes, {
+          duration: 4500,
+          iterations: Infinity,
+          easing: 'linear'
+        });
       }
+    }
+    function goStage5() { setBPM(80, "normal"); startStage5(); }
 
-      // ── CODE BLUE ─────────────────────────────────────────────
-      var cbTaps = 0, cbHoldTm = null;
-      function initCodeBlue(restartFunc) {
-        toggleSiren(true); setBPM(0, "danger");
-        document.getElementById("cb-panel").classList.add("active");
-        document.getElementById("cb-tap-ui").style.display = "flex"; document.getElementById("cb-hold-ui").style.display = "none";
-        cbTaps = 0;
-        document.getElementById("cb-gauge").style.width = "0%";
-        document.getElementById("cb-count").innerText = "0 / 10";
-        var btn = document.getElementById("cbBtn");
-        btn.style.left = "auto"; btn.style.position = "relative"; btn.style.transition = "none";
-        btn.style.margin = "18px auto";
-        btn.style.pointerEvents = "auto";
-        // 배경 영상 재생 + 소리 활성화
-        var vid = document.getElementById("cbBgVideo");
-        if (vid) {
-          vid.muted = false;
-          vid.volume = 0.7;
-          vid.play().catch(function () { vid.muted = true; vid.play(); });
-        }
-        currentStageFunc = restartFunc;
+    // ── STAGE 5 ───────────────────────────────────────────────
+    function startStage5(isRetry) {
+      updateProgress(6); switchUI("screen-stage5");
+      if (!isRetry) {
+        ["s5-a1", "s5-a2", "s5-a3"].forEach(function (id) { document.getElementById(id).value = ""; });
       }
-      function doCodeBlueCPR() {
-        if (cbTaps >= 10) return;
-        cbTaps++; playSnd("beep");
-        document.getElementById("cb-gauge").style.width = (cbTaps / 10 * 100) + "%";
-        document.getElementById("cb-count").innerText = cbTaps + " / 10";
-        var btn = document.getElementById("cbBtn");
-        btn.style.transform = "scale(0.88)"; setTimeout(function () { btn.style.transform = "scale(1)"; }, 80);
-        if (cbTaps >= 10) {
-          btn.style.pointerEvents = "none";
-          playSnd("success");
-          // 시간차 없이 즉시 홀드온 UI 노출!
-          document.getElementById("cb-tap-ui").style.display = "none";
-          document.getElementById("cb-hold-ui").style.display = "block";
-          document.getElementById("cbHoldBtn").style.display = "flex";
-          initHoldCPR();
+      currentStageFunc = function () { startStage5(true); };
+      errorCount = 0;
+    }
+    function checkStage5() {
+      var a1 = document.getElementById("s5-a1").value, a2 = document.getElementById("s5-a2").value, a3 = document.getElementById("s5-a3").value;
+      if (a1 === "혈소판" && a2 === "백혈구" && a3 === "적혈구") { playSnd("success"); setBPM(85, "normal"); startStage6(); } else triggerError(function () { startStage5(true); });
+    }
+
+    // ── STAGE 6 ───────────────────────────────────────────────
+    var s6Int = null, s6Save = 0;
+    var S6_GOAL = 8;
+    function startStage6(isRetry) {
+      updateProgress(7); switchUI("screen-stage6");
+      if (!isRetry) { s6Save = 0; }
+      document.getElementById("s6-status").innerText = "구출된 영양소: " + s6Save + "/" + S6_GOAL;
+      document.getElementById("s6-river").innerHTML = "";
+      document.getElementById("btn-s6-next").style.display = s6Save >= S6_GOAL ? "block" : "none";
+      if (s6Int) clearInterval(s6Int);
+      if (s6Save < S6_GOAL) s6Int = setInterval(spawnItem, 780);
+      currentStageFunc = function () { startStage6(true); };
+      errorCount = 0;
+    }
+    function spawnItem() {
+      if (!document.getElementById("screen-stage6").classList.contains("active")) { clearInterval(s6Int); return; }
+      var types = [
+        { t: "🍬 포도당", isGood: true },
+        { t: "🥩 아미노산", isGood: true },
+        { t: "☠️ 요소", isGood: false },
+        { t: "🔴 단백질", isGood: false },
+        { t: "🟡 탄수화물", isGood: false },
+        { t: "🟫 지방", isGood: false },
+        { t: "🔴 혈구", isGood: false }
+      ];
+      var rnd = Math.random();
+      var sel;
+      if (rnd < 0.42) { sel = types[Math.floor(Math.random() * 2)]; }
+      else { sel = types[2 + Math.floor(Math.random() * 5)]; }
+      var el = document.createElement("div"); el.className = "falling-item"; el.innerText = sel.t;
+      // 학습을 위해 색깔을 동일하게 중립적인 블루톤으로 통일!
+      el.style.background = "linear-gradient(135deg, rgba(58, 134, 255, 0.85), rgba(34, 102, 221, 0.9))";
+      el.style.color = "white";
+      el.style.top = "-35px";
+      el.style.left = (Math.random() * 72 + 4) + "%";
+      el.onpointerdown = function () {
+        if (sel.isGood) {
+          s6Save++;
+          document.getElementById("s6-status").innerText = "구출된 영양소: " + s6Save + "/" + S6_GOAL;
+          playSnd("beep"); el.parentNode && el.parentNode.removeChild(el);
+          if (s6Save >= S6_GOAL) { clearInterval(s6Int); playSnd("success"); document.getElementById("btn-s6-next").style.display = "block"; }
+        } else {
+          el.parentNode && el.parentNode.removeChild(el);
+          triggerError(function () { startStage6(true); });
+        }
+      };
+      document.getElementById("s6-river").appendChild(el);
+      var y = -35;
+      var riverH = document.getElementById("s6-river").offsetHeight || 300;
+      var fall = setInterval(function () {
+        y += 3.2; el.style.top = y + "px";
+        if (y > riverH) {
+          clearInterval(fall);
+          if (sel.isGood && el.parentNode) triggerError(function () { startStage6(true); });
+          el.parentNode && el.parentNode.removeChild(el);
+        }
+      }, 40);
+    }
+    function goEpilogue() { setBPM(90, "normal"); startEpilogue(); }
+
+    // ── 에필로그 ─────────────────────────────────────────────
+    var epiState = {
+      quizPicked: []
+    };
+
+    function startEpilogue() {
+      updateProgress(8);
+      switchUI("screen-epilogue");
+      goEpiPhase(0);
+    }
+
+    function showEpiDialogue(html) {
+      var textEl = document.getElementById('epiDialogueText');
+      if (textEl) textEl.innerHTML = html;
+    }
+
+    function goEpiPhase(n) {
+      document.querySelectorAll('.epi-phase').forEach(function (p) {
+        p.style.display = 'none';
+      });
+      var nextPhase = document.getElementById('epi-phase' + n);
+      if (nextPhase) {
+        nextPhase.style.display = 'flex';
+      }
+      if (n === 0) {
+        showEpiDialogue('에필로그 시스템 정상 기동... 임무를 시작하세요.');
+      }
+      if (n === 1) initEpiPhase1();
+      if (n === 2) initEpiPhase2();
+      if (n === 3) initEpiPhase3();
+      if (n === 4) initEpiPhase4();
+    }
+
+    /* ---------- Phase 1: 재료 선별 ---------- */
+    var EPI_QUIZ_ITEMS = [
+      { id: 'nutrient', emoji: '🍞', label: '영양소', correct: true },
+      { id: 'oxygen', emoji: '🫧', label: '산소', correct: true },
+      { id: 'co2', emoji: '💨', label: '이산화탄소', correct: false, why: '이산화탄소는 세포 호흡의 결과물이지 원료가 아니에요!' },
+      { id: 'urea', emoji: '🧪', label: '요소', correct: false, why: '요소는 콩팥에서 걸러지는 노폐물이에요.' },
+      { id: 'ammonia', emoji: '☠️', label: '암모니아', correct: false, why: '암모니아는 간에서 해독해야 하는 독성 물질이에요.' },
+      { id: 'mineral', emoji: '🧂', label: '무기염류', correct: false, why: '무기염류는 세포 호흡에 직접 쓰이지 않아요.' }
+    ];
+    var EPI_QUIZ_POS = [
+      { top: '10px', left: '10px' }, { top: '10px', right: '10px' },
+      { top: '100px', left: '40px' }, { top: '100px', right: '40px' },
+      { top: '190px', left: '10px' }, { top: '190px', right: '10px' }
+    ];
+
+    function initEpiPhase1() {
+      showEpiDialogue('그동안 모은 물질 중, 세포 호흡의 <b>원료</b> 2가지만 골라주세요.');
+      epiState.quizPicked = [];
+      document.getElementById('traySlot1').classList.remove('filled');
+      document.getElementById('traySlot1').textContent = '?';
+      document.getElementById('traySlot2').classList.remove('filled');
+      document.getElementById('traySlot2').textContent = '?';
+
+      var field = document.getElementById('quizField');
+      field.innerHTML = '';
+      EPI_QUIZ_ITEMS.forEach(function (item, i) {
+        var chip = document.createElement('div');
+        chip.className = 'icon-chip';
+        chip.id = 'chip-' + item.id;
+        chip.style.animationDelay = (i * 0.15) + 's';
+        for (var key in EPI_QUIZ_POS[i]) {
+          chip.style[key] = EPI_QUIZ_POS[i][key];
+        }
+        chip.innerHTML = '<span class="emoji">' + item.emoji + '</span>' + item.label;
+        chip.onclick = function () { onEpiQuizPick(item, chip); };
+        field.appendChild(chip);
+      });
+    }
+
+    function onEpiQuizPick(item, chip) {
+      if (chip.classList.contains('correct-flash') || chip.classList.contains('wrong-flash')) return;
+      if (item.correct) {
+        chip.classList.add('correct-flash');
+        playSnd('success');
+        epiState.quizPicked.push(item.id);
+        var slot = document.getElementById(epiState.quizPicked.length === 1 ? 'traySlot1' : 'traySlot2');
+        if (slot) {
+          slot.textContent = item.emoji;
+          slot.classList.add('filled');
+        }
+        showEpiDialogue('<b>' + item.label + '</b> 확보!');
+        if (epiState.quizPicked.length === 2) {
+          setTimeout(function () { goEpiPhase(2); }, 800);
+        }
+      } else {
+        chip.classList.add('wrong-flash');
+        epiPenalize(5, item.why);
+        setTimeout(function () { chip.classList.remove('wrong-flash'); }, 500);
+      }
+    }
+
+    function epiPenalize(amount, msg) {
+      updateScore(-amount);
+      playSnd("fail");
+      var appEl = document.getElementById("app");
+      if (appEl) {
+        appEl.style.animation = "none"; void appEl.offsetHeight; appEl.style.animation = "app-shake 0.4s";
+        setTimeout(function () { appEl.style.animation = ""; }, 400);
+      }
+      var bpmText = document.getElementById("ui-bpm").innerText;
+      var cur = parseInt(bpmText.replace(/[^0-9]/g, "")) || 0;
+      if (cur > 40) setBPM(cur - amount, "danger");
+      if (msg) showEpiDialogue(msg);
+    }
+
+    /* ---------- Phase 2: 미토콘드리아 충돌 ---------- */
+    function initEpiPhase2() {
+      showEpiDialogue('두 재료를 각각 하나씩 미토콘드리아 중앙으로 끌어와 충돌시키세요.');
+      var nutrient = document.getElementById('orbNutrient');
+      var oxygen = document.getElementById('orbOxygen');
+      nutrient.style.transform = '';
+      oxygen.style.transform = '';
+      nutrient.style.opacity = '1';
+      oxygen.style.opacity = '1';
+      nutrient.dataset.locked = 'false';
+      oxygen.dataset.locked = 'false';
+      document.getElementById('flashWhite').style.opacity = '0';
+      document.getElementById('equationText').style.opacity = '0';
+
+      var collided = { nutrient: false, oxygen: false };
+      makeEpiDraggable(nutrient, function () { checkEpiCollision('nutrient'); });
+      makeEpiDraggable(oxygen, function () { checkEpiCollision('oxygen'); });
+
+      function checkEpiCollision(which) {
+        var el = document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen');
+        var mitoRect = document.getElementById('mito').getBoundingClientRect();
+        var elRect = el.getBoundingClientRect();
+        var dx = (elRect.left + elRect.width / 2) - (mitoRect.left + mitoRect.width / 2);
+        var dy = (elRect.top + elRect.height / 2) - (mitoRect.top + mitoRect.height / 2);
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 80) {
+          collided[which] = true;
+
+          // 중앙에 부드럽게 고정
+          var style = window.getComputedStyle(el);
+          var matrix = new DOMMatrixReadOnly(style.transform);
+          var curDx = matrix.m41;
+          var curDy = matrix.m42;
+          var mitoCenterX = mitoRect.left + mitoRect.width / 2;
+          var mitoCenterY = mitoRect.top + mitoRect.height / 2;
+          var elCenterX = elRect.left + elRect.width / 2;
+          var elCenterY = elRect.top + elRect.height / 2;
+
+          var targetDx = curDx + (mitoCenterX - elCenterX);
+          var targetDy = curDy + (mitoCenterY - elCenterY);
+
+          el.style.transition = 'transform 0.3s ease-out';
+          el.style.transform = 'translate(' + targetDx + 'px, ' + targetDy + 'px)';
+          el.dataset.locked = 'true';
+          el.style.opacity = '0.5';
+          playSnd('success');
+
+          if (collided.nutrient && collided.oxygen) {
+            setTimeout(reactionEpiSuccess, 450);
+          }
+          return true;
+        } else {
+          // 충돌 안 했으면 원래 위치로 되돌리기
+          el.style.transition = 'transform 0.3s ease-out';
+          el.style.transform = 'translate(0px, 0px)';
+          setTimeout(function () { el.style.transition = ''; }, 300);
+          return false;
         }
       }
-      function initHoldCPR() {
-        var btn = document.getElementById("cbHoldBtn");
-        btn.innerText = "HOLD 5s";
-        if (cbHoldTm) { clearInterval(cbHoldTm); cbHoldTm = null; }
-        btn.onpointerdown = function (e) {
-          e.preventDefault();
-          playSnd("beep");
-          var timeLeft = 5;
-          btn.innerText = timeLeft + "s";
-          cbHoldTm = setInterval(function () {
-            timeLeft--;
-            btn.innerText = timeLeft + "s";
-            playSnd("beep");
-            if (timeLeft <= 0) {
-              clearInterval(cbHoldTm);
-              cbHoldTm = null;
-              reviveCodeBlue();
-            }
-          }, 1000);
+    }
+
+    function reactionEpiSuccess() {
+      playSnd('success');
+      var flash = document.getElementById('flashWhite');
+      var eq = document.getElementById('equationText');
+      flash.style.transition = 'opacity 0.15s';
+      flash.style.opacity = '1';
+      setTimeout(function () {
+        flash.style.transition = 'opacity 1s';
+        flash.style.opacity = '0';
+      }, 200);
+      eq.style.transition = 'opacity 0.6s';
+      eq.style.opacity = '1';
+      showEpiDialogue('반응 성공! <b>영양소 + 산소 → 물 + 이산화 탄소 + 에너지</b>');
+      setTimeout(function () { goEpiPhase(3); }, 2500);
+    }
+
+    function makeEpiDraggable(el, onDrop) {
+      var startX, startY, origX = 0, origY = 0, dragging = false;
+      el.addEventListener('pointerdown', function (e) {
+        if (el.dataset.locked === 'true') return;
+        dragging = true;
+        el.setPointerCapture(e.pointerId);
+        startX = e.clientX; startY = e.clientY;
+        el.style.transition = ''; // 드래그 시작 시 transition 제거
+        var style = window.getComputedStyle(el);
+        var matrix = new DOMMatrixReadOnly(style.transform);
+        origX = matrix.m41; origY = matrix.m42;
+        el.style.zIndex = '100';
+      });
+      el.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - startX;
+        var dy = e.clientY - startY;
+        el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
+      });
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        if (onDrop) onDrop();
+      }
+      el.addEventListener('pointerup', endDrag);
+      el.addEventListener('pointercancel', endDrag);
+    }
+
+    /* ---------- Phase 3: 생성물 순환 배치 ---------- */
+    var EPI_PRODUCT_TARGETS = {
+      prodCO2: 'targetLung',
+      prodWater: 'targetKidney',
+      prodEnergy: 'targetHeart'
+    };
+    var EPI_PRODUCT_WHY_WRONG = '아직 알맞은 곳이 아니에요. 이 물질이 우리 몸에서 어디로 가야 하는지 생각해보세요!';
+
+    function initEpiPhase3() {
+      showEpiDialogue('생성물을 알맞은 기관으로 보내 순환시키세요.');
+      for (var id in EPI_PRODUCT_TARGETS) {
+        var orb = document.getElementById(id);
+        if (orb) {
+          orb.dataset.locked = 'false';
+          orb.style.transform = '';
+          orb.style.opacity = '1';
+          makeEpiSortable(orb, EPI_PRODUCT_TARGETS[id]);
+        }
+      }
+      ['targetLung', 'targetHeart', 'targetKidney'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.className = 'target-slot';
+        }
+      });
+    }
+
+    function makeEpiSortable(el, correctTargetId) {
+      var startX, startY, origX = 0, origY = 0, dragging = false;
+      el.addEventListener('pointerdown', function (e) {
+        if (el.dataset.locked === 'true') return;
+        dragging = true;
+        el.setPointerCapture(e.pointerId);
+        startX = e.clientX; startY = e.clientY;
+        var style = window.getComputedStyle(el);
+        var matrix = new DOMMatrixReadOnly(style.transform);
+        origX = matrix.m41; origY = matrix.m42;
+        el.style.zIndex = '100';
+      });
+      el.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - startX;
+        var dy = e.clientY - startY;
+        el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
+        highlightNearestEpiTarget(el);
+      });
+      el.addEventListener('pointerup', function () { dropEpiSort(el, correctTargetId, origX, origY); });
+      el.addEventListener('pointercancel', function () { dropEpiSort(el, correctTargetId, origX, origY); });
+    }
+
+    function getEpiTargetEls() {
+      return ['targetLung', 'targetHeart', 'targetKidney'].map(function (id) { return document.getElementById(id); });
+    }
+
+    function nearestEpiTarget(el) {
+      var r = el.getBoundingClientRect();
+      var best = null, bestDist = Infinity;
+      getEpiTargetEls().forEach(function (t) {
+        if (!t || t.classList.contains('locked')) return;
+        var tr = t.getBoundingClientRect();
+        var dx = (r.left + r.width / 2) - (tr.left + tr.width / 2);
+        var dy = (r.top + r.height / 2) - (tr.top + tr.height / 2);
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < bestDist) { bestDist = d; best = t; }
+      });
+      return { target: best, dist: bestDist };
+    }
+
+    function highlightNearestEpiTarget(el) {
+      getEpiTargetEls().forEach(function (t) { if (t) t.classList.remove('hover'); });
+      var res = nearestEpiTarget(el);
+      if (res.target && res.dist < 70) res.target.classList.add('hover');
+    }
+
+    function dropEpiSort(el, correctTargetId, origX, origY) {
+      var res = nearestEpiTarget(el);
+      getEpiTargetEls().forEach(function (t) { if (t) t.classList.remove('hover'); });
+      if (res.target && res.dist < 70) {
+        if (res.target.id === correctTargetId) {
+          res.target.classList.add('locked');
+          el.dataset.locked = 'true';
+          var tr = res.target.getBoundingClientRect();
+          var pr = el.parentElement.getBoundingClientRect();
+          el.style.transition = 'transform 0.25s';
+          el.style.left = (tr.left - pr.left + tr.width / 2 - el.offsetWidth / 2) + 'px';
+          el.style.top = (tr.top - pr.top + tr.height / 2 - el.offsetHeight / 2) + 'px';
+          el.style.transform = 'translate(0,0)';
+          el.style.opacity = '0.9';
+          playSnd('success');
+          checkAllEpiSorted();
+          return;
+        } else {
+          epiPenalize(5, EPI_PRODUCT_WHY_WRONG);
+        }
+      }
+      el.style.transition = 'transform 0.3s';
+      el.style.transform = 'translate(' + origX + 'px, ' + origY + 'px)';
+      setTimeout(function () { el.style.transition = ''; }, 300);
+    }
+
+    function checkAllEpiSorted() {
+      var done = Object.keys(EPI_PRODUCT_TARGETS).every(function (id) {
+        var el = document.getElementById(id);
+        return el && el.dataset.locked === 'true';
+      });
+      if (done) {
+        showEpiDialogue('모든 기관계가 다시 연결되었습니다!');
+        setTimeout(function () { goEpiPhase(4); }, 1200);
+      }
+    }
+
+    /* ---------- Phase 4: 성공 화면 ---------- */
+    function initEpiPhase4() {
+      playSnd('success');
+      showEpiDialogue('임무 완료. 환자가 안정을 되찾았습니다.');
+      animateEpiBpmTo(80);
+      launchEpiConfetti();
+      finishEpiGame();
+    }
+
+    function animateEpiBpmTo(target) {
+      var start = parseInt(document.getElementById("ui-bpm").innerText.replace(/[^0-9]/g, "")) || 40;
+      var duration = 1500;
+      var t0 = performance.now();
+      function step(t) {
+        var p = Math.min(1, (t - t0) / duration);
+        var currentBpm = start + (target - start) * p;
+        setBPM(Math.round(currentBpm), "normal");
+        var bigBpmEl = document.getElementById('bigBpm');
+        if (bigBpmEl) bigBpmEl.textContent = Math.round(currentBpm) + ' BPM';
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function launchEpiConfetti() {
+      var canvas = document.getElementById('confettiCanvas');
+      var frame = document.getElementById('app');
+      if (!canvas || !frame) return;
+      canvas.width = frame.clientWidth;
+      canvas.height = 300;
+      var ctx = canvas.getContext('2d');
+      var colors = ['#FFD166', '#4ADE80', '#3A86FF', '#F4A261'];
+      var particlesList = Array.from({ length: 60 }, function () {
+        return {
+          x: Math.random() * canvas.width,
+          y: -20 - Math.random() * 100,
+          r: 3 + Math.random() * 4,
+          c: colors[Math.floor(Math.random() * colors.length)],
+          vy: 2 + Math.random() * 3,
+          vx: -1 + Math.random() * 2,
+          rot: Math.random() * 360
         };
-        btn.onpointerup = btn.onpointerleave = function () {
-          if (cbHoldTm) {
+      });
+      var framesCount = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particlesList.forEach(function (p) {
+          p.y += p.vy; p.x += p.vx; p.rot += 6;
+          ctx.save();
+          ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180);
+          ctx.fillStyle = p.c;
+          ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
+          ctx.restore();
+        });
+        framesCount++;
+        if (framesCount < 240) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      draw();
+    }
+
+    function finishEpiGame() {
+      pData.progress = 100;
+      document.getElementById("sync-msg").innerText = "⏳ 구조 보고서 전송 중...";
+      document.getElementById("app").style.animation = "victory-glow 1s infinite";
+      fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sheetName: SHEET_NAME,
+          studentId: pData.id,
+          studentName: pData.name,
+          progress: pData.progress,
+          score: pData.score
+        })
+      })
+        .then(function () {
+          document.getElementById("sync-msg").innerHTML = "🎉 <span style='color:var(--alert-red);font-weight:bold;'>임무 완료 및 구조 보고서 전송 완료!</span><br><span style='color:var(--alert-red);font-weight:bold;'>최종 점수: </span><strong style='color:var(--alert-red);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+        })
+        .catch(function () {
+          document.getElementById("sync-msg").innerHTML = "⚠️ <span style='color:var(--alert-red);font-weight:bold;'>네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.</span><br><span style='color:var(--alert-red);font-weight:bold;'>최종 점수: </span><strong style='color:var(--alert-red);font-size:1.4rem;'>" + pData.score + "점</strong>";
+        });
+    }
+
+    // ── CODE BLUE ─────────────────────────────────────────────
+    var cbTaps = 0, cbHoldTm = null;
+    function initCodeBlue(restartFunc) {
+      toggleSiren(true); setBPM(0, "danger");
+      document.getElementById("cb-panel").classList.add("active");
+      document.getElementById("cb-tap-ui").style.display = "flex"; document.getElementById("cb-hold-ui").style.display = "none";
+      cbTaps = 0;
+      document.getElementById("cb-gauge").style.width = "0%";
+      document.getElementById("cb-count").innerText = "0 / 10";
+      var btn = document.getElementById("cbBtn");
+      btn.style.left = "auto"; btn.style.position = "relative"; btn.style.transition = "none";
+      btn.style.margin = "18px auto";
+      btn.style.pointerEvents = "auto";
+      // 배경 영상 재생 + 소리 활성화
+      var vid = document.getElementById("cbBgVideo");
+      if (vid) {
+        vid.muted = false;
+        vid.volume = 0.7;
+        vid.play().catch(function () { vid.muted = true; vid.play(); });
+      }
+      currentStageFunc = restartFunc;
+    }
+    function doCodeBlueCPR() {
+      if (cbTaps >= 10) return;
+      cbTaps++; playSnd("beep");
+      document.getElementById("cb-gauge").style.width = (cbTaps / 10 * 100) + "%";
+      document.getElementById("cb-count").innerText = cbTaps + " / 10";
+      var btn = document.getElementById("cbBtn");
+      btn.style.transform = "scale(0.88)"; setTimeout(function () { btn.style.transform = "scale(1)"; }, 80);
+      if (cbTaps >= 10) {
+        btn.style.pointerEvents = "none";
+        playSnd("success");
+        // 시간차 없이 즉시 홀드온 UI 노출!
+        document.getElementById("cb-tap-ui").style.display = "none";
+        document.getElementById("cb-hold-ui").style.display = "block";
+        document.getElementById("cbHoldBtn").style.display = "flex";
+        initHoldCPR();
+      }
+    }
+    function initHoldCPR() {
+      var btn = document.getElementById("cbHoldBtn");
+      btn.innerText = "HOLD 5s";
+      if (cbHoldTm) { clearInterval(cbHoldTm); cbHoldTm = null; }
+      btn.onpointerdown = function (e) {
+        e.preventDefault();
+        playSnd("beep");
+        var timeLeft = 5;
+        btn.innerText = timeLeft + "s";
+        cbHoldTm = setInterval(function () {
+          timeLeft--;
+          btn.innerText = timeLeft + "s";
+          playSnd("beep");
+          if (timeLeft <= 0) {
             clearInterval(cbHoldTm);
             cbHoldTm = null;
-            btn.innerText = "HOLD 5s";
-            playSnd("fail");
-            updateScore(-5); // 홀드 실패 시 벌칙 감점 소량 부여
-            alert("압박 실패! 손을 떼면 안 됩니다. 다시 시도해 주세요.");
-            initHoldCPR(); // 홀드온 5초 다시 시도 가능하게 만듦
+            reviveCodeBlue();
           }
-        };
-      }
-      function reviveCodeBlue() {
-        toggleSiren(false); playSnd("success"); updateScore(-10); errorCount = 0;
-        document.getElementById("cb-panel").classList.remove("active");
-        // 배경 영상 음소거 & 일시정지
-        var vid = document.getElementById("cbBgVideo");
-        if (vid) { vid.pause(); vid.muted = true; }
-        alert("심장박동 극적 회복! 현재 구역부터 재시도합니다.");
-        if (currentStageFunc) currentStageFunc();
-      }
-    </script>
-    <audio id="sirenAudio" src="이미지/구급차 사이렌소리 효과음.m4a" loop></audio>
+        }, 1000);
+      };
+      btn.onpointerup = btn.onpointerleave = function () {
+        if (cbHoldTm) {
+          clearInterval(cbHoldTm);
+          cbHoldTm = null;
+          btn.innerText = "HOLD 5s";
+          playSnd("fail");
+          updateScore(-5); // 홀드 실패 시 벌칙 감점 소량 부여
+          alert("압박 실패! 손을 떼면 안 됩니다. 다시 시도해 주세요.");
+          initHoldCPR(); // 홀드온 5초 다시 시도 가능하게 만듦
+        }
+      };
+    }
+    function reviveCodeBlue() {
+      toggleSiren(false); playSnd("success"); updateScore(-10); errorCount = 0;
+      document.getElementById("cb-panel").classList.remove("active");
+      // 배경 영상 음소거 & 일시정지
+      var vid = document.getElementById("cbBgVideo");
+      if (vid) { vid.pause(); vid.muted = true; }
+      alert("심장박동 극적 회복! 현재 구역부터 재시도합니다.");
+      if (currentStageFunc) currentStageFunc();
+    }
+  </script>
+  <audio id="sirenAudio" src="이미지/siren_ambulance.m4a" loop></audio>
 </body>
 
 </html>
