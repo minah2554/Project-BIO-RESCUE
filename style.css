@@ -145,3 +145,78 @@ select option{background:#0E1A30;color:white;}
 @keyframes pulse-glow{0%,100%{box-shadow:0 0 22px rgba(72,229,194,0.55);}50%{box-shadow:0 0 36px rgba(72,229,194,0.75);}}
 @keyframes app-shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
 @keyframes victory-glow{0%,100%{box-shadow:none;}50%{box-shadow:inset 0 0 80px rgba(72,229,194,0.12);}}
+
+/* MINARI STUDIO Footer Style */
+.studio-footer {
+  margin-top: 20px;
+  padding: 10px 0 5px 0;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+  letter-spacing: 0.5px;
+  width: 100%;
+}
+.studio-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin-bottom: 12px;
+}
+.studio-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+  padding: 0 4px;
+}
+.studio-logo {
+  color: var(--neon-green);
+  text-shadow: 0 0 8px rgba(72, 229, 194, 0.4);
+  font-family: "SebangGothic", sans-serif;
+  letter-spacing: 1.5px;
+}
+.studio-cert {
+  font-family: monospace;
+  background: rgba(72, 229, 194, 0.08);
+  border: 1px solid rgba(72, 229, 194, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--neon-green);
+}
+.studio-copy {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.25);
+  margin-top: 4px;
+}
+
+/* STAGE 4 Check Answers Button & Shake Animation */
+.btn-check-s4 {
+  background: linear-gradient(135deg, var(--warn-yellow), #e0b400);
+  color: #020a18;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 10px;
+  width: 100%;
+  letter-spacing: 1px;
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.3);
+  font-family: "SebangGothic", sans-serif;
+}
+.btn-check-s4:active {
+  transform: scale(0.97);
+}
+@keyframes s4-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.s4-wrong {
+  border-color: var(--alert-red) !important;
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.6) !important;
+  animation: s4-shake 0.2s ease-in-out 2 !important;
+}

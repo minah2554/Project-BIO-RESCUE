@@ -851,18 +851,23 @@
     .blood-supply-popup {
       display: none;
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 999;
       justify-content: center;
       align-items: center;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
     }
+
     .blood-supply-popup.active {
       display: flex;
       animation: popupFadeIn 0.4s ease-out;
     }
+
     .blood-supply-popup .popup-inner {
-      background: linear-gradient(135deg, rgba(255,59,48,0.15), rgba(255,0,0,0.25));
+      background: linear-gradient(135deg, rgba(255, 59, 48, 0.15), rgba(255, 0, 0, 0.25));
       border: 2px solid var(--alert-red);
       border-radius: 20px;
       padding: 30px 28px;
@@ -870,19 +875,42 @@
       max-width: 85%;
       animation: glowPulse 1s infinite alternate;
     }
+
     @keyframes glowPulse {
-      from { box-shadow: 0 0 20px rgba(255,59,48,0.5), inset 0 0 20px rgba(255,59,48,0.1); }
-      to   { box-shadow: 0 0 60px rgba(255,59,48,0.9), inset 0 0 40px rgba(255,59,48,0.2); }
+      from {
+        box-shadow: 0 0 20px rgba(255, 59, 48, 0.5), inset 0 0 20px rgba(255, 59, 48, 0.1);
+      }
+
+      to {
+        box-shadow: 0 0 60px rgba(255, 59, 48, 0.9), inset 0 0 40px rgba(255, 59, 48, 0.2);
+      }
     }
+
     @keyframes popupFadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to   { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
+
     /* 혈액 순환 애니메이션 - 화면 테두리 글로우 */
     @keyframes borderGlowRed {
-      0%,100% { box-shadow: inset 0 0 30px rgba(255,59,48,0.3), 0 0 20px rgba(255,59,48,0.4); }
-      50%      { box-shadow: inset 0 0 80px rgba(255,59,48,0.6), 0 0 50px rgba(255,59,48,0.8); }
+
+      0%,
+      100% {
+        box-shadow: inset 0 0 30px rgba(255, 59, 48, 0.3), 0 0 20px rgba(255, 59, 48, 0.4);
+      }
+
+      50% {
+        box-shadow: inset 0 0 80px rgba(255, 59, 48, 0.6), 0 0 50px rgba(255, 59, 48, 0.8);
+      }
     }
+
     .blood-flow-glow {
       animation: borderGlowRed 1s infinite;
     }
@@ -1287,8 +1315,10 @@
     /* 코드블루 배경 비디오 */
     .cb-bg-video {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       z-index: 0;
     }
@@ -1591,6 +1621,81 @@
         box-shadow: inset 0 0 80px rgba(72, 229, 194, .12);
       }
     }
+
+    /* MINARI STUDIO Footer Style */
+    .studio-footer {
+      margin-top: 20px;
+      padding: 10px 0 5px 0;
+      text-align: center;
+      font-family: 'Pretendard', sans-serif;
+      letter-spacing: 0.5px;
+      width: 100%;
+    }
+    .studio-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin-bottom: 12px;
+    }
+    .studio-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+      padding: 0 4px;
+    }
+    .studio-logo {
+      color: var(--neon-green);
+      text-shadow: 0 0 8px rgba(72, 229, 194, 0.4);
+      font-family: "SebangGothic", sans-serif;
+      letter-spacing: 1.5px;
+    }
+    .studio-cert {
+      font-family: monospace;
+      background: rgba(72, 229, 194, 0.08);
+      border: 1px solid rgba(72, 229, 194, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--neon-green);
+    }
+    .studio-copy {
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.25);
+      margin-top: 4px;
+    }
+
+    /* STAGE 4 Check Answers Button & Shake Animation */
+    .btn-check-s4 {
+      background: linear-gradient(135deg, var(--warn-yellow), #e0b400);
+      color: #020a18;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 10px;
+      width: 100%;
+      letter-spacing: 1px;
+      box-shadow: 0 0 12px rgba(255, 204, 0, 0.3);
+      font-family: "SebangGothic", sans-serif;
+    }
+    .btn-check-s4:active {
+      transform: scale(0.97);
+    }
+    @keyframes s4-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+    .s4-wrong {
+      border-color: var(--alert-red) !important;
+      box-shadow: 0 0 12px rgba(255, 59, 48, 0.6) !important;
+      animation: s4-shake 0.2s ease-in-out 2 !important;
+    }
   </style>
 </head>
 
@@ -1631,20 +1736,31 @@
         <div class="stage-dot"></div>MISSION BRIEFING
       </div>
       <h2>&#128680; 특수 의료팀 원격 접속</h2>
-      <div class="instructions"><strong>환자 X</strong>가 응급실에 실려왔습니다! 심정지 상태로 골든타임 임박!<br>학번과 코드명을 입력하고 Medi-Bot으로 체내에
+      <div class="instructions"><strong>환자 X</strong>가 응급실에 실려왔습니다! 심정지 상태로 골든타임 임박!<br>침투명과 코드명을 입력하고 Medi-Bot으로 체내에
         침투하십시오.</div>
-      <div class="instructions" style="border-left: 3px solid var(--warn-yellow); background: rgba(255, 204, 0, 0.05); font-size: 0.78rem; line-height: 1.5; color: #e2e8f0; margin-bottom: 12px;">
+      <div class="instructions"
+        style="border-left: 3px solid var(--warn-yellow); background: rgba(255, 204, 0, 0.05); font-size: 0.78rem; line-height: 1.5; color: #e2e8f0; margin-bottom: 12px;">
         <strong>🏥 [필독] 바이오 구조대 게임 규칙</strong><br>
         • 상단 우측의 <strong>♥ BPM(심장 박동수)</strong>을 수시로 확인하세요.<br>
         • 오답으로 인해 BPM이 <strong>0 BPM</strong>이 되면 즉시 <strong>[코드 블루]</strong> 경보가 울립니다.<br>
         • 코드 블루 상태에서는 하트 연타 및 5초 홀드로 <strong>심폐소생술(CPR)</strong>을 완료해야 합니다.<br>
         • ⚠️ 코드 블루가 발생할 때마다 <strong>최종 점수가 감점</strong>되니 주의하세요!
       </div>
-      <input type="text" id="studentId" placeholder="학번 입력 (예: 20101)">
-      <input type="text" id="studentName" placeholder="코드명 입력 (예: 홍길동)">
+      <input type="text" id="studentId" placeholder="침투번호 입력 (예: 2901)">
+      <input type="text" id="studentName" placeholder="코드명 입력 (예: 미나리)">
       <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글
         시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
       <button class="btn-primary" onclick="startGame()">&#9889; 시스템 침투 승인</button>
+      <div class="studio-footer">
+        <div class="studio-divider"></div>
+        <div class="studio-meta">
+          <span class="studio-logo">MINARI STUDIO</span>
+          <span class="studio-cert">SECURE RESCUE SYSTEM v2.6</span>
+        </div>
+        <div class="studio-copy">
+          &copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.
+        </div>
+      </div>
     </div>
 
     <div id="screen-cpr" class="screen">
@@ -1819,6 +1935,7 @@
         <div class="tool" onclick="selectTool('대동맥')">대동맥</div>
         <div class="tool" onclick="selectTool('대정맥')">대정맥</div>
       </div>
+      <button class="btn-check-s4" id="btn-s4-check" onclick="checkS4StageAnswers()">연결 상태 검사 (정답 확인)</button>
 
       <div id="board"
         style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 10px 0; overflow-y: auto; flex-grow: 1;">
@@ -1884,7 +2001,9 @@
 
       <div id="gauge-container"
         style="position: absolute; bottom: 65px; left: 10%; width: 80%; height: 20px; background: rgba(0,0,0,0.8); border: 2px solid #ffd700; border-radius: 10px; display: none; overflow: hidden; z-index: 10;">
-        <div id="gauge" style="height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff6b00);border-radius:8px;transition:width 0.05s;box-shadow:0 0 10px #ffd700;"></div>
+        <div id="gauge"
+          style="height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff6b00);border-radius:8px;transition:width 0.05s;box-shadow:0 0 10px #ffd700;">
+        </div>
       </div>
 
       <button class="btn-next" id="btn-s4-next" style="display:none;" onclick="goStage5()">전신 순환 출발 &#8594;</button>
@@ -1985,11 +2104,18 @@
 
     <!-- 혈액공급 성공 팝업 -->
     <div class="blood-supply-popup" id="bloodSupplyPopup">
-      <div class="popup-inner">
-        <div style="font-size:2.5rem;margin-bottom:10px;">&#128147;</div>
-        <div style="font-size:1.3rem;font-weight:700;color:#ff6b6b;margin-bottom:8px;">혈액 공급 시작!</div>
-        <div style="font-size:.9rem;color:#fff;line-height:1.6;">좌심실 펌핑 성공!<br>혈액이 온몸으로 순환합니다!</div>
-        <button onclick="closeBloodSupplyPopup()" style="margin-top:16px;padding:10px 24px;background:var(--alert-red);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#10003; 확인</button>
+      <div class="popup-inner" style="max-width: 95%; width: 420px; padding: 20px;">
+        <div style="font-size:1.3rem;font-weight:700;color:var(--neon-green);margin-bottom:12px;font-family:'SebangGothic',sans-serif;">❤️ 혈액 순환 시뮬레이션</div>
+        <div style="position:relative; width:100%; border-radius:10px; overflow:hidden; border:2px solid var(--neon-blue); background:#000; margin-bottom:15px; display: flex; align-items: center; justify-content: center;">
+          <video id="s4CirculationVideo" src="이미지/스테이지4 심장순환.mp4" muted autoplay playsinline style="width:100%; display:block;"></video>
+        </div>
+        <div style="font-size:.85rem;color:#fff;line-height:1.6;margin-bottom:15px;">
+          좌심실 펌핑 성공! 혈액이 온몸으로 순환합니다!
+        </div>
+        <button onclick="closeS4VideoAndGoNext()"
+          style="width:100%;padding:12px;background:var(--neon-green);color:#020a18;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 0 12px var(--neon-green);font-family:'SebangGothic',sans-serif;">
+          다음 단계로 이동 &rarr;
+        </button>
       </div>
     </div>
 
@@ -2001,9 +2127,12 @@
       </div>
       <div class="cb-content">
         <div class="cb-title">&#128680; CODE BLUE! &#128680;</div>
-        <div class="cb-sub">환자 맥박·호흡 소실! 즉시 심폐소생술(CPR)을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: CPR 시행 횟수만큼 최종 점수 감점)</span></div>
-        <div id="cb-tap-ui" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;">
-          <div class="heart-btn" id="cbBtn" onclick="doCodeBlueCPR()" style="margin:18px auto;position:relative;left:auto;transform:none;">
+        <div class="cb-sub">환자 맥박·호흡 소실! 즉시 심폐소생술(CPR)을 가동하십시오!<br><span style="color:var(--warn-yellow);">(경고: CPR 시행
+            횟수만큼 최종 점수 감점)</span></div>
+        <div id="cb-tap-ui"
+          style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;">
+          <div class="heart-btn" id="cbBtn" onclick="doCodeBlueCPR()"
+            style="margin:18px auto;position:relative;left:auto;transform:none;">
             <span style="font-size:2rem;">&#9829;</span>
             <span class="heart-label" id="cb-count">0 / 10</span>
           </div>
@@ -2013,7 +2142,8 @@
           <p style="color:var(--warn-yellow);margin-top:10px;font-size:.85rem;">빨간 하트를 연타하여 게이지를 채우세요!</p>
         </div>
         <div id="cb-hold-ui" style="display:none;width:100%;text-align:center;">
-          <div class="hold-circle" id="cbHoldBtn" style="display:none;left:auto;transform:none;margin:18px auto;">HOLD 5s</div>
+          <div class="hold-circle" id="cbHoldBtn" style="display:none;left:auto;transform:none;margin:18px auto;">HOLD
+            5s</div>
           <p style="color:var(--neon-green);margin-top:10px;font-size:.85rem;">5초간 화면을 꾹 누르고 떼지 마세요!</p>
         </div>
       </div>
@@ -2410,9 +2540,17 @@
       timeHeld = 0;
       s4Step123Done = false;
 
+      // 연결 검사 버튼 표시
+      var checkBtn = document.getElementById("btn-s4-check");
+      if (checkBtn) checkBtn.style.display = "block";
+
       // 혈액 공급 팝업 닫기
       var bsp = document.getElementById('bloodSupplyPopup');
-      if (bsp) bsp.classList.remove('active');
+      if (bsp) {
+        bsp.classList.remove('active');
+        var s4Video = document.getElementById('s4CirculationVideo');
+        if (s4Video) s4Video.pause();
+      }
       document.getElementById('screen-stage4').classList.remove('blood-flow-glow');
 
       particles.forEach(function (p) { if (p.parentNode) p.parentNode.removeChild(p); });
@@ -2456,7 +2594,7 @@
       lv.style.cursor = 'default';
 
       // 지시사항 초기화 (1~3만 표시)
-      document.getElementById('s4-instructions').innerHTML = 
+      document.getElementById('s4-instructions').innerHTML =
         '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
         '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
         '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.';
@@ -2483,7 +2621,7 @@
 
     function activate4thMission() {
       // 4번 지시사항 추가
-      document.getElementById('s4-instructions').innerHTML = 
+      document.getElementById('s4-instructions').innerHTML =
         '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
         '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
         '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.<br>' +
@@ -2491,6 +2629,9 @@
       // 게이지 표시
       document.getElementById('gauge-container').style.display = 'block';
       document.getElementById('gauge').style.width = '0%';
+      // 연결 검사 버튼 숨김
+      var checkBtn = document.getElementById("btn-s4-check");
+      if (checkBtn) checkBtn.style.display = "none";
       // 좌심실 활성화
       var lv = document.getElementById('lv');
       lv.classList.add('pulse-ready');
@@ -2503,6 +2644,60 @@
       lv.ontouchcancel = handleLvEnd;
       playSnd('success');
       showMessage('✅ 1~3 완료! 이제 좌심실을 2초간 길게 누르세요!', false);
+    }
+
+    function checkS4StageAnswers() {
+      if (allCorrect) return;
+      if (s4Step123Done) {
+        showMessage("✅ 이미 1~3단계 연결이 완료되었습니다! 좌심실을 2초간 누르세요.", false);
+        return;
+      }
+      var wrongKeys = [];
+      for (var key in s4State) {
+        var s = s4State[key];
+        var isCorrect = true;
+        if (s.type === 'vessel') {
+          if (s.word !== s.ansWord || s.color !== s.ansColor) isCorrect = false;
+        } else if (s.type === 'chamber') {
+          if (s.color !== s.ansColor) isCorrect = false;
+        } else if (s.type === 'arrow') {
+          if (s.dir !== s.ansDir) isCorrect = false;
+        }
+        if (!isCorrect) wrongKeys.push(key);
+      }
+
+      if (wrongKeys.length === 0) {
+        s4Step123Done = true;
+        activate4thMission();
+      } else {
+        playSnd('fail');
+        showMessage("⚠️ " + wrongKeys.length + "개의 연결이 올바르지 않습니다. 다시 확인하세요!", false);
+        
+        wrongKeys.forEach(function(key) {
+          var el;
+          if (s4State[key].type === 'vessel') {
+            el = document.getElementById('slot-' + key);
+          } else {
+            el = document.getElementById(key);
+          }
+          if (el) {
+            el.classList.add('s4-wrong');
+            setTimeout(function() {
+              el.classList.remove('s4-wrong');
+            }, 1500);
+          }
+        });
+      }
+    }
+
+    function closeS4VideoAndGoNext() {
+      var s4Video = document.getElementById('s4CirculationVideo');
+      if (s4Video) {
+        s4Video.pause();
+      }
+      var popup = document.getElementById('bloodSupplyPopup');
+      if (popup) popup.classList.remove('active');
+      goStage5();
     }
 
     function selectTool(word) {
@@ -2655,11 +2850,11 @@
       // 커스텀 오답 팝업
       var popup = document.createElement('div');
       popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.6);';
-      popup.innerHTML = '<div style="background:linear-gradient(135deg,rgba(139,0,0,0.9),rgba(80,0,0,0.95));border:2px solid #ff3b30;border-radius:18px;padding:28px 24px;text-align:center;max-width:80%;animation:popupFadeIn 0.3s ease-out;">'+
-        '<div style="font-size:2.2rem;margin-bottom:10px;">&#128683;</div>'+
-        '<div style="font-size:1.4rem;font-weight:700;color:#ff6b6b;margin-bottom:8px;">혈액공급 실패!</div>'+
-        '<div style="font-size:.85rem;color:#ffcccc;line-height:1.7;margin-bottom:16px;">심방·심실 색깔, 혈관 단어,<br>화살표 방향을 다시 확인하세요.</div>'+
-        '<button onclick="this.parentNode.parentNode.remove()" style="padding:10px 26px;background:var(--alert-red);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#128260; 다시 도전</button>'+
+      popup.innerHTML = '<div style="background:linear-gradient(135deg,rgba(139,0,0,0.9),rgba(80,0,0,0.95));border:2px solid #ff3b30;border-radius:18px;padding:28px 24px;text-align:center;max-width:80%;animation:popupFadeIn 0.3s ease-out;">' +
+        '<div style="font-size:2.2rem;margin-bottom:10px;">&#128683;</div>' +
+        '<div style="font-size:1.4rem;font-weight:700;color:#ff6b6b;margin-bottom:8px;">혈액공급 실패!</div>' +
+        '<div style="font-size:.85rem;color:#ffcccc;line-height:1.7;margin-bottom:16px;">심방·심실 색깔, 혈관 단어,<br>화살표 방향을 다시 확인하세요.</div>' +
+        '<button onclick="this.parentNode.parentNode.remove()" style="padding:10px 26px;background:var(--alert-red);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#128260; 다시 도전</button>' +
         '</div>';
       document.body.appendChild(popup);
     }
@@ -2675,7 +2870,19 @@
 
       // 혈액 공급 시작 팝업
       var popup = document.getElementById('bloodSupplyPopup');
-      if (popup) popup.classList.add('active');
+      if (popup) {
+        popup.classList.add('active');
+        var s4Video = document.getElementById('s4CirculationVideo');
+        if (s4Video) {
+          s4Video.currentTime = 0;
+          s4Video.play().catch(function (e) {
+            console.log("Video autoplay blocked, waiting for user click.", e);
+          });
+          s4Video.onended = function () {
+            closeS4VideoAndGoNext();
+          };
+        }
+      }
 
       startBloodFlow();
 
@@ -2687,8 +2894,7 @@
     }
 
     function closeBloodSupplyPopup() {
-      var popup = document.getElementById('bloodSupplyPopup');
-      if (popup) popup.classList.remove('active');
+      closeS4VideoAndGoNext();
     }
 
     function startBloodFlow() {
@@ -2865,7 +3071,7 @@
       if (vid) {
         vid.muted = false;
         vid.volume = 0.7;
-        vid.play().catch(function() { vid.muted = true; vid.play(); });
+        vid.play().catch(function () { vid.muted = true; vid.play(); });
       }
       currentStageFunc = restartFunc;
     }

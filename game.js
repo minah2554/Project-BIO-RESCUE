@@ -371,6 +371,8 @@ const s4State = {
     'arr-ao-body': { type: 'arrow', dir: 'none', ansDir: 'down' }   
 };
 
+let s4Step123Done = false; // 1,2,3 완료 여부
+
 function startStage4(isRetry) {
   updateProgress(5); switchUI("screen-stage4");
   currentStageFunc = function () { startStage4(true); };
@@ -378,7 +380,21 @@ function startStage4(isRetry) {
   allCorrect = false;
   currentTool = null;
   timeHeld = 0;
-  
+  s4Step123Done = false;
+
+  // 연결 검사 버튼 표시
+  const checkBtn = document.getElementById("btn-s4-check");
+  if (checkBtn) checkBtn.style.display = "block";
+
+  // 혈액 공급 팝업 닫기
+  const bsp = document.getElementById('bloodSupplyPopup');
+  if (bsp) {
+    bsp.classList.remove('active');
+    const s4Video = document.getElementById('s4CirculationVideo');
+    if (s4Video) s4Video.pause();
+  }
+  document.getElementById('screen-stage4').classList.remove('blood-flow-glow');
+
   particles.forEach(p => { if(p.parentNode) p.parentNode.removeChild(p); });
   particles = [];
   
@@ -402,20 +418,122 @@ function startStage4(isRetry) {
   
   document.getElementById("message").style.opacity = 0;
   document.getElementById("btn-s4-next").style.display = "none";
-  document.getElementById("gauge-container").style.display = "block";
+  document.getElementById("gauge-container").style.display = "none";
   document.getElementById("gauge").style.width = "0%";
-  document.getElementById("lv").classList.add("pulse-ready");
   document.getElementById("heart-area").classList.remove("pump-effect");
+
+  // 좌심실은 항상 붉은색, pulse-ready 제거
+  document.getElementById("lv").classList.remove("pulse-ready");
   
   const lv = document.getElementById("lv");
+  lv.onmousedown = null;
+  lv.onmouseup = null;
+  lv.onmouseleave = null;
+  lv.ontouchstart = null;
+  lv.ontouchend = null;
+  lv.ontouchcancel = null;
+  lv.style.cursor = 'default';
+  
+  // 지시사항 초기화 (1~3만 표시)
+  document.getElementById('s4-instructions').innerHTML =
+    '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
+    '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
+    '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.';
+
+  document.querySelectorAll('.tool').forEach(el => el.classList.remove('selected'));
+}
+
+// 1,2,3 완료 체크 - vesselClick, chamberClick, arrowClick 마다 호출
+function checkS4Step123() {
+  if (s4Step123Done || allCorrect) return;
+  let done123 = true;
+  for (let key in s4State) {
+    const s = s4State[key];
+    if (s.type === 'vessel' && (s.word !== s.ansWord || s.color !== s.ansColor)) { done123 = false; break; }
+    if (s.type === 'chamber' && key !== 'lv' && s.color !== s.ansColor) { done123 = false; break; }
+    if (s.type === 'arrow' && s.dir !== s.ansDir) { done123 = false; break; }
+  }
+  if (done123) {
+    s4Step123Done = true;
+    activate4thMission();
+  }
+}
+
+function activate4thMission() {
+  document.getElementById('s4-instructions').innerHTML =
+    '1. 단어를 빈칸에 넣고 눌러 색(동맥혈🔴/정맥혈🔵)을 맞추세요.<br>' +
+    '2. 심방과 심실도 눌러 색을 맞추세요.<br>' +
+    '3. 원형 화살표 버튼을 눌러 피가 흐르는 방향을 맞추세요.<br>' +
+    '<strong style="color:#ff6b6b;">4. ✅ 좌심실을 2초간 눌러 혈액을 공급하세요!</strong>';
+  document.getElementById('gauge-container').style.display = 'block';
+  document.getElementById('gauge').style.width = '0%';
+  const checkBtn = document.getElementById("btn-s4-check");
+  if (checkBtn) checkBtn.style.display = "none";
+  const lv = document.getElementById('lv');
+  lv.classList.add('pulse-ready');
+  lv.style.cursor = 'pointer';
   lv.onmousedown = handleLvStart;
   lv.onmouseup = handleLvEnd;
   lv.onmouseleave = handleLvEnd;
   lv.ontouchstart = handleLvStart;
   lv.ontouchend = handleLvEnd;
   lv.ontouchcancel = handleLvEnd;
-  
-  document.querySelectorAll('.tool').forEach(el => el.classList.remove('selected'));
+  playSnd('success');
+  showMessage('✅ 1~3 완료! 이제 좌심실을 2초간 길게 누르세요!', false);
+}
+
+function checkS4StageAnswers() {
+  if (allCorrect) return;
+  if (s4Step123Done) {
+    showMessage("✅ 이미 1~3단계 연결이 완료되었습니다! 좌심실을 2초간 누르세요.", false);
+    return;
+  }
+  const wrongKeys = [];
+  for (let key in s4State) {
+    const s = s4State[key];
+    let isCorrect = true;
+    if (s.type === 'vessel') {
+      if (s.word !== s.ansWord || s.color !== s.ansColor) isCorrect = false;
+    } else if (s.type === 'chamber') {
+      if (s.color !== s.ansColor) isCorrect = false;
+    } else if (s.type === 'arrow') {
+      if (s.dir !== s.ansDir) isCorrect = false;
+    }
+    if (!isCorrect) wrongKeys.push(key);
+  }
+
+  if (wrongKeys.length === 0) {
+    s4Step123Done = true;
+    activate4thMission();
+  } else {
+    playSnd('fail');
+    showMessage("⚠️ " + wrongKeys.length + "개의 연결이 올바르지 않습니다. 다시 확인하세요!", false);
+    
+    wrongKeys.forEach(key => {
+      let el;
+      if (s4State[key].type === 'vessel') {
+        el = document.getElementById('slot-' + key);
+      } else {
+        el = document.getElementById(key);
+      }
+      if (el) {
+        el.classList.add('s4-wrong');
+        setTimeout(() => {
+          el.classList.remove('s4-wrong');
+        }, 1500);
+      }
+    });
+  }
+}
+
+function closeS4VideoAndGoNext() {
+  const s4Video = document.getElementById('s4CirculationVideo');
+  if (s4Video) {
+    s4Video.pause();
+  }
+  const popup = document.getElementById('bloodSupplyPopup');
+  if (popup) popup.classList.remove('active');
+  goStage5();
 }
 
 function selectTool(word) {
@@ -444,6 +562,7 @@ function vesselClick(id) {
     else s.color = 'gray';
   }
   updateVesselUI(id);
+  checkS4Step123();
 }
 
 function chamberClick(id) {
@@ -456,6 +575,7 @@ function chamberClick(id) {
   else s.color = 'gray';
   
   updateChamberUI(id);
+  checkS4Step123();
 }
 
 function arrowClick(id) {
@@ -466,6 +586,7 @@ function arrowClick(id) {
   else s.dir = 'down';
   
   updateArrowUI(id);
+  checkS4Step123();
 }
 
 function updateVesselUI(id) {
@@ -519,6 +640,18 @@ function isPuzzleCorrect() {
   return correct;
 }
 
+function showFailPopup() {
+  const popup = document.createElement('div');
+  popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.6);';
+  popup.innerHTML = '<div style="background:linear-gradient(135deg,rgba(139,0,0,0.9),rgba(80,0,0,0.95));border:2px solid #ff3b30;border-radius:18px;padding:28px 24px;text-align:center;max-width:80%;animation:popupFadeIn 0.3s ease-out;">' +
+    '<div style="font-size:2.2rem;margin-bottom:10px;">&#128683;</div>' +
+    '<div style="font-size:1.4rem;font-weight:700;color:#ff6b6b;margin-bottom:8px;">혈액공급 실패!</div>' +
+    '<div style="font-size:.85rem;color:#ffcccc;line-height:1.7;margin-bottom:16px;">심방·심실 색깔, 혈관 단어,<br>화살표 방향을 다시 확인하세요.</div>' +
+    '<button onclick="this.parentNode.parentNode.remove()" style="padding:10px 26px;background:var(--alert-red);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#128260; 다시 도전</button>' +
+    '</div>';
+  document.body.appendChild(popup);
+}
+
 function handleLvStart(e) {
   if (allCorrect) return;
   if (e.type === 'touchstart') e.preventDefault();
@@ -535,14 +668,13 @@ function handleLvStart(e) {
       holdTimer = null;
       if (isPuzzleCorrect()) {
         allCorrect = true;
+        handleLvEnd();
         successPumping();
       } else {
+        handleLvEnd();
         playSnd("fail");
-        alert("혈액공급실패! 심방, 심실, 혈관의 단어와 화살표(혈류 방향)를 다시 확인해 주세요.");
-        timeHeld = 0;
-        document.getElementById('gauge').style.width = "0%";
+        showFailPopup();
       }
-      handleLvEnd();
     }
   }, 50);
 }
@@ -565,6 +697,25 @@ function successPumping() {
   document.getElementById('gauge-container').style.display = "none";
   document.getElementById('lv').classList.remove('pulse-ready');
   document.getElementById('heart-area').classList.add('pump-effect');
+
+  // 화면 테두리 글로우 효과
+  document.getElementById('screen-stage4').classList.add('blood-flow-glow');
+
+  // 혈액 공급 시작 팝업
+  const popup = document.getElementById('bloodSupplyPopup');
+  if (popup) {
+    popup.classList.add('active');
+    const s4Video = document.getElementById('s4CirculationVideo');
+    if (s4Video) {
+      s4Video.currentTime = 0;
+      s4Video.play().catch(e => {
+        console.log("Video autoplay blocked, waiting for user click.", e);
+      });
+      s4Video.onended = () => {
+        closeS4VideoAndGoNext();
+      };
+    }
+  }
 
   startBloodFlow();
 
