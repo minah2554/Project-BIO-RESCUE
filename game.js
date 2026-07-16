@@ -947,13 +947,15 @@ function epiPenalize(amount, msg) {
 
 /* ---------- Phase 2: 미토콘드리아 충돌 ---------- */
 function initEpiPhase2() {
-  showEpiDialogue('두 재료를 미토콘드리아 중앙으로 끌어와 충돌시키세요!');
+  showEpiDialogue('두 재료를 각각 하나씩 미토콘드리아 중앙으로 끌어와 충돌시키세요.');
   const nutrient = document.getElementById('orbNutrient');
   const oxygen = document.getElementById('orbOxygen');
   nutrient.style.transform = '';
   oxygen.style.transform = '';
   nutrient.style.opacity = '1';
   oxygen.style.opacity = '1';
+  nutrient.dataset.locked = 'false';
+  oxygen.dataset.locked = 'false';
   document.getElementById('flashWhite').style.opacity = '0';
   document.getElementById('equationText').style.opacity = '0';
 
@@ -962,17 +964,44 @@ function initEpiPhase2() {
   makeEpiDraggable(oxygen, () => { checkEpiCollision('oxygen'); });
 
   function checkEpiCollision(which) {
+    const el = document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen');
     const mitoRect = document.getElementById('mito').getBoundingClientRect();
-    const elRect = document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen').getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
     const dx = (elRect.left + elRect.width / 2) - (mitoRect.left + mitoRect.width / 2);
     const dy = (elRect.top + elRect.height / 2) - (mitoRect.top + mitoRect.height / 2);
     const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 70) {
+    if (dist < 80) {
       collided[which] = true;
-      document.getElementById(which === 'nutrient' ? 'orbNutrient' : 'orbOxygen').style.opacity = '0.3';
-    }
-    if (collided.nutrient && collided.oxygen) {
-      reactionEpiSuccess();
+      
+      // 중앙에 부드럽게 고정
+      const style = window.getComputedStyle(el);
+      const matrix = new DOMMatrixReadOnly(style.transform);
+      const curDx = matrix.m41;
+      const curDy = matrix.m42;
+      const mitoCenterX = mitoRect.left + mitoRect.width / 2;
+      const mitoCenterY = mitoRect.top + mitoRect.height / 2;
+      const elCenterX = elRect.left + elRect.width / 2;
+      const elCenterY = elRect.top + elRect.height / 2;
+      
+      const targetDx = curDx + (mitoCenterX - elCenterX);
+      const targetDy = curDy + (mitoCenterY - elCenterY);
+      
+      el.style.transition = 'transform 0.3s ease-out';
+      el.style.transform = 'translate(' + targetDx + 'px, ' + targetDy + 'px)';
+      el.dataset.locked = 'true';
+      el.style.opacity = '0.5';
+      playSnd('success');
+      
+      if (collided.nutrient && collided.oxygen) {
+        setTimeout(reactionEpiSuccess, 450);
+      }
+      return true;
+    } else {
+      // 충돌 안 했으면 원래 위치로 되돌리기
+      el.style.transition = 'transform 0.3s ease-out';
+      el.style.transform = 'translate(0px, 0px)';
+      setTimeout(() => { el.style.transition = ''; }, 300);
+      return false;
     }
   }
 }
@@ -996,9 +1025,11 @@ function reactionEpiSuccess() {
 function makeEpiDraggable(el, onDrop) {
   let startX, startY, origX = 0, origY = 0, dragging = false;
   el.addEventListener('pointerdown', e => {
+    if (el.dataset.locked === 'true') return;
     dragging = true;
     el.setPointerCapture(e.pointerId);
     startX = e.clientX; startY = e.clientY;
+    el.style.transition = ''; // 드래그 시작 시 transition 제거
     const style = window.getComputedStyle(el);
     const matrix = new DOMMatrixReadOnly(style.transform);
     origX = matrix.m41; origY = matrix.m42;
@@ -1206,10 +1237,10 @@ function finishEpiGame() {
     })
   })
     .then(() => {
-      document.getElementById("sync-msg").innerHTML = "🎉 임무 완료 및 구조 보고서 전송 완료!<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
+      document.getElementById("sync-msg").innerHTML = "🎉 <span style='color:var(--alert-red);font-weight:bold;'>임무 완료 및 구조 보고서 전송 완료!</span><br><span style='color:var(--alert-red);font-weight:bold;'>최종 점수: </span><strong style='color:var(--alert-red);font-size:1.4rem;'>" + pData.score + "점</strong><br><span style='color:var(--muted);font-size:.8rem;'>" + pData.name + " 대원 수고했습니다!</span>";
     })
     .catch(() => {
-      document.getElementById("sync-msg").innerHTML = "⚠️ 네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.<br>최종 점수: <strong style='color:var(--warn-yellow);font-size:1.4rem;'>" + pData.score + "점</strong>";
+      document.getElementById("sync-msg").innerHTML = "⚠️ <span style='color:var(--alert-red);font-weight:bold;'>네트워크 오류로 기록 저장에 실패했지만 임무는 완수되었습니다.</span><br><span style='color:var(--alert-red);font-weight:bold;'>최종 점수: </span><strong style='color:var(--alert-red);font-size:1.4rem;'>" + pData.score + "점</strong>";
     });
 }
 function goEpilogue() { setBPM(90, "normal"); startEpilogue(); }
