@@ -1765,8 +1765,8 @@
 
     <div id="screen-cpr" class="screen">
       <div class="scene-wrap" id="sw-cpr">
-        <img src="이미지/Bio_Rescue_Code_Blue_-_Slide_2.png" class="scene-img" alt="CPR"
-          onerror="this.style.background='#1a0000'">
+        <video src="이미지/심장박동.mp4" class="scene-img" autoplay loop muted playsinline
+          style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
         <div class="scan-line"></div>
         <div class="hud-corner hud-tl"></div>
         <div class="hud-corner hud-tr"></div>
@@ -2307,6 +2307,13 @@
       // 로컬에만 저장 - 외부 전송 없음
       pData.id = sid; pData.name = sname;
       updateProgress(1); switchUI("screen-cpr");
+
+      // 프롤로그 진입 시 사이렌 소리 재생
+      var siren = document.getElementById("sirenAudio");
+      if (siren) {
+        siren.currentTime = 0;
+        siren.play().catch(function (e) { console.log("Siren audio play blocked:", e); });
+      }
     }
 
     // ── CPR ──────────────────────────────────────────────────
@@ -2317,7 +2324,18 @@
       document.getElementById("cpr-count").innerText = introCpr + " / 15";
       var btn = document.getElementById("cprBtn");
       btn.style.transform = "scale(0.88)"; setTimeout(function () { btn.style.transform = "scale(1)"; }, 100);
-      if (introCpr >= 15) { setBPM(40, "normal"); playSnd("success"); setTimeout(function () { startStage1(); }, 600); }
+      if (introCpr >= 15) { 
+        setBPM(40, "normal"); 
+        playSnd("success"); 
+
+        // 프롤로그 완료 시 사이렌 소리 정지
+        var siren = document.getElementById("sirenAudio");
+        if (siren) {
+          siren.pause();
+        }
+
+        setTimeout(function () { startStage1(); }, 600); 
+      }
     }
 
     // ── STAGE 1 ───────────────────────────────────────────────
@@ -3134,6 +3152,6 @@
       if (currentStageFunc) currentStageFunc();
     }
   </script>
+  <audio id="sirenAudio" src="이미지/구급차 사이렌소리 효과음.m4a" loop></audio>
 </body>
-
 </html>

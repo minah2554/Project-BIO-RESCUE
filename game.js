@@ -162,6 +162,13 @@ function startGame() {
   if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
   pData.id = sid; pData.name = sname;
   updateProgress(1); switchUI("screen-cpr");
+
+  // 프롤로그 진입 시 사이렌 소리 재생
+  const siren = document.getElementById("sirenAudio");
+  if (siren) {
+    siren.currentTime = 0;
+    siren.play().catch(e => { console.log("Siren audio play blocked:", e); });
+  }
 }
 
 let introCpr = 0;
@@ -171,7 +178,18 @@ function doIntroCPR() {
   document.getElementById("cpr-count").innerText = introCpr + " / 15";
   const btn = document.getElementById("cprBtn");
   btn.style.transform = "scale(0.88)"; setTimeout(() => btn.style.transform="scale(1)", 100);
-  if (introCpr >= 15) { setBPM(40,"normal"); playSnd("success"); setTimeout(() => startStage1(), 600); }
+  if (introCpr >= 15) { 
+    setBPM(40,"normal"); 
+    playSnd("success"); 
+
+    // 프롤로그 완료 시 사이렌 소리 정지
+    const siren = document.getElementById("sirenAudio");
+    if (siren) {
+      siren.pause();
+    }
+
+    setTimeout(() => startStage1(), 600); 
+  }
 }
 
 let s1Zone = 0, s1SelNut = null, s1SelEnz = null;
