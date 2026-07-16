@@ -114,7 +114,29 @@
     /* 로그인 화면 스크롤 허용 */
     #screen-login {
       overflow-y: auto;
-      padding-bottom: 20px;
+      padding-bottom: 40px;
+    }
+
+    /* 작은 폰에서 상단 이미지 높이 줄이기 */
+    @media (max-height: 700px) {
+      .scene-wrap { height: 120px !important; }
+    }
+    @media (max-height: 600px) {
+      .scene-wrap { height: 90px !important; }
+    }
+
+    /* 로그인 저작권 푸터 */
+    .login-studio-footer {
+      margin-top: 14px;
+      text-align: center;
+      padding-top: 10px;
+      border-top: 1px solid rgba(122, 149, 178, 0.18);
+    }
+    .login-studio-copy {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      opacity: 0.5;
     }
 
     h2,
@@ -1867,30 +1889,32 @@
       <div class="instructions"><strong>환자 X</strong>가 응급실에 실려왔습니다! 심정지 상태로 골든타임 임박!<br>침투명과 코드명을 입력하고 Medi-Bot으로 체내에
         침투하십시오.</div>
       <div class="instructions"
-        style="border-left: 3px solid var(--warn-yellow); background: rgba(255, 204, 0, 0.05); font-size: 0.78rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 12px; text-align: left; padding: 10px 14px; border-radius: 4px;">
-        <strong style="display: block; margin-bottom: 6px; text-align: center;">🏥 [필독] 바이오 구조대 게임 규칙</strong>
-        <div style="display: flex; align-items: flex-start; margin-bottom: 4px;">
-          <span style="margin-right: 6px;">•</span>
-          <span>상단 우측의 <strong>♥ BPM(심장 박동수)</strong>을 수시로 확인하세요.</span>
+        style="border-left: 3px solid var(--warn-yellow); background: rgba(255, 204, 0, 0.05); font-size: 0.76rem; line-height: 1.55; color: #e2e8f0; margin-bottom: 10px; text-align: left; padding: 8px 12px; border-radius: 4px;">
+        <strong style="display: block; margin-bottom: 5px; text-align: left;">🏥 [필독] 바이오 구조대 게임 규칙</strong>
+        <div style="display: flex; align-items: flex-start; margin-bottom: 3px;">
+          <span style="margin-right: 5px; flex-shrink: 0;">•</span>
+          <span>상단 우측의 <strong>♥ BPM</strong>을 수시로 확인하세요.</span>
         </div>
-        <div style="display: flex; align-items: flex-start; margin-bottom: 4px;">
-          <span style="margin-right: 6px;">•</span>
-          <span>오답으로 인해 BPM이 <strong>0 BPM</strong>이 되면 즉시 <strong>[코드 블루]</strong> 경보가 울립니다.</span>
+        <div style="display: flex; align-items: flex-start; margin-bottom: 3px;">
+          <span style="margin-right: 5px; flex-shrink: 0;">•</span>
+          <span>오답으로 BPM이 <strong>0 BPM</strong>이 되면 즉시 <strong>[코드 블루]</strong> 경보가 울립니다.</span>
         </div>
-        <div style="display: flex; align-items: flex-start; margin-bottom: 4px;">
-          <span style="margin-right: 6px;">•</span>
-          <span>코드 블루 시 탭 연타 및 5초 홀드로 <strong>CPR을 완료</strong>하세요.</span>
+        <div style="display: flex; align-items: flex-start; margin-bottom: 3px;">
+          <span style="margin-right: 5px; flex-shrink: 0;">•</span>
+          <span>코드 블루 시 탭 연타 + 5초 홀드로 <strong>CPR 완료</strong>하세요.</span>
         </div>
         <div style="display: flex; align-items: flex-start;">
-          <span style="margin-right: 6px;">•</span>
-          <span>⚠️ 코드 블루가 발생할 때마다 <strong>최종 점수가 감점</strong>되니 주의하세요!</span>
+          <span style="margin-right: 5px; flex-shrink: 0;">•</span>
+          <span>⚠️ 코드 블루 발생 시 <strong>최종 점수 감점</strong>에 주의하세요!</span>
         </div>
       </div>
       <input type="text" id="studentId" placeholder="침투번호 입력 (예: 2901)">
       <input type="text" id="studentName" placeholder="코드명 입력 (예: 미나리)">
-      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글
-        시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:8px;text-align:center;">&#128274; 입력 정보는 기록 보관용 구글 시트로 전송되며 이 기기에도 임시 저장됩니다.</p>
       <button class="btn-primary" onclick="startGame()">&#9889; 시스템 침투 승인</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
 
       <div id="screen-cpr" class="screen">
         <div class="scene-wrap" id="sw-cpr">
