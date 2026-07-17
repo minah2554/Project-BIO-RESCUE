@@ -1008,40 +1008,40 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 8px 0;
-      gap: 4px;
+      margin: 2px 0;
+      gap: 2px;
     }
 
     .heart-bg {
       position: absolute;
-      top: 15px;
+      top: 10px;
       left: 50%;
-      width: 130px;
-      height: 130px;
+      width: 110px;
+      height: 110px;
       background-color: rgba(220, 53, 69, 0.2);
       transform: translateX(-50%) rotate(-45deg);
       z-index: 0;
-      border-radius: 10px;
+      border-radius: 8px;
     }
 
     .heart-bg::before,
     .heart-bg::after {
       content: '';
       position: absolute;
-      width: 130px;
-      height: 130px;
+      width: 110px;
+      height: 110px;
       background-color: inherit;
       border-radius: 50%;
     }
 
     .heart-bg::before {
-      top: -65px;
+      top: -55px;
       left: 0;
     }
 
     .heart-bg::after {
       top: 0;
-      left: 65px;
+      left: 55px;
     }
 
     .chamber {
@@ -1722,6 +1722,25 @@
       transform: scale(0.97);
     }
 
+    .btn-check-s4-inline {
+      background: linear-gradient(135deg, var(--warn-yellow), #e0b400);
+      color: #020a18;
+      border: 2px solid var(--warn-yellow);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+      font-family: "Pretendard", sans-serif;
+    }
+
+    .btn-check-s4-inline:active {
+      transform: scale(0.95);
+    }
+
     @keyframes s4-shake {
 
       0%,
@@ -1948,6 +1967,9 @@
           <div class="gauge-fill" id="cpr-gauge"></div>
         </div>
       </div>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <div id="screen-stage1" class="screen">
@@ -1977,6 +1999,9 @@
           &#8617; 그냥 통과</div>
       </div>
       <button class="btn-next" id="btn-s1-next" onclick="nextS1Zone()">다음 구역 이동 &#8594;</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <div id="screen-stage2" class="screen">
@@ -2013,6 +2038,9 @@
         </div>
       </div>
       <button class="btn-next" id="btn-s2-next" onclick="goStage3()">기체 교환소 이동 &#8594;</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <div id="screen-stage3" class="screen">
@@ -2028,55 +2056,93 @@
       <div class="stage-badge">
         <div class="stage-dot"></div>STAGE 3: 폐포 기체 확산
       </div>
-      <div class="instructions">혈액 속 <strong>CO&#8322;는 두 번 터치해 방출</strong> 💥, 떠다니는 <strong>O&#8322;는 한 번 터치해
-          흡수</strong> ✅!</div>
-      <div class="s3-score-bar">
-        <div class="s3-stat" id="s3-o2" style="color:var(--neon-blue);">&#128309; O&#8322; 흡수: 0/5</div>
-        <div class="s3-stat" id="s3-co2" style="color:var(--alert-red);">&#128308; CO&#8322; 방출: 0/5</div>
+
+      <!-- 규칙 설명 및 시작 버튼 패널 -->
+      <div id="s3-rules-panel"
+        style="padding: 12px 16px; background: rgba(2, 10, 24, 0.85); border-radius: 12px; margin: 10px auto; max-width: 90%; text-align: center; border: 1.5px dashed var(--neon-blue); box-shadow: 0 0 15px rgba(0, 168, 204, 0.25); z-index: 10;">
+        <h3
+          style="color: var(--neon-blue); margin-bottom: 6px; font-size: 1.05rem; font-family: 'SebangGothic', sans-serif;">
+          💨 폐포 기체 확산 규칙</h3>
+        <p
+          style="color: #e2e8f0; font-size: 0.82rem; margin-bottom: 10px; line-height: 1.4; font-family: 'Pretendard', sans-serif;">
+          스타트 버튼을 누르면 10개의 기체가 나타납니다.<br>
+          <strong>이산화탄소(🔴)는 두 번</strong>, <strong>산소(🔵)는 한 번</strong> 터치해서<br>
+          <strong>5초 이내</strong>에 모두 없애면 보너스 점수 <strong>+20점</strong> 획득!
+        </p>
+        <button class="btn-primary" id="btn-s3-start" onclick="startS3Game()"
+          style="padding: 6px 16px; font-size: 0.9rem; font-family: 'SebangGothic', sans-serif; cursor: pointer; border-radius: 8px;">⏱️
+          미션 스타트</button>
       </div>
-      <div class="bubble-container" id="s3-bubbles">
-        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-          <span class="bubble-icon">&#128308;</span>CO&#8322;
-          <span class="bubble-tap-hint">2번 탭!</span>
+
+      <div class="instructions" id="s3-instructions" style="display:none;">혈액 속 <strong>CO&#8322;는 두 번 터치해 폐포 밖으로
+          방출</strong> 💥, 떠다니는 <strong>O&#8322;는 한 번 터치해 모세혈관으로 흡수</strong> ✅!</div>
+
+      <div class="s3-score-bar" id="s3-score-bar" style="display:none;">
+        <div class="s3-stat" id="s3-o2" style="color:var(--neon-blue); font-size: 0.82rem;">&#128309; O&#8322; 흡수: 0/5
         </div>
-        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-          <span class="bubble-icon">&#128309;</span>O&#8322;
-          <span class="bubble-tap-hint">탭!</span>
+        <div class="s3-stat" id="s3-timer"
+          style="color:var(--warn-yellow); font-size: 0.95rem; font-weight: bold; font-family: monospace;">⏱️ 0.00초
         </div>
-        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-          <span class="bubble-icon">&#128308;</span>CO&#8322;
-          <span class="bubble-tap-hint">2번 탭!</span>
-        </div>
-        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-          <span class="bubble-icon">&#128309;</span>O&#8322;
-          <span class="bubble-tap-hint">탭!</span>
-        </div>
-        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-          <span class="bubble-icon">&#128308;</span>CO&#8322;
-          <span class="bubble-tap-hint">2번 탭!</span>
-        </div>
-        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-          <span class="bubble-icon">&#128309;</span>O&#8322;
-          <span class="bubble-tap-hint">탭!</span>
-        </div>
-        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-          <span class="bubble-icon">&#128308;</span>CO&#8322;
-          <span class="bubble-tap-hint">2번 탭!</span>
-        </div>
-        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-          <span class="bubble-icon">&#128309;</span>O&#8322;
-          <span class="bubble-tap-hint">탭!</span>
-        </div>
-        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
-          <span class="bubble-icon">&#128308;</span>CO&#8322;
-          <span class="bubble-tap-hint">2번 탭!</span>
-        </div>
-        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
-          <span class="bubble-icon">&#128309;</span>O&#8322;
-          <span class="bubble-tap-hint">탭!</span>
+        <div class="s3-stat" id="s3-co2" style="color:var(--alert-red); font-size: 0.82rem;">&#128308; CO&#8322; 방출: 0/5
         </div>
       </div>
-      <button class="btn-next" id="btn-s3-next" onclick="goStage4()">순환 루프 연결 &#8594;</button>
+
+      <div class="bubble-container" id="s3-bubbles" style="display:none; opacity: 0; pointer-events: none;">
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+        <div class="bubble bubble-co2" data-taps="0" onclick="hitGas('co2',this)">
+          <span class="bubble-icon">&#128308;</span>CO&#8322;
+          <span class="bubble-tap-hint">2번 탭!</span>
+        </div>
+        <div class="bubble bubble-o2" onclick="hitGas('o2',this)">
+          <span class="bubble-icon">&#128309;</span>O&#8322;
+          <span class="bubble-tap-hint">탭!</span>
+        </div>
+      </div>
+
+      <!-- 결과 메시지 패널 -->
+      <div id="s3-result-panel"
+        style="display:none; padding: 12px 16px; background: rgba(2, 10, 24, 0.9); border-radius: 12px; margin: 10px auto; max-width: 90%; text-align: center; border: 1.5px solid var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.25); z-index: 10; font-family: 'Pretendard', sans-serif;">
+        <h3 id="s3-result-title"
+          style="color:var(--neon-green); margin-bottom: 6px; font-size: 1.05rem; font-family: 'SebangGothic', sans-serif;">
+          🎉 미션 성공!</h3>
+        <p id="s3-result-text" style="color:#ffffff; font-size:0.85rem; line-height: 1.4; white-space: pre-line;"></p>
+      </div>
+
+      <button class="btn-next" id="btn-s3-next" onclick="goStage4()" style="display:none;">순환 루프 연결 &#8594;</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <div id="screen-stage4" class="screen">
@@ -2095,11 +2161,11 @@
         <div class="tool" onclick="selectTool('폐정맥')">폐정맥</div>
         <div class="tool" onclick="selectTool('대동맥')">대동맥</div>
         <div class="tool" onclick="selectTool('대정맥')">대정맥</div>
+        <button class="btn-check-s4-inline" id="btn-s4-check" onclick="checkS4StageAnswers()">연결 상태 검사</button>
       </div>
-      <button class="btn-check-s4" id="btn-s4-check" onclick="checkS4StageAnswers()">연결 상태 검사 (정답 확인)</button>
 
       <div id="board"
-        style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 10px 0; overflow-y: auto; flex-grow: 1;">
+        style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 2px 0; overflow-y: auto; flex-grow: 1;">
         <div id="message-wrap"
           style="position: absolute; top: 10px; width: 100%; display: flex; justify-content: center; z-index: 20; pointer-events: none;">
           <div id="message"
@@ -2168,6 +2234,9 @@
       </div>
 
       <button class="btn-next" id="btn-s4-next" style="display:none;" onclick="goStage5()">전신 순환 출발 &#8594;</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <div id="screen-stage5" class="screen">
@@ -2212,6 +2281,9 @@
         </select>
       </div>
       <button class="btn-primary" onclick="checkStage5()">&#9889; 특공대 일제 투입</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <div id="screen-stage6" class="screen">
@@ -2232,6 +2304,9 @@
       <div class="river-box" id="s6-river"></div>
       <div class="s6-status-txt" id="s6-status">구출된 영양소: 0/8</div>
       <button class="btn-next" id="btn-s6-next" onclick="goEpilogue()">최종 발전소 진입 &#8594;</button>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
 
@@ -2288,10 +2363,10 @@
             style="position:relative; width:100%; height:320px; display:flex; align-items:center; justify-content:center;">
             <div id="mito"></div>
             <div class="draggable" id="orbNutrient"
-              style="position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #ffd9a0, #F4A261); color:#020a18;">
+              style="position:absolute; left:12%; top:calc(50% - 32px); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #ffd9a0, #F4A261); color:#020a18;">
               영양소</div>
             <div class="draggable" id="orbOxygen"
-              style="position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #b9f1ff, #3A86FF); color:#ffffff;">
+              style="position:absolute; right:12%; top:calc(50% - 32px); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #b9f1ff, #3A86FF); color:#ffffff;">
               산소</div>
             <div id="flashWhite"
               style="position:absolute; inset:0; background:#fff; opacity:0; z-index:60; pointer-events:none;"></div>
@@ -2353,6 +2428,9 @@
         style="background:rgba(5,15,34,0.85); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px; line-height:1.4; margin-top:10px; width:100%; box-shadow:0 0 10px rgba(72, 229, 194, 0.1);">
         <span id="epiDialogueText" style="color:var(--text);">에필로그 시스템 정상 기동...</span>
       </div>
+      <div class="login-studio-footer">
+        <div class="login-studio-copy">&copy; 2026 MINARI STUDIO. ALL RIGHTS RESERVED.</div>
+      </div>
     </div>
 
     <!-- 혈액공급 성공 팝업 -->
@@ -2413,6 +2491,58 @@
     var actx = null, sirenInt = null, flatSound = null;
     var GAS_URL = "https://script.google.com/macros/s/AKfycbxf30pT9UPbkRzT9FjtxCYrQAuQbf5r_NBnar4UbW4VbSmdk-85qd-8H9XeqVa7xbEjsw/exec";
     var SHEET_NAME = "[PROJECT: BIO-RESCUE]";
+    var speechTimer = null;
+    function speakCodeBlue(count) {
+      if (!count || count <= 0) return;
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          var utterance = new SpeechSynthesisUtterance("코드블루! 코드블루!");
+          utterance.lang = "ko-KR";
+          utterance.rate = 1.05;
+          utterance.volume = 1.0;
+
+          // Select male voice or fallback with low pitch
+          var voices = window.speechSynthesis.getVoices();
+          var selectedVoice = null;
+          for (var i = 0; i < voices.length; i++) {
+            var name = voices[i].name.toLowerCase();
+            var lang = voices[i].lang;
+            if ((lang.indexOf("ko") === 0) && (name.indexOf("junghun") >= 0 || name.indexOf("male") >= 0 || name.indexOf("남성") >= 0 || name.indexOf("yuri") >= 0 || name.indexOf("minjun") >= 0 || name.indexOf("wuri") >= 0)) {
+              selectedVoice = voices[i];
+              break;
+            }
+          }
+          if (!selectedVoice) {
+            for (var i = 0; i < voices.length; i++) {
+              if (voices[i].lang.indexOf("ko") === 0) {
+                selectedVoice = voices[i];
+                break;
+              }
+            }
+          }
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+            var name = selectedVoice.name.toLowerCase();
+            if (name.indexOf("heami") >= 0 || name.indexOf("female") >= 0 || name.indexOf("한국어") >= 0 || name.indexOf("한국의") >= 0) {
+              utterance.pitch = 0.8;
+            } else {
+              utterance.pitch = 1.0;
+            }
+          } else {
+            utterance.pitch = 0.8;
+          }
+
+          window.speechSynthesis.speak(utterance);
+
+          if (count > 1) {
+            speechTimer = setTimeout(function () {
+              speakCodeBlue(count - 1);
+            }, 2500);
+          }
+        }
+      } catch (e) { }
+    }
 
     // ── 진행도 트래커 ─────────────────────────────────────────
     function updateProgress(idx) {
@@ -2468,27 +2598,6 @@
     }, { passive: true });
 
     // ── 오디오 ───────────────────────────────────────────────
-    var speechTimer = null;
-    function speakCodeBlue(count) {
-      if (!count || count <= 0) return;
-      try {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          var utterance = new SpeechSynthesisUtterance("코드블루! 코드블루!");
-          utterance.lang = "ko-KR";
-          utterance.rate = 1.05;
-          utterance.volume = 1.0;
-          window.speechSynthesis.speak(utterance);
-
-          if (count > 1) {
-            speechTimer = setTimeout(function () {
-              speakCodeBlue(count - 1);
-            }, 2500);
-          }
-        }
-      } catch (e) { }
-    }
-
     function playSnd(type) {
       try {
         if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2509,8 +2618,6 @@
       if (on) {
         toggleSiren(false);
         speakCodeBlue(2);
-        // 배경 영상의 소리를 사용하므로 beep 사이렌 비활성
-        // (영상 소리는 initCodeBlue에서 재생)
       } else {
         if (sirenInt) {
           clearInterval(sirenInt);
@@ -2564,7 +2671,7 @@
       // UI 전환 애니메이션 실행 전 즉각 사이렌을 재생하여 반응 속도를 최대화
       var siren = document.getElementById("sirenAudio");
       if (siren) {
-        siren.currentTime = 0;
+        siren.currentTime = 5.45;
         siren.play().catch(function (e) { console.log("Siren audio play blocked:", e); });
       }
 
@@ -2579,6 +2686,25 @@
       var siren = document.getElementById("sirenAudio");
       if (siren) {
         siren.load();
+      }
+
+      // 테스트 라우팅 (디버깅 및 자동 검증용)
+      var urlParams = new URLSearchParams(window.location.search);
+      var testParam = urlParams.get('test');
+      if (testParam) {
+        pData.id = "2901"; pData.name = "테스트";
+        setTimeout(function () {
+          if (testParam === 'stage3') {
+            startStage3();
+          } else if (testParam === 'stage4') {
+            startStage4();
+          } else if (testParam === 'stage6') {
+            startStage6();
+          } else if (testParam === 'epi2') {
+            startEpilogue();
+            goEpiPhase(2);
+          }
+        }, 300);
       }
     });
 
@@ -2708,8 +2834,26 @@
 
     // ── STAGE 3 ───────────────────────────────────────────────
     var o2Cnt = 0, co2Cnt = 0;
+    var s3StartTime = 0, s3TimerInterval = null, s3Running = false;
+
     function startStage3(isRetry) {
       updateProgress(4); switchUI("screen-stage3");
+
+      // Reset UI elements
+      document.getElementById("s3-rules-panel").style.display = "block";
+      document.getElementById("s3-instructions").style.display = "none";
+      document.getElementById("s3-score-bar").style.display = "none";
+      document.getElementById("s3-bubbles").style.display = "none";
+      document.getElementById("s3-bubbles").style.opacity = "0";
+      document.getElementById("s3-bubbles").style.pointerEvents = "none";
+      document.getElementById("s3-result-panel").style.display = "none";
+      document.getElementById("btn-s3-next").style.display = "none";
+
+      if (s3TimerInterval) {
+        clearInterval(s3TimerInterval);
+        s3TimerInterval = null;
+      }
+      s3Running = false;
 
       var container = document.getElementById("s3-bubbles");
       var bubbles = container.querySelectorAll(".bubble");
@@ -2738,30 +2882,49 @@
           b.style.top = positions[idx].y + "%";
         }
 
-        if (!isRetry) {
-          b.classList.remove("hit", "tapped-once");
-          b.dataset.taps = "0";
-          b.style.opacity = "1";
-          b.style.pointerEvents = "auto";
-          var hint = b.querySelector(".bubble-tap-hint");
-          if (hint) {
-            hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
-          }
+        b.classList.remove("hit", "tapped-once");
+        b.dataset.taps = "0";
+        b.style.opacity = "1";
+        b.style.pointerEvents = "auto";
+        var hint = b.querySelector(".bubble-tap-hint");
+        if (hint) {
+          hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
         }
       });
 
-      if (!isRetry) {
-        o2Cnt = 0; co2Cnt = 0;
-      }
+      o2Cnt = 0; co2Cnt = 0;
       currentStageFunc = function () { startStage3(true); };
       errorCount = 0; updS3();
-      document.getElementById("btn-s3-next").style.display = (o2Cnt >= 5 && co2Cnt >= 5) ? "block" : "none";
     }
+
+    function startS3Game() {
+      document.getElementById("s3-rules-panel").style.display = "none";
+      document.getElementById("s3-instructions").style.display = "block";
+      document.getElementById("s3-score-bar").style.display = "flex";
+
+      var bubbles = document.getElementById("s3-bubbles");
+      bubbles.style.display = "flex";
+      bubbles.style.opacity = "1";
+      bubbles.style.pointerEvents = "auto";
+
+      s3Running = true;
+      s3StartTime = performance.now();
+      document.getElementById("s3-timer").innerText = "⏱️ 0.00초";
+
+      s3TimerInterval = setInterval(function () {
+        if (!s3Running) return;
+        var elapsed = (performance.now() - s3StartTime) / 1000;
+        document.getElementById("s3-timer").innerText = "⏱️ " + elapsed.toFixed(2) + "초";
+      }, 30);
+    }
+
     function updS3() {
       document.getElementById("s3-o2").innerText = "🔵 O₂ 흡수: " + o2Cnt + "/5";
       document.getElementById("s3-co2").innerText = "🔴 CO₂ 방출: " + co2Cnt + "/5";
     }
+
     function hitGas(type, el) {
+      if (!s3Running) return;
       if (el.classList.contains("hit")) return;
       playSnd("beep");
       if (type === "co2") {
@@ -2773,15 +2936,58 @@
         } else {
           el.classList.remove("tapped-once"); el.classList.add("hit");
           co2Cnt++; updS3();
-          if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
+          checkS3Clear();
         }
       } else {
         el.classList.add("hit");
         o2Cnt++; updS3();
-        if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
+        checkS3Clear();
       }
     }
-    function goStage4() { setBPM(70, "normal"); startStage4(); }
+
+    function checkS3Clear() {
+      if (o2Cnt >= 5 && co2Cnt >= 5) {
+        s3Running = false;
+        if (s3TimerInterval) {
+          clearInterval(s3TimerInterval);
+          s3TimerInterval = null;
+        }
+        var finalTime = (performance.now() - s3StartTime) / 1000;
+
+        var resultPanel = document.getElementById("s3-result-panel");
+        var resultTitle = document.getElementById("s3-result-title");
+        var resultText = document.getElementById("s3-result-text");
+
+        resultPanel.style.display = "block";
+        document.getElementById("s3-bubbles").style.pointerEvents = "none";
+
+        if (finalTime <= 5.00) {
+          playSnd("success");
+          updateScore(20);
+          resultTitle.innerText = "🎉 보너스 점수 획득!";
+          resultTitle.style.color = "var(--neon-green)";
+          resultPanel.style.borderColor = "var(--neon-green)";
+          resultText.innerText = "클리어 기록: " + finalTime.toFixed(2) + "초 (5초 이내 성공)\n기체 교환 미션 성공 보너스로 20점이 추가되었습니다!";
+        } else {
+          playSnd("success");
+          resultTitle.innerText = "🎉 미션 완료!";
+          resultTitle.style.color = "var(--warn-yellow)";
+          resultPanel.style.borderColor = "var(--warn-yellow)";
+          resultText.innerText = "클리어 기록: " + finalTime.toFixed(2) + "초\n(5초를 초과하여 보너스 점수가 없습니다.)";
+        }
+
+        document.getElementById("btn-s3-next").style.display = "block";
+      }
+    }
+
+    function goStage4() {
+      if (s3TimerInterval) {
+        clearInterval(s3TimerInterval);
+        s3TimerInterval = null;
+      }
+      setBPM(70, "normal");
+      startStage4();
+    }
 
     // ── STAGE 4 (순환계 루트 복구 작전) ─────────────────────────────────
     var currentTool = null;
@@ -3283,7 +3489,14 @@
           s6Save++;
           document.getElementById("s6-status").innerText = "구출된 영양소: " + s6Save + "/" + S6_GOAL;
           playSnd("beep"); el.parentNode && el.parentNode.removeChild(el);
-          if (s6Save >= S6_GOAL) { clearInterval(s6Int); playSnd("success"); document.getElementById("btn-s6-next").style.display = "block"; }
+          if (s6Save >= S6_GOAL) {
+            clearInterval(s6Int);
+            playSnd("success");
+            document.getElementById("btn-s6-next").style.display = "block";
+            setTimeout(function () {
+              goEpilogue();
+            }, 1000);
+          }
         } else {
           el.parentNode && el.parentNode.removeChild(el);
           triggerError(function () { startStage6(true); });
@@ -3296,7 +3509,6 @@
         y += 3.2; el.style.top = y + "px";
         if (y > riverH) {
           clearInterval(fall);
-          if (sel.isGood && el.parentNode) triggerError(function () { startStage6(true); });
           el.parentNode && el.parentNode.removeChild(el);
         }
       }, 40);

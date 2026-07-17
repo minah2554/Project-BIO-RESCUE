@@ -210,6 +210,23 @@ select option{background:#0E1A30;color:white;}
 .btn-check-s4:active {
   transform: scale(0.97);
 }
+.btn-check-s4-inline {
+  background: linear-gradient(135deg, var(--warn-yellow), #e0b400);
+  color: #020a18;
+  border: 2px solid var(--warn-yellow);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+  font-family: "Pretendard", sans-serif;
+}
+.btn-check-s4-inline:active {
+  transform: scale(0.95);
+}
 @keyframes s4-shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }

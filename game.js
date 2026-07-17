@@ -64,6 +64,38 @@ function speakCodeBlue(count) {
       utterance.lang = "ko-KR";
       utterance.rate = 1.05;
       utterance.volume = 1.0;
+
+      // Select male voice or fallback with low pitch
+      var voices = window.speechSynthesis.getVoices();
+      var selectedVoice = null;
+      for (var i = 0; i < voices.length; i++) {
+        var name = voices[i].name.toLowerCase();
+        var lang = voices[i].lang;
+        if ((lang.indexOf("ko") === 0) && (name.indexOf("junghun") >= 0 || name.indexOf("male") >= 0 || name.indexOf("남성") >= 0 || name.indexOf("yuri") >= 0 || name.indexOf("minjun") >= 0 || name.indexOf("wuri") >= 0)) {
+          selectedVoice = voices[i];
+          break;
+        }
+      }
+      if (!selectedVoice) {
+        for (var i = 0; i < voices.length; i++) {
+          if (voices[i].lang.indexOf("ko") === 0) {
+            selectedVoice = voices[i];
+            break;
+          }
+        }
+      }
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        var name = selectedVoice.name.toLowerCase();
+        if (name.indexOf("heami") >= 0 || name.indexOf("female") >= 0 || name.indexOf("한국어") >= 0 || name.indexOf("한국의") >= 0) {
+          utterance.pitch = 0.8;
+        } else {
+          utterance.pitch = 1.0;
+        }
+      } else {
+        utterance.pitch = 0.8;
+      }
+
       window.speechSynthesis.speak(utterance);
       
       if (count > 1) {
@@ -166,7 +198,7 @@ function startGame() {
   // 프롤로그 진입 시 사이렌 소리 재생
   const siren = document.getElementById("sirenAudio");
   if (siren) {
-    siren.currentTime = 0;
+    siren.currentTime = 5.45;
     siren.play().catch(e => { console.log("Siren audio play blocked:", e); });
   }
 }
@@ -283,20 +315,38 @@ function triggerDetox() {
 }
 function goStage3() { setBPM(60,"normal"); startStage3(); }
 
-let o2Cnt=0, co2Cnt=0;
+let o2Cnt = 0, co2Cnt = 0;
+let s3StartTime = 0, s3TimerInterval = null, s3Running = false;
+
 function startStage3(isRetry) {
   updateProgress(4); switchUI("screen-stage3");
-  
+
+  // Reset UI elements
+  document.getElementById("s3-rules-panel").style.display = "block";
+  document.getElementById("s3-instructions").style.display = "none";
+  document.getElementById("s3-score-bar").style.display = "none";
+  document.getElementById("s3-bubbles").style.display = "none";
+  document.getElementById("s3-bubbles").style.opacity = "0";
+  document.getElementById("s3-bubbles").style.pointerEvents = "none";
+  document.getElementById("s3-result-panel").style.display = "none";
+  document.getElementById("btn-s3-next").style.display = "none";
+
+  if (s3TimerInterval) {
+    clearInterval(s3TimerInterval);
+    s3TimerInterval = null;
+  }
+  s3Running = false;
+
   const container = document.getElementById("s3-bubbles");
   const bubbles = container.querySelectorAll(".bubble");
-  
+
   // 5 cols x 2 rows grid for random placement (prevents overlaps)
   const positions = [];
   const cols = 5;
   const rows = 2;
   const cellWidth = 90 / cols; 
   const cellHeight = 90 / rows;
-  
+
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       positions.push({
@@ -307,37 +357,56 @@ function startStage3(isRetry) {
   }
   // Shuffle positions
   positions.sort(() => Math.random() - 0.5);
-  
+
   bubbles.forEach((b, idx) => {
     if (positions[idx]) {
       b.style.left = positions[idx].x + "%";
       b.style.top = positions[idx].y + "%";
     }
-    
-    if (!isRetry) {
-      b.classList.remove("hit", "tapped-once"); 
-      b.dataset.taps = "0";
-      b.style.opacity = "1"; 
-      b.style.pointerEvents = "auto";
-      const hint = b.querySelector(".bubble-tap-hint");
-      if (hint) {
-        hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
-      }
+
+    b.classList.remove("hit", "tapped-once"); 
+    b.dataset.taps = "0";
+    b.style.opacity = "1"; 
+    b.style.pointerEvents = "auto";
+    const hint = b.querySelector(".bubble-tap-hint");
+    if (hint) {
+      hint.innerText = b.classList.contains("bubble-co2") ? "2번 탭!" : "탭!";
     }
   });
 
-  if (!isRetry) {
-    o2Cnt = 0; co2Cnt = 0;
-  }
+  o2Cnt = 0; co2Cnt = 0;
   currentStageFunc = function () { startStage3(true); };
   errorCount = 0; updS3();
-  document.getElementById("btn-s3-next").style.display = (o2Cnt >= 5 && co2Cnt >= 5) ? "block" : "none";
 }
+
+function startS3Game() {
+  document.getElementById("s3-rules-panel").style.display = "none";
+  document.getElementById("s3-instructions").style.display = "block";
+  document.getElementById("s3-score-bar").style.display = "flex";
+
+  var bubbles = document.getElementById("s3-bubbles");
+  bubbles.style.display = "flex";
+  bubbles.style.opacity = "1";
+  bubbles.style.pointerEvents = "auto";
+
+  s3Running = true;
+  s3StartTime = performance.now();
+  document.getElementById("s3-timer").innerText = "⏱️ 0.00초";
+
+  s3TimerInterval = setInterval(function() {
+    if (!s3Running) return;
+    var elapsed = (performance.now() - s3StartTime) / 1000;
+    document.getElementById("s3-timer").innerText = "⏱️ " + elapsed.toFixed(2) + "초";
+  }, 30);
+}
+
 function updS3() {
   document.getElementById("s3-o2").innerText = "🔵 O₂ 흡수: " + o2Cnt + "/5";
   document.getElementById("s3-co2").innerText = "🔴 CO₂ 방출: " + co2Cnt + "/5";
 }
+
 function hitGas(type, el) {
+  if (!s3Running) return;
   if (el.classList.contains("hit")) return;
   playSnd("beep");
   if (type === "co2") {
@@ -349,15 +418,58 @@ function hitGas(type, el) {
     } else {
       el.classList.remove("tapped-once"); el.classList.add("hit");
       co2Cnt++; updS3();
-      if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
+      checkS3Clear();
     }
   } else {
     el.classList.add("hit");
     o2Cnt++; updS3();
-    if (o2Cnt >= 5 && co2Cnt >= 5) { playSnd("success"); document.getElementById("btn-s3-next").style.display = "block"; }
+    checkS3Clear();
   }
 }
-function goStage4() { setBPM(70,"normal"); startStage4(); }
+
+function checkS3Clear() {
+  if (o2Cnt >= 5 && co2Cnt >= 5) {
+    s3Running = false;
+    if (s3TimerInterval) {
+      clearInterval(s3TimerInterval);
+      s3TimerInterval = null;
+    }
+    var finalTime = (performance.now() - s3StartTime) / 1000;
+
+    var resultPanel = document.getElementById("s3-result-panel");
+    var resultTitle = document.getElementById("s3-result-title");
+    var resultText = document.getElementById("s3-result-text");
+
+    resultPanel.style.display = "block";
+    document.getElementById("s3-bubbles").style.pointerEvents = "none";
+
+    if (finalTime <= 5.00) {
+      playSnd("success");
+      updateScore(20);
+      resultTitle.innerText = "🎉 보너스 점수 획득!";
+      resultTitle.style.color = "var(--neon-green)";
+      resultPanel.style.borderColor = "var(--neon-green)";
+      resultText.innerText = "클리어 기록: " + finalTime.toFixed(2) + "초 (5초 이내 성공)\n기체 교환 미션 성공 보너스로 20점이 추가되었습니다!";
+    } else {
+      playSnd("success");
+      resultTitle.innerText = "🎉 미션 완료!";
+      resultTitle.style.color = "var(--warn-yellow)";
+      resultPanel.style.borderColor = "var(--warn-yellow)";
+      resultText.innerText = "클리어 기록: " + finalTime.toFixed(2) + "초\n(5초를 초과하여 보너스 점수가 없습니다.)";
+    }
+
+    document.getElementById("btn-s3-next").style.display = "block";
+  }
+}
+
+function goStage4() {
+  if (s3TimerInterval) {
+    clearInterval(s3TimerInterval);
+    s3TimerInterval = null;
+  }
+  setBPM(70, "normal");
+  startStage4();
+}
 
 // ── STAGE 4 (순환계 루트 복구 작전) ─────────────────────────────────
 let currentTool = null;
@@ -830,12 +942,31 @@ function spawnItem() {
   el.style.background = "linear-gradient(135deg, rgba(58, 134, 255, 0.85), rgba(34, 102, 221, 0.9))";
   el.style.color = "white"; el.style.top="-35px"; el.style.left=(Math.random()*72+4)+"%";
   el.onpointerdown=()=>{
-    if(sel.isGood){s6Save++;document.getElementById("s6-status").innerText="구출된 영양소: "+s6Save+"/"+S6_GOAL;playSnd("beep");el.remove();if(s6Save>=S6_GOAL){clearInterval(s6Int);playSnd("success");document.getElementById("btn-s6-next").style.display="block";}}
+    if(sel.isGood){
+      s6Save++;
+      document.getElementById("s6-status").innerText="구출된 영양소: "+s6Save+"/"+S6_GOAL;
+      playSnd("beep");
+      el.remove();
+      if(s6Save>=S6_GOAL){
+        clearInterval(s6Int);
+        playSnd("success");
+        document.getElementById("btn-s6-next").style.display="block";
+        setTimeout(() => { goEpilogue(); }, 1000);
+      }
+    }
     else{el.remove();triggerError(function () { startStage6(true); });}
   };
   document.getElementById("s6-river").appendChild(el);
   const riverH=document.getElementById("s6-river").offsetHeight||300;
-  let y=-35; const fall=setInterval(()=>{y+=3.2;el.style.top=y+"px";if(y>riverH){clearInterval(fall);if(sel.isGood&&el.parentNode)triggerError(function () { startStage6(true); });el.remove();}},40);
+  let y=-35;
+  const fall=setInterval(()=>{
+    y+=3.2;
+    el.style.top=y+"px";
+    if(y>riverH){
+      clearInterval(fall);
+      el.remove();
+    }
+  },40);
 }
 // ── 에필로그 ─────────────────────────────────────────────
 const epiState = {
