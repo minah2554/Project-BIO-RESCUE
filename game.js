@@ -441,7 +441,9 @@ function checkS3Clear() {
     var resultText = document.getElementById("s3-result-text");
 
     resultPanel.style.display = "block";
-    document.getElementById("s3-bubbles").style.pointerEvents = "none";
+    document.getElementById("s3-bubbles").style.display = "none";
+    document.getElementById("s3-score-bar").style.display = "none";
+    document.getElementById("s3-instructions").style.display = "none";
 
     if (finalTime <= 5.00) {
       playSnd("success");
@@ -1157,6 +1159,7 @@ function makeEpiDraggable(el, onDrop) {
   let startX, startY, origX = 0, origY = 0, dragging = false;
   el.addEventListener('pointerdown', e => {
     if (el.dataset.locked === 'true') return;
+    e.preventDefault();
     dragging = true;
     el.setPointerCapture(e.pointerId);
     startX = e.clientX; startY = e.clientY;
@@ -1165,13 +1168,14 @@ function makeEpiDraggable(el, onDrop) {
     const matrix = new DOMMatrixReadOnly(style.transform);
     origX = matrix.m41; origY = matrix.m42;
     el.style.zIndex = '100';
-  });
+  }, { passive: false });
   el.addEventListener('pointermove', e => {
     if (!dragging) return;
+    e.preventDefault();
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
     el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
-  });
+  }, { passive: false });
   function endDrag(e) {
     if (!dragging) return;
     dragging = false;
@@ -1212,6 +1216,7 @@ function makeEpiSortable(el, correctTargetId) {
   let startX, startY, origX = 0, origY = 0, dragging = false;
   el.addEventListener('pointerdown', e => {
     if (el.dataset.locked === 'true') return;
+    e.preventDefault();
     dragging = true;
     el.setPointerCapture(e.pointerId);
     startX = e.clientX; startY = e.clientY;
@@ -1219,14 +1224,15 @@ function makeEpiSortable(el, correctTargetId) {
     const matrix = new DOMMatrixReadOnly(style.transform);
     origX = matrix.m41; origY = matrix.m42;
     el.style.zIndex = '100';
-  });
+  }, { passive: false });
   el.addEventListener('pointermove', e => {
     if (!dragging) return;
+    e.preventDefault();
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
     el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
     highlightNearestEpiTarget(el);
-  });
+  }, { passive: false });
   el.addEventListener('pointerup', () => { dropEpiSort(el, correctTargetId, origX, origY); });
   el.addEventListener('pointercancel', () => { dropEpiSort(el, correctTargetId, origX, origY); });
 }

@@ -130,11 +130,10 @@
       }
     }
 
-    /* 로그인 저작권 푸터 */
     .login-studio-footer {
-      margin-top: 14px;
+      margin-top: auto;
       text-align: center;
-      padding-top: 10px;
+      padding: 10px 0;
       border-top: 1px solid rgba(122, 149, 178, 0.18);
     }
 
@@ -1899,7 +1898,7 @@
 
     <div id="screen-login" class="screen active">
       <div class="scene-wrap" id="sw-login">
-        <video src="이미지/cover.mp4" class="scene-img" autoplay loop muted playsinline
+        <video src="이미지/cover.mp4?v=2" class="scene-img" autoplay loop muted playsinline
           style="object-fit: cover; width: 100%; height: 100%; border-radius: inherit; pointer-events: none;"></video>
         <div class="scan-line"></div>
         <div class="hud-corner hud-tl"></div>
@@ -2360,7 +2359,7 @@
           <div class="instructions" style="width: 100%;"><strong>STEP 2. 세포 호흡 반응</strong><br>두 재료를 각각 하나씩 미토콘드리아 중앙으로
             끌어와 충돌시키세요.</div>
           <div id="mitoWrap"
-            style="position:relative; width:100%; height:320px; display:flex; align-items:center; justify-content:center;">
+            style="position:relative; width:100%; height:220px; display:flex; align-items:center; justify-content:center;">
             <div id="mito"></div>
             <div class="draggable" id="orbNutrient"
               style="position:absolute; left:12%; top:calc(50% - 32px); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; touch-action:none; z-index:20; box-shadow:0 4px 14px rgba(0,0,0,0.4); background:radial-gradient(circle at 35% 35%, #ffd9a0, #F4A261); color:#020a18;">
@@ -2959,7 +2958,9 @@
         var resultText = document.getElementById("s3-result-text");
 
         resultPanel.style.display = "block";
-        document.getElementById("s3-bubbles").style.pointerEvents = "none";
+        document.getElementById("s3-bubbles").style.display = "none";
+        document.getElementById("s3-score-bar").style.display = "none";
+        document.getElementById("s3-instructions").style.display = "none";
 
         if (finalTime <= 5.00) {
           playSnd("success");
@@ -3704,21 +3705,23 @@
       var startX, startY, origX = 0, origY = 0, dragging = false;
       el.addEventListener('pointerdown', function (e) {
         if (el.dataset.locked === 'true') return;
+        e.preventDefault();
         dragging = true;
         el.setPointerCapture(e.pointerId);
         startX = e.clientX; startY = e.clientY;
-        el.style.transition = ''; // 드래그 시작 시 transition 제거
+        el.style.transition = ''; 
         var style = window.getComputedStyle(el);
         var matrix = new DOMMatrixReadOnly(style.transform);
         origX = matrix.m41; origY = matrix.m42;
         el.style.zIndex = '100';
-      });
+      }, { passive: false });
       el.addEventListener('pointermove', function (e) {
         if (!dragging) return;
+        e.preventDefault();
         var dx = e.clientX - startX;
         var dy = e.clientY - startY;
         el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
-      });
+      }, { passive: false });
       function endDrag(e) {
         if (!dragging) return;
         dragging = false;
@@ -3759,6 +3762,7 @@
       var startX, startY, origX = 0, origY = 0, dragging = false;
       el.addEventListener('pointerdown', function (e) {
         if (el.dataset.locked === 'true') return;
+        e.preventDefault();
         dragging = true;
         el.setPointerCapture(e.pointerId);
         startX = e.clientX; startY = e.clientY;
@@ -3766,14 +3770,15 @@
         var matrix = new DOMMatrixReadOnly(style.transform);
         origX = matrix.m41; origY = matrix.m42;
         el.style.zIndex = '100';
-      });
+      }, { passive: false });
       el.addEventListener('pointermove', function (e) {
         if (!dragging) return;
+        e.preventDefault();
         var dx = e.clientX - startX;
         var dy = e.clientY - startY;
         el.style.transform = 'translate(' + (origX + dx) + 'px, ' + (origY + dy) + 'px)';
         highlightNearestEpiTarget(el);
-      });
+      }, { passive: false });
       el.addEventListener('pointerup', function () { dropEpiSort(el, correctTargetId, origX, origY); });
       el.addEventListener('pointercancel', function () { dropEpiSort(el, correctTargetId, origX, origY); });
     }
